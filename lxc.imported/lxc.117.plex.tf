@@ -57,7 +57,7 @@ resource "proxmox_lxc" "plex" {
         ro        = false
         shared    = false
         size      = "80G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-117-disk-0"
     }
 

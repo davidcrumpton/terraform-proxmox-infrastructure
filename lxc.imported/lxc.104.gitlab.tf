@@ -48,7 +48,7 @@ resource "proxmox_lxc" "gitlab" {
         ro        = false
         shared    = false
         size      = "128G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-104-disk-0"
     }
     network {

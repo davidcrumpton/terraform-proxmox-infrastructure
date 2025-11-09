@@ -48,7 +48,7 @@ resource "proxmox_lxc" "pve01-backup" {
         ro        = false
         shared    = false
         size      = "420G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-118-disk-0"
     }
     network {

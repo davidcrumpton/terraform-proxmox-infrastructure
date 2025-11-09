@@ -48,7 +48,7 @@ resource "proxmox_lxc" "git" {
         ro        = false
         shared    = false
         size      = "64G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-109-disk-0"
     }
     network {

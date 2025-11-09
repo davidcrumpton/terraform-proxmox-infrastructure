@@ -55,7 +55,7 @@ resource "proxmox_lxc" "sso" {
         ro        = false
         shared    = false
         size      = "8G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-113-disk-0"
     }
 

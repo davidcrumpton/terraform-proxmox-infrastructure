@@ -49,7 +49,7 @@ resource "proxmox_lxc" "nextsuite" {
         ro        = false
         shared    = false
         size      = "64G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-101-disk-0"
     }
     network {

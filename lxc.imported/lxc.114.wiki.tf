@@ -53,7 +53,7 @@ resource "proxmox_lxc" "wiki" {
         ro        = false
         shared    = false
         size      = "16G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-114-disk-0"
     }
 

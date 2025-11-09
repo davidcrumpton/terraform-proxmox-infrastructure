@@ -17,7 +17,7 @@
         # ostemplate           = var.ostemplate_ubuntu.ubuntu_22_04
         # ostype               = var.ostemplate_ubuntu.ostype
     # Note ubuntu is set to debian where appropriate
-# Set storage   = "" instead of storage   = null if you want to use default storage. 
+# Set storage   = "local-lvm" instead of storage   = null if you want to use default storage. 
 # You can set it local-lvm or local-zfs or whatever if you want to hardcode it
 # to a particular storage.  Proxmox will assign the rest of the name.
 

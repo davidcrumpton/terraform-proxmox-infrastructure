@@ -52,7 +52,7 @@ resource "proxmox_lxc" "opensearch" {
         ro        = false
         shared    = false
         size      = "64G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-110-disk-0"
     }
     network {

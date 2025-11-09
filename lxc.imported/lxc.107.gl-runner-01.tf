@@ -48,7 +48,7 @@ resource "proxmox_lxc" "gl-runner-01" {
         ro        = false
         shared    = false
         size      = "96G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-107-disk-0"
     }
     network {

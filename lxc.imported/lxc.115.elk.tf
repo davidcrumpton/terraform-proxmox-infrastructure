@@ -54,7 +54,7 @@ resource "proxmox_lxc" "elk" {
         ro        = false
         shared    = false
         size      = "256G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-115-disk-0"
     }
 

@@ -50,7 +50,7 @@ resource "proxmox_lxc" "influxd" {
         ro        = false
         shared    = false
         size      = "256G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-111-disk-0"
     }
     network {

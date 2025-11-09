@@ -48,7 +48,7 @@ resource "proxmox_lxc" "atom5g" {
         ro        = false
         shared    = false
         size      = "32G"
-        storage   = ""
+        storage   = "local-lvm"
         # volume    = "local-lvm:vm-106-disk-0"
     }
 
