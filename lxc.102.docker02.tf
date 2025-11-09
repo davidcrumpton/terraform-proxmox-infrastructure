@@ -7,7 +7,7 @@ resource "proxmox_lxc" "docker02" {
     cores                = 2
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # Docker image storage
         
@@ -18,7 +18,7 @@ resource "proxmox_lxc" "docker02" {
     hastate              = null
     hookscript           = null
     hostname             = "docker02"
-    id                   = "pve02/lxc/102"
+    # id                   = "pve02/lxc/102"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 896
@@ -35,7 +35,7 @@ resource "proxmox_lxc" "docker02" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 102
 
     rootfs {
@@ -45,7 +45,7 @@ resource "proxmox_lxc" "docker02" {
         ro        = false
         shared    = false
         size      = "64G"
-        storage   = null
-        volume    = "local-lvm:vm-102-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-102-disk-0"
     }
 }

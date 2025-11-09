@@ -7,7 +7,7 @@ resource "proxmox_lxc" "atom5g" {
     cores                = 2
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # atom5g
         
@@ -18,7 +18,7 @@ resource "proxmox_lxc" "atom5g" {
     hastate              = null
     hookscript           = null
     hostname             = "atom5g"
-    id                   = "pve02/lxc/106"
+    # id                   = "pve02/lxc/106"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 512
@@ -35,7 +35,7 @@ resource "proxmox_lxc" "atom5g" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 106
 
     rootfs {
@@ -45,7 +45,7 @@ resource "proxmox_lxc" "atom5g" {
         ro        = false
         shared    = false
         size      = "32G"
-        storage   = null
-        volume    = "local-lvm:vm-106-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-106-disk-0"
     }
 }

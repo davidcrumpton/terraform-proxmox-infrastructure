@@ -7,7 +7,7 @@ resource "proxmox_lxc" "plex" {
     cores                = 4
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # Plex Media Server
         
@@ -27,7 +27,7 @@ resource "proxmox_lxc" "plex" {
     hastate              = null
     hookscript           = null
     hostname             = "plex"
-    id                   = "pve02/lxc/117"
+    # id                   = "pve02/lxc/117"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 928
@@ -44,7 +44,7 @@ resource "proxmox_lxc" "plex" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 117
 
     rootfs {
@@ -54,7 +54,7 @@ resource "proxmox_lxc" "plex" {
         ro        = false
         shared    = false
         size      = "80G"
-        storage   = null
-        volume    = "local-lvm:vm-117-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-117-disk-0"
     }
 }

@@ -7,7 +7,7 @@ resource "proxmox_lxc" "influxd" {
     cores                = 2
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # Influx Database
         
@@ -20,7 +20,7 @@ resource "proxmox_lxc" "influxd" {
     hastate              = null
     hookscript           = null
     hostname             = "influxd"
-    id                   = "pve02/lxc/111"
+    # id                   = "pve02/lxc/111"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 768
@@ -37,7 +37,7 @@ resource "proxmox_lxc" "influxd" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 111
 
     rootfs {
@@ -47,7 +47,7 @@ resource "proxmox_lxc" "influxd" {
         ro        = false
         shared    = false
         size      = "256G"
-        storage   = null
-        volume    = "local-lvm:vm-111-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-111-disk-0"
     }
 }

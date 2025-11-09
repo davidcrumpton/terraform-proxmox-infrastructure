@@ -7,7 +7,7 @@ resource "proxmox_lxc" "nextsuite" {
     cores                = 8
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # Nextcloud
         
@@ -18,7 +18,7 @@ resource "proxmox_lxc" "nextsuite" {
     hastate              = null
     hookscript           = null
     hostname             = "nextsuite"
-    id                   = "pve02/lxc/101"
+    # id                   = "pve02/lxc/101"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 2048
@@ -35,7 +35,7 @@ resource "proxmox_lxc" "nextsuite" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 101
 
     rootfs {
@@ -45,7 +45,7 @@ resource "proxmox_lxc" "nextsuite" {
         ro        = false
         shared    = false
         size      = "64G"
-        storage   = null
-        volume    = "local-lvm:vm-101-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-101-disk-0"
     }
 }

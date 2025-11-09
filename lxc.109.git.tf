@@ -7,7 +7,7 @@ resource "proxmox_lxc" "git" {
     cores                = 2
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # Git
         
@@ -18,7 +18,7 @@ resource "proxmox_lxc" "git" {
     hastate              = null
     hookscript           = null
     hostname             = "git"
-    id                   = "pve02/lxc/109"
+    # id                   = "pve02/lxc/109"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 768
@@ -35,7 +35,7 @@ resource "proxmox_lxc" "git" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 109
 
     rootfs {
@@ -45,7 +45,7 @@ resource "proxmox_lxc" "git" {
         ro        = false
         shared    = false
         size      = "64G"
-        storage   = null
-        volume    = "local-lvm:vm-109-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-109-disk-0"
     }
 }

@@ -7,7 +7,7 @@ resource "proxmox_lxc" "sso" {
     cores                = 1
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # SSO CrumptonOrg
         
@@ -25,7 +25,7 @@ resource "proxmox_lxc" "sso" {
     hastate              = null
     hookscript           = null
     hostname             = "sso"
-    id                   = "pve02/lxc/113"
+    # id                   = "pve02/lxc/113"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 768
@@ -42,7 +42,7 @@ resource "proxmox_lxc" "sso" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 113
 
     rootfs {
@@ -52,7 +52,7 @@ resource "proxmox_lxc" "sso" {
         ro        = false
         shared    = false
         size      = "8G"
-        storage   = null
-        volume    = "local-lvm:vm-113-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-113-disk-0"
     }
 }

@@ -1,6 +1,6 @@
 # locals {
 #   vm_name          = "awesome-vm"
-#   pve_node         = "pve02"
+#   pve_# current_node         = "pve02"
 #   iso_storage_pool = "local"
 # }
 

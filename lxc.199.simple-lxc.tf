@@ -7,14 +7,14 @@ resource "proxmox_lxc" "simple-lxc" {
     cores                = 4
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = null
     force                = false
     hagroup              = null
     hastate              = null
     hookscript           = null
     hostname             = "simple-lxc"
-    id                   = "pve02/lxc/199"
+    # id                   = "pve02/lxc/199"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 928
@@ -31,7 +31,7 @@ resource "proxmox_lxc" "simple-lxc" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 199
 
     rootfs {
@@ -41,7 +41,7 @@ resource "proxmox_lxc" "simple-lxc" {
         ro        = false
         shared    = false
         size      = "8G"
-        storage   = null
-        volume    = "local-lvm:vm-199-disk-0"
+        storage   =""
+        # volume    = "local-lvm:vm-199-disk-0"
     }
 }

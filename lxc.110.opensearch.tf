@@ -7,7 +7,7 @@ resource "proxmox_lxc" "opensearch" {
     cores                = 2
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # OpenSearch Elastic and Dashboard
         
@@ -22,7 +22,7 @@ resource "proxmox_lxc" "opensearch" {
     hastate              = null
     hookscript           = null
     hostname             = "opensearch"
-    id                   = "pve02/lxc/110"
+    # id                   = "pve02/lxc/110"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 2560
@@ -39,7 +39,7 @@ resource "proxmox_lxc" "opensearch" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 110
 
     rootfs {
@@ -49,7 +49,7 @@ resource "proxmox_lxc" "opensearch" {
         ro        = false
         shared    = false
         size      = "64G"
-        storage   = null
-        volume    = "local-lvm:vm-110-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-110-disk-0"
     }
 }

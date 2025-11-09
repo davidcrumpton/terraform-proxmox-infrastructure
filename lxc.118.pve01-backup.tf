@@ -7,7 +7,7 @@ resource "proxmox_lxc" "pve01-backup" {
     cores                = 1
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # PVE01-Backup
         
@@ -18,7 +18,7 @@ resource "proxmox_lxc" "pve01-backup" {
     hastate              = null
     hookscript           = null
     hostname             = "pve01-backup"
-    id                   = "pve02/lxc/118"
+    # id                   = "pve02/lxc/118"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 208
@@ -35,7 +35,7 @@ resource "proxmox_lxc" "pve01-backup" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 118
 
     rootfs {
@@ -45,7 +45,7 @@ resource "proxmox_lxc" "pve01-backup" {
         ro        = false
         shared    = false
         size      = "420G"
-        storage   = null
-        volume    = "local-lvm:vm-118-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-118-disk-0"
     }
 }

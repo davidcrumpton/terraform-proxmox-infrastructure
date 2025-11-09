@@ -7,7 +7,7 @@ resource "proxmox_lxc" "gitlab" {
     cores                = 4
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # GitLab Automation Server
         
@@ -18,7 +18,7 @@ resource "proxmox_lxc" "gitlab" {
     hastate              = null
     hookscript           = null
     hostname             = "gitlab"
-    id                   = "pve02/lxc/104"
+    # id                   = "pve02/lxc/104"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 16384
@@ -35,7 +35,7 @@ resource "proxmox_lxc" "gitlab" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 104
 
     rootfs {
@@ -45,7 +45,7 @@ resource "proxmox_lxc" "gitlab" {
         ro        = false
         shared    = false
         size      = "128G"
-        storage   = null
-        volume    = "local-lvm:vm-104-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-104-disk-0"
     }
 }

@@ -7,7 +7,7 @@ resource "proxmox_lxc" "wiki" {
     cores                = 1
     cpulimit             = 0
     cpuunits             = 1024
-    current_node         = "pve02"
+    # current_node         = "pve02"
     description          = <<-EOT
         # Wiki for CrumptonOrg
         
@@ -23,7 +23,7 @@ resource "proxmox_lxc" "wiki" {
     hastate              = null
     hookscript           = null
     hostname             = "wiki"
-    id                   = "pve02/lxc/114"
+    # id                   = "pve02/lxc/114"
     ignore_unpack_errors = false
     lock                 = null
     memory               = 1024
@@ -40,7 +40,7 @@ resource "proxmox_lxc" "wiki" {
     tty                  = 2
     unique               = false
     unprivileged         = true
-    unused               = []
+    # unused               = []
     vmid                 = 114
 
     rootfs {
@@ -50,7 +50,7 @@ resource "proxmox_lxc" "wiki" {
         ro        = false
         shared    = false
         size      = "16G"
-        storage   = null
-        volume    = "local-lvm:vm-114-disk-0"
+        storage   = ""
+        # volume    = "local-lvm:vm-114-disk-0"
     }
 }
