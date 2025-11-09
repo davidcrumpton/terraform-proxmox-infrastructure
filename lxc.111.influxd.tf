@@ -26,7 +26,10 @@ resource "proxmox_lxc" "influxd" {
     memory               = 768
     nameserver           = null
     onboot               = true
-    ostype               = "ubuntu"
+    password             = var.default_password
+    ssh_public_keys      = var.default_ssh_keys
+    ostemplate           = var.ostemplate_ubuntu.ubuntu_22_04
+    ostype               = var.ostemplate_ubuntu.ostype
     protection           = false
     restore              = false
     searchdomain         = null

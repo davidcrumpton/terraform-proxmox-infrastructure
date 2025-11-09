@@ -24,7 +24,10 @@ resource "proxmox_lxc" "docker02" {
     memory               = 896
     nameserver           = null
     onboot               = true
-    ostype               = "debian"
+    password             = var.default_password
+    ssh_public_keys      = var.default_ssh_keys
+    ostemplate           = var.ostemplate_debian.debian_12
+    ostype               = var.ostemplate_debian.ostype
     protection           = false
     restore              = false
     searchdomain         = null

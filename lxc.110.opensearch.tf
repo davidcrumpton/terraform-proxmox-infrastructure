@@ -28,7 +28,10 @@ resource "proxmox_lxc" "opensearch" {
     memory               = 2560
     nameserver           = null
     onboot               = true
-    ostype               = "debian"
+    password             = var.default_password
+    ssh_public_keys      = var.default_ssh_keys
+    ostemplate           = var.ostemplate_debian.debian_12
+    ostype               = var.ostemplate_debian.ostype
     protection           = true
     restore              = false
     searchdomain         = null

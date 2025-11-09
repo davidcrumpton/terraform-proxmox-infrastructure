@@ -33,7 +33,10 @@ resource "proxmox_lxc" "plex" {
     memory               = 928
     nameserver           = null
     onboot               = true
-    ostype               = "ubuntu"
+    password             = var.default_password
+    ssh_public_keys      = var.default_ssh_keys
+    ostemplate           = var.ostemplate_ubuntu.ubuntu_22_04
+    ostype               = var.ostemplate_ubuntu.ostype
     protection           = true
     restore              = false
     searchdomain         = null

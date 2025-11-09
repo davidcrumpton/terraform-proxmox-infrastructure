@@ -75,3 +75,36 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHAB5iOtvm4nIHgFwYXpHr1tgm0jS8Mqjx54j/cG7W
 variable "default_password" {
   default = "SimpleLXCPassword123!"
 }
+
+variable "ostemplate_ubuntu" {
+  type = object({
+    ubuntu_22_04 = string
+    ostype       = string
+  })
+  default = {
+    ubuntu_22_04 = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
+    ostype       = "ubuntu"
+  }
+}
+variable "ostemplate_debian" {
+  type = object({
+    debian_12 = string
+    ostype    = string
+  })
+  default = {
+    debian_12 = "local:vztmpl/debian-12-standard_12.0-1_amd64.tar.zst"
+    ostype    = "debian"
+  }
+}
+
+# ubuntu 24
+variable "ostemplate_ubuntu_2404" {
+  type = object({
+    ubuntu_24_04 = string
+    ostype       = string
+  })
+  default = {
+    ubuntu_24_04 = "local:vztmpl/ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
+    ostype       = "ubuntu"
+  } 
+}
