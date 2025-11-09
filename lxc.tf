@@ -13,20 +13,20 @@
 #   media_size      = "4100G"
 #   bridge          = "vmbr0"
 # }
-module "simple_lxc" {
-  source = "./lxc.d/simple-lxc"
+# module "simple_lxc" {
+#   source = "./lxc.d/simple-lxc"
 
-  ssh_public_keys = var.default_ssh_keys
-  default_password = random_password.lxc_root_password.result
-  vmid            = 199
-  hostname        = "simple-lxc"
-  cores           = 4
-  memory          = 928
-  swap            = 512
-  rootfs_storage  = "local-lvm"
-  rootfs_size     = "8G"
-  bridge          = "vmbr0"
-}
+#   ssh_public_keys = var.default_ssh_keys
+#   default_password = random_password.lxc_root_password.result
+#   vmid            = 199
+#   hostname        = "simple-lxc"
+#   cores           = 4
+#   memory          = 928
+#   swap            = 512
+#   rootfs_storage  = "local-lvm"
+#   rootfs_size     = "8G"
+#   bridge          = "vmbr0"
+# }
 
 
 # module "gitlab_runner" {

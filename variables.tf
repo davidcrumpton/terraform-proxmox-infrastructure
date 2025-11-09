@@ -76,23 +76,23 @@ variable "default_password" {
   default = "SimpleLXCPassword123!"
 }
 
-variable "ostemplate_ubuntu" {
+variable "ostemplate_ubuntu_2204" {
   type = object({
-    ubuntu_22_04 = string
+    template = string
     ostype       = string
   })
   default = {
-    ubuntu_22_04 = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
+    template = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
     ostype       = "ubuntu"
   }
 }
-variable "ostemplate_debian" {
+variable "ostemplate_debian_12" {
   type = object({
-    debian_12 = string
+    template = string
     ostype    = string
   })
   default = {
-    debian_12 = "local:vztmpl/debian-12-standard_12.0-1_amd64.tar.zst"
+    template = "local:vztmpl/debian-12-standard_12.0-1_amd64.tar.zst"
     ostype    = "debian"
   }
 }
@@ -100,11 +100,11 @@ variable "ostemplate_debian" {
 # ubuntu 24
 variable "ostemplate_ubuntu_2404" {
   type = object({
-    ubuntu_24_04 = string
+    template = string
     ostype       = string
   })
   default = {
-    ubuntu_24_04 = "local:vztmpl/ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
+    template = "local:vztmpl/ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
     ostype       = "ubuntu"
   } 
 }
@@ -120,4 +120,9 @@ variable "bridge"{
     internal = "vmbr1"
     wifi_5g = "vmbr10"
   }
+}
+
+variable "storage_pool" {
+  type = string
+  default = "local-lvm"
 }

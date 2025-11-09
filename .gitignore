@@ -14,4 +14,3 @@ override.tf.json
 .idea/
 *.swp
 *.out
-*.out
