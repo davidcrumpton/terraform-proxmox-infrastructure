@@ -122,7 +122,15 @@ variable "bridge"{
   }
 }
 
-variable "storage_pool" {
-  type = string
-  default = "local-lvm"
+variable "storage_pool"{
+  type = object({
+    local = string
+    zfs = string
+    directory_media = string
+  }) 
+  default = {
+    local = "local-lvm"
+    zfs = "local-zfs"
+    directory_media = "media"
+  }
 }

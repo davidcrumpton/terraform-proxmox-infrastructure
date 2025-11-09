@@ -21,7 +21,7 @@ resource "proxmox_lxc" "simple_lxc" {
   }
 
   rootfs {
-    storage = var.storage_pool
+    storage = var.storage_pool.local
     size    = "8G"
   }
 

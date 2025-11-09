@@ -21,7 +21,7 @@ resource "proxmox_lxc" "ns1" {
   }
 
   rootfs {
-    storage = var.storage_pool
+    storage = var.storage_pool.local
     size    = "8G"
   }
 
