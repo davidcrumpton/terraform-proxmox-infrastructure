@@ -1,3 +1,7 @@
+resource "proxmox_pool" "wikijs-pool" {
+  poolid  = "wikijs-pool" 
+  comment = "Pool for Wikijs-Guests"
+}
 resource "proxmox_lxc_guest" "wikijs01" {
     name         = "wikijs01"
     power_state  = "running"
@@ -101,3 +105,9 @@ resource "random_password" "wikijs_root_password" {
   override_special = "!@#$%&*()-_=+[]{}<>:?"
   special          = true
 } 
+
+output "wikijs_root_password" {
+  description = "Root password for wikijs nodes"
+  value = random_password.wikijs_root_password.result
+  sensitive = true
+}
