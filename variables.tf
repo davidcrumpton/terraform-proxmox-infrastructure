@@ -80,9 +80,11 @@ variable "ostemplate_ubuntu_2204" {
   type = object({
     template = string
     ostype       = string
+    template_lxcg = string
   })
   default = {
     template = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
+    template_lxcg = "ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
     ostype       = "ubuntu"
   }
 }
@@ -90,10 +92,12 @@ variable "ostemplate_debian_12" {
   type = object({
     template = string
     ostype    = string
+    template_lxcg = string
   })
   default = {
     template = "local:vztmpl/debian-12-standard_12.12-1_amd64.tar.zst"
     ostype    = "debian"
+    template_lxcg = "debian-12-standard_12.12-1_amd64.tar.zst"
   }
 }
 
@@ -102,10 +106,12 @@ variable "ostemplate_ubuntu_2404" {
   type = object({
     template = string
     ostype       = string
+    template_lxcg = string
   })
   default = {
     template = "local:vztmpl/ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
     ostype       = "ubuntu"
+    template_lxcg = "ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
   } 
 }
 
@@ -138,11 +144,13 @@ variable "storage_pool"{
 variable "common_tags"{
   type = object({
     lxc = string
+    lxcg = string
     vm = string
     docker_in_lxc = string
   }) 
   default = {
     lxc = "lxc"
+    lxcg = "lxcg"
     vm = "VM"
     docker_in_lxc = "lxc-docker"
   }
@@ -155,30 +163,35 @@ variable "lxc_sizing"{
       cores  = number
       swap   = number
       disk   = number
+      disk_lxcg = string
     })
     large = object({
       memory = number
       cores  = number
       swap   = number
       disk   = number
+      disk_lxcg = string
     })
     medium = object({
       memory = number
       cores  = number
       swap   = number
       disk   = number
+      disk_lxcg = string
     })
     small = object({
       memory = number
       cores  = number
       swap   = number
       disk   = number
+      disk_lxcg = string
     })
     tiny = object({
       memory = number
       cores  = number
       swap   = number
       disk   = number
+      disk_lxcg = string
     })  
   }) 
   default = {
@@ -187,30 +200,35 @@ variable "lxc_sizing"{
       cores  = 8
       swap   = 8192
       disk   = 1024
+      disk_lxcg = "1M"
     }
     large = {
       memory = 2048
       cores  = 4
       swap   = 4096
       disk   = 1024
+      disk_lxcg = "1M"
     }
     medium = {
       memory = 1024
       cores  = 2
       swap   = 2048
       disk   = 1024
+      disk_lxcg = "1M"
     }
     small = {
       memory = 512
       cores  = 2
       swap   = 1024
       disk   = 1024
+      disk_lxcg = "1M"
     }
     tiny = {
       memory = 256
       cores  = 1
       swap   = 512
       disk   = 1024
+      disk_lxcg = "1M"
     }
   }
 }

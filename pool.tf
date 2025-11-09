@@ -1,4 +1,4 @@
-# resource "proxmox_pool" "my_pool" {
-#   poolid  = "my-pool" 
-#   comment = "Example of a pool"
-# }
+resource "proxmox_pool" "wikijs-pool" {
+  poolid  = "wikijs-pool" 
+  comment = "Pool for Wikijs-Guests"
+}
