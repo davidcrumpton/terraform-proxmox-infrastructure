@@ -2,6 +2,7 @@
 #   source = "./lxc.d/plex"
  
 #   ssh_public_keys = var.default_ssh_keys
+#   default_password = random_password.lxc_root_password.result
 #   vmid            = 117
 #   hostname        = "plexing"
 #   cores           = 4
@@ -33,6 +34,7 @@ module "simple_lxc" {
 #   source = "./lxc.d/gitlab-runner"
 
 #   ssh_public_keys = var.default_ssh_keys
+#   default_password = random_password.lxc_root_password.result
 #   vmid            = 107
 #   hostname        = "gitlab-running"
 #   cores           = 4
@@ -46,7 +48,7 @@ module "simple_lxc" {
 #   target_node  = "pve02"
 #   hostname     = "lxc-basic"
 #   ostemplate   = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
-#   password     = "BasicLXCContainer"
+#   default_password = random_password.lxc_root_password.result
 #   unprivileged = true
 
 #   // Terraform will crash without rootfs defined
@@ -68,7 +70,7 @@ module "simple_lxc" {
 #     power_state  = "running"
 #     target_node         = "pve02"
 #     unprivileged = true
-#     password     = "yourpassword"
+#     default_password = random_password.lxc_root_password.result
 #     template {
 #         file    = "ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
 #         storage = "local"
@@ -101,6 +103,7 @@ module "simple_lxc" {
 #   ostype       = "ubuntu"
 
 #   ssh_public_keys = var.default_ssh_keys
+#   default_password = random_password.lxc_root_password.result
 
 #   // Terraform will crash without rootfs defined
 #   rootfs {
