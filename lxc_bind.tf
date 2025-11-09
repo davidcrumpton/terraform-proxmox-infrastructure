@@ -2,9 +2,9 @@ resource "proxmox_lxc" "ns1" {
   target_node = var.node
   vmid        = 200
   hostname    = "ns1"
-  cores       = 2
-  memory      = 512
-  swap        = 512
+   cores       = var.lxc_sizing.tiny.cores
+  memory      = var.lxc_sizing.tiny.memory
+  swap        = var.lxc_sizing.tiny.swap
   ostemplate = var.ostemplate_ubuntu_2204.template
   ssh_public_keys = var.default_ssh_keys
   password = random_password.ns1_root_password.result

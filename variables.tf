@@ -147,3 +147,70 @@ variable "common_tags"{
     docker_in_lxc = "lxc-docker"
   }
 }
+
+variable "lxc_sizing"{
+  type = object({
+    xlarge = object({
+      memory = number
+      cores  = number
+      swap   = number
+      disk   = number
+    })
+    large = object({
+      memory = number
+      cores  = number
+      swap   = number
+      disk   = number
+    })
+    medium = object({
+      memory = number
+      cores  = number
+      swap   = number
+      disk   = number
+    })
+    small = object({
+      memory = number
+      cores  = number
+      swap   = number
+      disk   = number
+    })
+    tiny = object({
+      memory = number
+      cores  = number
+      swap   = number
+      disk   = number
+    })  
+  }) 
+  default = {
+    xlarge = {
+      memory = 4096
+      cores  = 8
+      swap   = 8192
+      disk   = 1024
+    }
+    large = {
+      memory = 2048
+      cores  = 4
+      swap   = 4096
+      disk   = 1024
+    }
+    medium = {
+      memory = 1024
+      cores  = 2
+      swap   = 2048
+      disk   = 1024
+    }
+    small = {
+      memory = 512
+      cores  = 2
+      swap   = 1024
+      disk   = 1024
+    }
+    tiny = {
+      memory = 256
+      cores  = 1
+      swap   = 512
+      disk   = 1024
+    }
+  }
+}

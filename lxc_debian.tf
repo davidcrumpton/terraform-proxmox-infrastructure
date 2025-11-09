@@ -2,12 +2,12 @@ resource "proxmox_lxc" "debian" {
   target_node = var.node
   vmid        = 201
   hostname    = "debian"
-  cores       = 2
-  memory      = 512
-  swap        = 512
+  cores       = var.lxc_sizing.small.cores
+  memory      = var.lxc_sizing.small.memory
+  swap        = var.lxc_sizing.small.swap
   ostemplate = var.ostemplate_debian_12.template
   ssh_public_keys = var.default_ssh_keys
-  password = random_password.ns1_root_password.result
+  password = random_password.debian_root_password.result
   start = true
   onboot      = true
 
