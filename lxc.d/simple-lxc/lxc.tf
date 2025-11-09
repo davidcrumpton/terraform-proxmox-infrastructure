@@ -38,7 +38,7 @@ resource "proxmox_lxc" "simple_lxc" {
   network {
     name      = "eth0"
     bridge    = var.bridge
-    #hwaddr    = "C6:96:DC:8D:45:19"
+    hwaddr    = "C6:96:DC:8D:45:19"
     type      = "veth"
     firewall  = true
     ip        = "dhcp"

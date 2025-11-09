@@ -57,4 +57,17 @@ resource "proxmox_lxc" "elk" {
         storage   = ""
         # volume    = "local-lvm:vm-115-disk-0"
     }
+
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "22:25:64:41:73:b6"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }   
 }

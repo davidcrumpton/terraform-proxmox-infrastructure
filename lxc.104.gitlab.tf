@@ -51,4 +51,16 @@ resource "proxmox_lxc" "gitlab" {
         storage   = ""
         # volume    = "local-lvm:vm-104-disk-0"
     }
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "EE:22:EE:A0:33:5E"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }
 }

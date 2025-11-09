@@ -51,4 +51,28 @@ resource "proxmox_lxc" "atom5g" {
         storage   = ""
         # volume    = "local-lvm:vm-106-disk-0"
     }
+
+#net0: name=eth0,bridge=vmbr10,firewall=1,hwaddr=AA:A1:98:4D:41:2B,ip=dhcp,ip6=dhcp,type=veth
+#net1: name=eth1,bridge=vmbr0,firewall=1,hwaddr=96:BB:CB:1C:9E:F3,ip=192.168.1.5/24,type=veth
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.wifi_5g
+        hwaddr    = "AA:A1:98:4D:41:2B"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    network {
+        name      = "eth1"
+        bridge    = var.bridge.lan
+        hwaddr    = "96:BB:CB:1C:9E:F3"
+        type      = "veth"
+        firewall  = true
+        ip        = "192.168.1.5/24"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }   
 }

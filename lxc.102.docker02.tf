@@ -51,4 +51,16 @@ resource "proxmox_lxc" "docker02" {
         storage   = ""
         # volume    = "local-lvm:vm-102-disk-0"
     }
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "AE:81:3E:D9:38:22"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"  
+    }
+    features     {
+        nesting = true
+    }
 }

@@ -51,4 +51,16 @@ resource "proxmox_lxc" "pve01-backup" {
         storage   = ""
         # volume    = "local-lvm:vm-118-disk-0"
     }
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "BC:24:11:94:58:AA"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }
 }

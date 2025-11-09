@@ -56,4 +56,17 @@ resource "proxmox_lxc" "wiki" {
         storage   = ""
         # volume    = "local-lvm:vm-114-disk-0"
     }
+
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "22:25:64:1b:81:ab"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true    
+    }
 }

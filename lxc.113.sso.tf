@@ -58,4 +58,17 @@ resource "proxmox_lxc" "sso" {
         storage   = ""
         # volume    = "local-lvm:vm-113-disk-0"
     }
+
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "BC:24:11:99:2C:D3"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }
 }

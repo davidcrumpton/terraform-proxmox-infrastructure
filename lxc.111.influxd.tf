@@ -53,4 +53,16 @@ resource "proxmox_lxc" "influxd" {
         storage   = ""
         # volume    = "local-lvm:vm-111-disk-0"
     }
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "BC:24:11:37:AA:17"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }
 }

@@ -55,4 +55,16 @@ resource "proxmox_lxc" "opensearch" {
         storage   = ""
         # volume    = "local-lvm:vm-110-disk-0"
     }
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "BC:24:11:B5:BA:D8"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }   
 }

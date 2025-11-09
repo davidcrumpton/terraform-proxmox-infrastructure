@@ -108,3 +108,16 @@ variable "ostemplate_ubuntu_2404" {
     ostype       = "ubuntu"
   } 
 }
+
+variable "bridge"{
+  type = object({
+    lan = string
+    internal = string
+    wifi_5g = string
+  }) 
+  default = {
+    lan = "vmbr0"
+    internal = "vmbr1"
+    wifi_5g = "vmbr10"
+  }
+}

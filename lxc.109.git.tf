@@ -51,4 +51,16 @@ resource "proxmox_lxc" "git" {
         storage   = ""
         # volume    = "local-lvm:vm-109-disk-0"
     }
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "BC:24:11:14:F3:31"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }
 }

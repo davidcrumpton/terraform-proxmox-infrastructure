@@ -52,4 +52,16 @@ resource "proxmox_lxc" "nextsuite" {
         storage   = ""
         # volume    = "local-lvm:vm-101-disk-0"
     }
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "BC:24:11:2B:D1:ED"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }
 }

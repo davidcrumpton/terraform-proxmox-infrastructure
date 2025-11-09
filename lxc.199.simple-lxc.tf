@@ -47,4 +47,17 @@ resource "proxmox_lxc" "simple-lxc" {
         storage   =""
         # volume    = "local-lvm:vm-199-disk-0"
     }
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "C6:96:DC:8D:45:19"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }
+
 }

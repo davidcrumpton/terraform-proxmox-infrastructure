@@ -60,4 +60,17 @@ resource "proxmox_lxc" "plex" {
         storage   = ""
         # volume    = "local-lvm:vm-117-disk-0"
     }
+
+    network {
+        name      = "eth0"
+        bridge    = var.bridge.lan
+        hwaddr    = "22:25:64:14:fa:0a"
+        type      = "veth"
+        firewall  = true
+        ip        = "dhcp"
+        ip6       = "dhcp"
+    }
+    features     {
+        nesting = true
+    }
 }
