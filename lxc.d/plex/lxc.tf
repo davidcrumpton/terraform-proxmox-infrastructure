@@ -4,9 +4,12 @@ resource "proxmox_lxc" "plex" {
   ostype      = "ubuntu"
   ostemplate   = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
   unprivileged = true
-  onboot      = true
   protection  = true
   features    { nesting = true }
+  ssh_public_keys = var.ssh_public_keys
+  password = var.default_password
+  start = var.start_after_creation
+  onboot      = var.start_on_boot
   tags        = "media;public"
 
   cores  = var.cores

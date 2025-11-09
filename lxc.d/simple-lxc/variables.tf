@@ -1,15 +1,18 @@
-
-
 variable "vmid" {
-  description = "VMID for the Plex LXC"
+  description = "VM ID for the LXC container"
   type        = number
   default     = 117
 }
 
-variable "hostname" {
-  description = "Hostname for the Plex LXC"
+variable "node" {
+  description = "Proxmox node where the LXC will be created"
   type        = string
-  default     = "plex"
+  default     = "pve02"
+}
+variable "hostname" {
+  description = "Hostname of the LXC container"
+  type        = string
+  default     = "gitlab-runner"
 }
 
 variable "cores" {
@@ -19,19 +22,19 @@ variable "cores" {
 }
 
 variable "memory" {
-  description = "RAM allocated to container (MB)"
+  description = "RAM in MB"
   type        = number
   default     = 928
 }
 
 variable "swap" {
-  description = "Swap space allocated (MB)"
+  description = "Swap memory in MB"
   type        = number
   default     = 512
 }
 
 variable "rootfs_storage" {
-  description = "Storage for container root filesystem"
+  description = "Storage pool for root filesystem"
   type        = string
   default     = "local-lvm"
 }
@@ -43,19 +46,19 @@ variable "rootfs_size" {
 }
 
 variable "media_storage" {
-  description = "Storage pool for media mount"
+  description = "Storage pool for media mountpoint"
   type        = string
   default     = "media"
 }
 
 variable "media_size" {
-  description = "Size of the media mount"
+  description = "Size of media mountpoint"
   type        = string
   default     = "4100G"
 }
 
 variable "bridge" {
-  description = "Network bridge for the container"
+  description = "Network bridge"
   type        = string
   default     = "vmbr0"
 }
@@ -69,6 +72,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHAB5iOtvm4nIHgFwYXpHr1tgm0jS8Mqjx54j/cG7W
 
 variable "ostemplate" {
   default = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
+  type = string
 }
 
 variable "default_password" {

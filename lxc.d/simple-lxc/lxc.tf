@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-resource "proxmox_lxc" "gl_runner" {
+resource "proxmox_lxc" "simple_lxc" {
   target_node = var.node
   vmid        = var.vmid
   hostname    = var.hostname
@@ -19,10 +19,12 @@ resource "proxmox_lxc" "gl_runner" {
   password = var.default_password
   start = var.start_after_creation
   onboot      = var.start_on_boot
-  ostype      = "ubuntu"
-  unprivileged = true
-  tags        = "git"
 
+
+  ostype      = "debian"
+  unprivileged = true
+  tags        = "poc"
+  
   features     {
     nesting = true
   }
@@ -36,7 +38,7 @@ resource "proxmox_lxc" "gl_runner" {
   network {
     name      = "eth0"
     bridge    = var.bridge
-    hwaddr    = "C6:96:DC:8D:45:19"
+    #hwaddr    = "C6:96:DC:8D:45:19"
     type      = "veth"
     firewall  = true
     ip        = "dhcp"

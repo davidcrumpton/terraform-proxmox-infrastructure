@@ -21,3 +21,10 @@ provider "proxmox" {
   pm_tls_insecure  = var.pm_tls_insecure
 }
 
+# generate random root password of 24 characters
+
+resource "random_password" "lxc_root_password" {
+  length           = 24
+  override_special = "!@#$%&*()-_=+[]{}<>:?"
+  special          = true
+} 
