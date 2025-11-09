@@ -41,7 +41,7 @@ variable "datacenter" {
    }
 variable "node" { 
   type = string
- default = "node1" 
+ default = "pve02" 
  }
 variable "storage" { 
   type = string
@@ -213,4 +213,63 @@ variable "lxc_sizing"{
       disk   = 1024
     }
   }
+}
+
+variable "vm_sizing"{
+  type = object({
+    medium = object({
+      memory = number
+      cores  = number
+      swap   = number
+      disk   = number
+    })
+    small = object({
+      memory = number
+      cores  = number
+      swap   = number
+      disk   = number
+    })
+  }) 
+  default = {
+    medium = {
+      memory = 2048
+      cores  = 2
+      swap   = 4096
+      disk   = 32
+    }
+    small = {
+      memory = 1024
+      cores  = 1
+      swap   = 2048
+      disk   = 16
+    }
+  }
+}
+
+# VM ISO
+# vm_iso.OS_FAMIILY.iso = "storage:iso/filename.iso"
+variable vm_iso {
+  type = object({
+    ubuntu_2204 = string
+    ubuntu_2404 = string
+    debian_12   = string
+    freebsd_13  = string
+    openbsd_76 = string
+    netbsd_10 = string
+    minix_76 = string
+  }) 
+  default = {
+    ubuntu_2204 = "local:iso/ubuntu-22.04.6-live-server-amd64.iso"
+    ubuntu_2404 = "local:iso/ubuntu-24.04.2-live-server-amd64.iso"
+    debian_12   = "local:iso/debian-12.12.0-amd64-netinst.iso"
+    freebsd_13  = "local:iso/FreeBSD-13.3-RELEASE-amd64-disc1.iso"
+    openbsd_76 = "local:iso/install76.iso"
+    netbsd_10 = "local:iso/netbsd-10.3-amd64.iso"
+    minix_76 = "local:iso/minix76.iso"
+  }
+}
+
+variable target_node {
+  type = string
+  default = "pve02"
 }
