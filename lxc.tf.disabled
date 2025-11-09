@@ -46,7 +46,7 @@ resource "proxmox_lxc" "basic" {
   target_node  = "pve02"
   hostname     = "lxc-basic"
   ostemplate   = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
-  password     = "BasicLXCContainer"
+  password     = random_password.lxc_root_password.result
   unprivileged = true
 
   // Terraform will crash without rootfs defined
@@ -68,7 +68,7 @@ resource "proxmox_lxc_guest" "minimal-example" {
     power_state  = "running"
     target_node         = "pve02"
     unprivileged = true
-    password     = "yourpassword"
+    password     = random_password.lxc_root_password.result
     template {
         file    = "ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
         storage = "local"
