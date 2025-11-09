@@ -19,3 +19,9 @@ output "simple_root_password" {
   value       = random_password.simple_root_password.result
   sensitive   = true
 }
+
+output "debian_root_password" {
+  description = "Root password for the Debian LXC container"
+  value       = random_password.debian_root_password.result
+  sensitive   = true
+}
