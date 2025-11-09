@@ -11,10 +11,19 @@ resource "proxmox_lxc" "debian" {
   start = true
   onboot      = true
 
+  description          = <<-EOT
+      # Debian Testing LXC Container
+      Created with Terraform and Proxmox Provider
+
+      ## Access
+      SSH Access with provided SSH keys.
+      ## Root Password
+      Root password is generated and can be found in Terraform outputs.
+  EOT
 
   ostype      = var.ostemplate_debian_12.ostype
   unprivileged = true
-  
+
   tags = "poc;${var.common_tags.lxc};${var.ostemplate_debian_12.ostype};debian12"
   
   features     {

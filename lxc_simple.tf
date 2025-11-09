@@ -11,10 +11,19 @@ resource "proxmox_lxc" "simple_lxc" {
   start = true
   onboot      = true
 
+  description          = <<-EOT
+      # Simple LXC Container
+      Created with Terraform and Proxmox Provider
+
+      ## Access
+      SSH Access with provided SSH keys.
+      ## Root Password
+      Root password is generated and can be found in Terraform outputs.
+  EOT
 
   ostype      = var.ostemplate_ubuntu_2204.ostype
   unprivileged = true
-  tags        = "poc"
+  tags        = "poc;${var.common_tags.lxc};${var.ostemplate_ubuntu_2204.ostype};ubuntu2204"
   
   features     {
     nesting = true
