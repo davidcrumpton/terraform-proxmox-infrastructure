@@ -134,3 +134,16 @@ variable "storage_pool"{
     directory_media = "media"
   }
 }
+
+variable "common_tags"{
+  type = object({
+    lxc = string
+    vm = string
+    docker_in_lxc = string
+  }) 
+  default = {
+    lxc = "lxc"
+    vm = "VM"
+    docker_in_lxc = "lxc-docker"
+  }
+}

@@ -14,7 +14,8 @@ resource "proxmox_lxc" "debian" {
 
   ostype      = var.ostemplate_debian_12.ostype
   unprivileged = true
-  tags        = "poc"
+  
+  tags = "poc;${var.common_tags.lxc};${var.ostemplate_debian_12.ostype};debian12"
   
   features     {
     nesting = true
