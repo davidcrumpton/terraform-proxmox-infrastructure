@@ -4,11 +4,27 @@
 
 This requires more init options to keep state synced in the cloud.
 
+### Personal
 ```sh
 terraform init -reconfigure -backend-config="address=${TF_ADDRESS}" \
 -backend-config="lock_address=${TF_ADDRESS}/lock"  -backend-config="unlock_address=${TF_ADDRESS}/lock" \
 -backend-config="username=oauth2" -backend-config="password=${GITLAB_TF_API_TOKEN}" \
 -backend-config="lock_method=POST"  -backend-config="unlock_method=DELETE"  -backend-config="retry_max=10"
+```
+### Formal
+
+```sh
+export GITLAB_ACCESS_TOKEN=<YOUR-ACCESS-TOKEN>
+export TF_STATE_NAME=proxmox-homelab
+terraform init \
+    -backend-config="address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME" \
+    -backend-config="lock_address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME/lock" \
+    -backend-config="unlock_address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME/lock" \
+    -backend-config="username=bear" \
+    -backend-config="password=$GITLAB_ACCESS_TOKEN" \
+    -backend-config="lock_method=POST" \
+    -backend-config="unlock_method=DELETE" \
+    -backend-config="retry_wait_min=5"
 ```
 
 ## TFVARS File terraform.tfvars 
