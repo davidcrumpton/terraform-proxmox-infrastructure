@@ -20,7 +20,7 @@ cache:
     - "${TF_ROOT}/.terraform"
 
 before_script:
-  - export PM_API_TOKEN_ID=${echo $PM_API_TOKEN_ID | sed 's/\./!/g'}
+  - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
   - echo ${PM_API_TOKEN_ID}
   - terraform --version
   - terraform init
