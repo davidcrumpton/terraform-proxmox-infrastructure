@@ -27,7 +27,7 @@ before_script:
   - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
   - echo ${PM_API_TOKEN_ID}
   - terraform --version
-  - terraform init -backend-config="address=${TF_ADDRESS}" -backend-config="lock_address=${TF_ADDRESS}/lock" -backend-config="unlock_address=${TF_ADDRESS}/lock" -backend-config="username=${CI_JOB_TOKEN}" -backend-config="password=${CI_JOB_TOKEN}" -backend-config="lock_method=POST" -backend-config="unlock_method=DELETE" -backend-config="retry_max=10"
+  - terraform init -backend-config="address=${TF_ADDRESS}" -backend-config="lock_address=${TF_ADDRESS}/lock" -backend-config="unlock_address=${TF_ADDRESS}/lock"   -backend-config="username=oauth2" -backend-config="password=${CI_JOB_TOKEN}" -backend-config="lock_method=POST" -backend-config="unlock_method=DELETE" -backend-config="retry_max=10"
 
 
 validate:
@@ -41,7 +41,7 @@ validate:
 plan:
   stage: plan
   script:
-    - terraform plan -out="${TF_ROOT}/tfplan.cache" -lock=false
+    - terraform plan -out="${TF_ROOT}/tfplan.cache" 
   artifacts:
     expire_in: 1 day
     paths:
@@ -54,7 +54,7 @@ plan:
 apply:
   stage: apply
   script:
-    - terraform apply -lock=false -auto-approve "${TF_ROOT}/tfplan.cache"
+    - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
   dependencies:
     - plan
   when: manual # Requires manual approval in the GitLab UI
@@ -65,7 +65,7 @@ apply:
 destroy:
   stage: destroy
   script:
-    - terraform destroy -auto-approve -lock=false
+    - terraform destroy -auto-approve
   when: manual # Requires manual approval, useful for tearing down lab environments
   only:
     - master
