@@ -20,7 +20,7 @@ cache:
     - "${TF_ROOT}/.terraform"
 
 before_script:
-  - mkdir -p .terraform-plugin-cache
+  - mkdir -p "${TF_PLUGIN_CACHE_DIR}"
   - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
   - echo ${PM_API_TOKEN_ID}
   - terraform --version
