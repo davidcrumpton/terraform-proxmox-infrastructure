@@ -169,35 +169,30 @@ variable "lxc_sizing"{
       cores  = number
       swap   = number
       disk   = number
-      disk_lxcg = string
     })
     large = object({
       memory = number
       cores  = number
       swap   = number
       disk   = number
-      disk_lxcg = string
     })
     medium = object({
       memory = number
       cores  = number
       swap   = number
       disk   = number
-      disk_lxcg = string
     })
     small = object({
       memory = number
       cores  = number
       swap   = number
       disk   = number
-      disk_lxcg = string
     })
     tiny = object({
       memory = number
       cores  = number
       swap   = number
       disk   = number
-      disk_lxcg = string
     })  
   }) 
   default = {
@@ -205,36 +200,31 @@ variable "lxc_sizing"{
       memory = 4096
       cores  = 8
       swap   = 8192
-      disk   = 1024
-      disk_lxcg = "1M"
+      disk   = 4096
     }
     large = {
       memory = 2048
       cores  = 4
       swap   = 4096
-      disk   = 1024
-      disk_lxcg = "1M"
+      disk   = 4096
     }
     medium = {
       memory = 1024
       cores  = 2
       swap   = 2048
-      disk   = 1024
-      disk_lxcg = "1M"
+      disk   = 4096
     }
     small = {
       memory = 512
       cores  = 2
       swap   = 1024
-      disk   = 1024
-      disk_lxcg = "1M"
+      disk   = 2048
     }
     tiny = {
       memory = 256
       cores  = 1
       swap   = 512
       disk   = 1024
-      disk_lxcg = "1M"
     }
   }
 }
