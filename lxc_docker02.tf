@@ -20,7 +20,7 @@ resource "proxmox_lxc" "docker" {
   ostype      = var.ostemplate_debian_12.ostype
   unprivileged = true
  
-  tags        = "tf-mng;docker;${var.ostemplate_debian_12.ostype};${var.ostemplate_ubuntu_2204.tag}"
+  tags        = "tf-mng;docker;${var.ostemplate_debian_12.ostype};${var.ostemplate_debian_12.tag}"
   
   features     {
     nesting = true

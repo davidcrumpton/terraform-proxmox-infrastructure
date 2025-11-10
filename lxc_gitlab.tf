@@ -21,7 +21,7 @@ resource "proxmox_lxc" "gitlab" {
   ostype      = var.ostemplate_debian_12.ostype
   unprivileged = true
  
-  tags        = "tf-mng;git;sso;${var.ostemplate_debian_12.ostype};${var.ostemplate_ubuntu_2204.tag}"
+  tags        = "tf-mng;git;sso;${var.ostemplate_debian_12.ostype};${var.ostemplate_debian_12.tag}"
   
   features     {
     nesting = true
