@@ -13,6 +13,8 @@ image:
 variables:
   TF_ROOT: "${CI_PROJECT_DIR}" # Assumes your .tf files are in a 'terraform' directory
   TF_PLUGIN_CACHE_DIR: "${CI_PROJECT_DIR}/.terraform-plugin-cache" # Cache plugins to speed up jobs
+  TF_ADDRESS: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/proxmox-homelab" # 'proxmox-homelab' is an arbitrary name for your state file/environment
+
 
 cache:
   paths:
@@ -25,7 +27,8 @@ before_script:
   - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
   - echo ${PM_API_TOKEN_ID}
   - terraform --version
-  - terraform init
+  - terraform init -backend-config="address=${TF_ADDRESS}" -backend-config="lock_address=${TF_ADDRESS}/lock" -backend-config="unlock_address=${TF_ADDRESS}/lock" -backend-config="username=${CI_JOB_TOKEN}" -backend-config="password=${CI_JOB_TOKEN}" -backend-config="lock_method=POST" -backend-config="unlock_method=DELETE" -backend-config="retry_max=10"
+
 
 validate:
   stage: validate
