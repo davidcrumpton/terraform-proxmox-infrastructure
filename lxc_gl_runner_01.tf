@@ -1,7 +1,7 @@
 resource "proxmox_lxc" "gl_runner" {
   target_node = var.node
   vmid        = 507
-  hostname    = "gitlab-runnder-ng"
+  hostname    = "gitlab-runnder-01-ng"
   cores       = var.lxc_sizing.small.cores
   memory      = var.lxc_sizing.small.memory
   swap        = var.lxc_sizing.small.swap
