@@ -1,3 +1,8 @@
+variable "create_ansible_vars_yaml" {
+  type = number
+  default = 1
+}
+
 resource "proxmox_lxc" "simple_lxc" {
   target_node = var.node
   vmid        = 199
@@ -62,14 +67,16 @@ output "simple_root_password" {
 
 locals {
   ansible_vars_values = {
-    tags = resource.proxmox_lxc.simple_lxc
+    tags_list = sort(split(";", resource.proxmox_lxc.simple_lxc.tags))
+    docker = false
+    ldap_login = false
   }
 }
 #------------------------------------------------------------------------------
 # Module-generated Ansible vars file
 #------------------------------------------------------------------------------
 resource "local_file" "ansible_vars_values" {
-  count = var.create_ansible_vars_yaml ? 1 : 0
+  count = var.create_ansible_vars_yaml  == 1 ? 1 : 0
 
   content  = templatefile("${path.module}/templates/ansible_vars.yaml.tpl", local.ansible_vars_values)
   filename = "${path.cwd}/ansible-vars/${resource.proxmox_lxc.simple_lxc.hostname}.ansible_vars.yaml"
