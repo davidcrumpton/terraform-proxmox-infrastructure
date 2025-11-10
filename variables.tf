@@ -35,14 +35,10 @@ variable "pm_tls_insecure" {
   default = false
 }
 
-variable "datacenter" { 
-  type = string
-   default = "pve" 
-   }
 variable "node" { 
   type = string
- default = "pve02" 
  }
+
 variable "storage" { 
   type = string
  default = "local-lvm" 
@@ -50,21 +46,24 @@ variable "storage" {
 
 # VM defaults
 variable "vm_name" {
-   type = string
- default = "terraform-vm" 
+  type = string
+  default = "terraform-vm" 
  }
+
 variable "cores" { 
   type = number
  default = 2 
  }
+
 variable "memory" {
    type = number
     default = 2048 
-    }
+}
+
 variable "disk_size_gb" {
    type = number
    default = 16 
-   }
+}
 
 variable "default_ssh_keys" {
   default = <<-EOT
