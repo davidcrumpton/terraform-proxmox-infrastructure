@@ -22,7 +22,7 @@ cache:
 before_script:
   - pwd
   - echo ${TF_ROOT}
-  - mkdir -p ${TF_ROOT}/.terraform-plugin-cache
+  - mkdir -p ${TF_ROOT}/../.terraform-plugin-cache
   - cd "${TF_ROOT}"
   - terraform --version
   - terraform init
