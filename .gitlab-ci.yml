@@ -2,9 +2,9 @@ workflow:
   rules:
     # Run pipelines when templates, generator, data, or CI config change
     - changes:
-      - .tf
-      - .tf.disabled
-      - lxc.d/
+      - *.tf
+      - *.tf.disabled
+      - lxc.d/*.tf
       - .gitlab-ci.yml
       when: always
     # Don't run for other changes (e.g., README, LICENSE)
