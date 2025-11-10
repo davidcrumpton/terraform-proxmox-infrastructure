@@ -1,0 +1,66 @@
+stages:
+  - validate
+  - plan
+  - apply
+  - destroy
+
+image:
+  name: "hashicorp/terraform:latest"
+  entrypoint:
+    - "/usr/bin/env"
+    - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+variables:
+  TF_ROOT: "${CI_PROJECT_DIR}/terraform" # Assumes your .tf files are in a 'terraform' directory
+  TF_PLUGIN_CACHE_DIR: "${CI_PROJECT_DIR}/.terraform-plugin-cache" # Cache plugins to speed up jobs
+
+cache:
+  paths:
+    - "${TF_PLUGIN_CACHE_DIR}"
+    - "${TF_ROOT}/.terraform"
+
+before_script:
+  - cd "${TF_ROOT}"
+  - terraform --version
+  - terraform init
+
+validate:
+  stage: validate
+  script:
+    - terraform validate
+    - terraform fmt -check=true # Ensure consistent formatting
+  only:
+    - merge_requests
+
+plan:
+  stage: plan
+  script:
+    - terraform plan -out=tfplan.cache
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - "${TF_ROOT}/tfplan.cache"
+  only:
+    - merge_requests
+    - master
+    - main
+
+apply:
+  stage: apply
+  script:
+    - terraform apply -auto-approve tfplan.cache
+  dependencies:
+    - plan
+  when: manual # Requires manual approval in the GitLab UI
+  only:
+    - master
+    - main
+
+destroy:
+  stage: destroy
+  script:
+    - terraform destroy -auto-approve
+  when: manual # Requires manual approval, useful for tearing down lab environments
+  only:
+    - master
+    - main
