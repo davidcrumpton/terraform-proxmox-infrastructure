@@ -11,10 +11,9 @@ terraform init -reconfigure -backend-config="address=${TF_ADDRESS}" \
 -backend-config="lock_method=POST"  -backend-config="unlock_method=DELETE"  -backend-config="retry_max=10"
 ```
 
-## TFVARS File
+## TFVARS File terraform.tfvars 
 
 ```text
-cat terraform.tfvars 
 pm_api_url = "https://pve02.crumpton.org:8006/api2/json"
 pm_user = "root@pam"
 
@@ -31,11 +30,11 @@ storage = "local-lvm"
 Source the variables below after proper setup.  Your token should be created in your personal account config.
 
 ```sh
-# export PM_API_URL="https://pve02.crumpton.org:8006/api2/json"
-# export PM_API_TOKEN_ID="root@pam!terraform"
-# export PM_API_TOKEN_SECRET="f0fb7021-0f0f-45ad-97b3-c7f6b589d84a"
-# export CI_API_V4_URL="https://gitlab.crumpton.org/api/v4"
-# export CI_PROJECT_ID=20
-# export TF_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/proxmox-homelab"
+export PM_API_URL="https://pve02.crumpton.org:8006/api2/json"
+export PM_API_TOKEN_ID="root@pam!terraform"
+export PM_API_TOKEN_SECRET="f0fb7021-0f0f-45ad-97b3-c7f6b589d84a"
+export CI_API_V4_URL="https://gitlab.crumpton.org/api/v4"
+export CI_PROJECT_ID=20
+export TF_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/proxmox-homelab"
 # export GITLAB_TOKEN=glpat-a3...
 ```
