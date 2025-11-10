@@ -27,7 +27,7 @@ before_script:
   - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
   - echo ${PM_API_TOKEN_ID}
   - terraform --version
-  - terraform init              -backend-config="address=${TF_ADDRESS}" -backend-config="lock_address=${TF_ADDRESS}/lock"  -backend-config="unlock_address=${TF_ADDRESS}/lock"   -backend-config="username=oauth2"   -backend-config="password=${GITLAB_TOKEN}"  -backend-config="lock_method=POST"    -backend-config="unlock_method=DELETE"   -backend-config="retry_max=10" -reconfigure
+  - terraform init -backend-config="address=${TF_ADDRESS}" -backend-config="lock_address=${TF_ADDRESS}/lock"  -backend-config="unlock_address=${TF_ADDRESS}/lock" -backend-config="username=oauth2" -backend-config="password=${CI_JOB_TOKEN}" -backend-config="lock_method=POST"  -backend-config="unlock_method=DELETE"  -backend-config="retry_max=10"
 
 validate:
   stage: validate
