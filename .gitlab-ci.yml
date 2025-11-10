@@ -11,7 +11,7 @@ image:
     - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 variables:
-  TF_ROOT: "${CI_PROJECT_DIR}/terraform}" # Assumes your .tf files are in a 'terraform' directory
+  TF_ROOT: "${CI_PROJECT_DIR}/terraform" # Assumes your .tf files are in a 'terraform' directory
   TF_PLUGIN_CACHE_DIR: "${CI_PROJECT_DIR}/.terraform-plugin-cache" # Cache plugins to speed up jobs
 
 cache:
