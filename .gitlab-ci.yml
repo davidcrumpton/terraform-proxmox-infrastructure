@@ -57,6 +57,7 @@ plan:
     expire_in: 1 day
     paths:
       - "${TF_ROOT}/tfplan.cache"
+      - "${TF_ROOT}/ansible-vars"
   only:
     - merge_requests
     - master
