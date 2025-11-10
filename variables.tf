@@ -37,6 +37,7 @@ variable "pm_tls_insecure" {
 
 variable "node" { 
   type = string
+  default = "proxmox" 
  }
 
 variable "storage" { 
