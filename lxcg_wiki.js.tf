@@ -7,7 +7,7 @@ resource "proxmox_lxc_guest" "wikijs01" {
     power_state  = "running"
     target_node         = "pve02"
     unprivileged = true
-
+    
     ssh_public_keys = var.default_ssh_keys
     password     = random_password.wikijs_root_password.result
     template {
