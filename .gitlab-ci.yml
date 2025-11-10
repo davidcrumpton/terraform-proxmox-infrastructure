@@ -57,7 +57,6 @@ plan:
     expire_in: 1 day
     paths:
       - "${TF_ROOT}/tfplan.cache"
-      - "${TF_ROOT}/ansible-vars"
   only:
     - merge_requests
     - master
@@ -69,6 +68,10 @@ apply:
     - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
   dependencies:
     - plan
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - "${TF_ROOT}/ansible-vars"
   when: manual # Requires manual approval in the GitLab UI
   only:
     - master
