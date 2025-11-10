@@ -1,29 +1,29 @@
-resource "proxmox_lxc" "simple_lxc" {
+resource "proxmox_lxc" "pve01_backup" {
   target_node = var.node
-  vmid        = 199
-  hostname    = "simple-lxc"
+  vmid        = 518
+  hostname    = "pve01-backup-ng"
   cores       = var.lxc_sizing.small.cores
   memory      = var.lxc_sizing.small.memory
   swap        = var.lxc_sizing.small.swap
   ostemplate = var.ostemplate_ubuntu_2204.template
   ssh_public_keys = var.default_ssh_keys
-  password = random_password.simple_root_password.result
+  password = random_password.pve01_backup_root_password.result
   start = true
   onboot      = true
 
   description          = <<-EOT
-      # Simple LXC Container
-      Created with Terraform and Proxmox Provider
+    # PVE01-Backup
 
-      ## Access
-      SSH Access with provided SSH keys.
-      ## Root Password
-      Root password is generated and can be found in Terraform outputs.
+    This system has an account to backup pve01 data via SMB.
+
+
+    Mounts the 4G media share
   EOT
 
   ostype      = var.ostemplate_ubuntu_2204.ostype
   unprivileged = true
-  tags        = "poc;${var.common_tags.lxc};${var.ostemplate_ubuntu_2204.ostype};ubuntu2204"
+ 
+  tags        = "tf-mng;backup;pve01_backup;${var.ostemplate_ubuntu_2204.ostype};${var.ostemplate_ubuntu_2204.tag}"
   
   features     {
     nesting = true
@@ -38,7 +38,7 @@ resource "proxmox_lxc" "simple_lxc" {
   network {
     name      = "eth0"
     bridge    = var.bridge.lan
-    hwaddr    = "C6:96:DC:8D:4C:39"
+  #  hwaddr    = "C6:96:DC:8D:4C:39"
     type      = "veth"
     firewall  = true
     ip        = "dhcp"
@@ -47,14 +47,14 @@ resource "proxmox_lxc" "simple_lxc" {
 
 }
 
-resource "random_password" "simple_root_password" {
+resource "random_password" "pve01_backup_root_password" {
   length           = 24
   override_special = "!@#$%&*()-_=+[]{}<>:?"
   special          = true
 } 
 
-output "simple_root_password" {
-  description = "Root password for the simple LXC container"
-  value       = random_password.simple_root_password.result
+output "pve01_backup_root_password" {
+  description = "Root password for the pve01_backup LXC container"
+  value       = random_password.pve01_backup_root_password.result
   sensitive   = true
 }

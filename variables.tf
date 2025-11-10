@@ -81,11 +81,13 @@ variable "ostemplate_ubuntu_2204" {
     template = string
     ostype       = string
     template_lxcg = string
+    tag = string
   })
   default = {
     template = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
     template_lxcg = "ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
     ostype       = "ubuntu"
+    tag = "u2204"
   }
 }
 variable "ostemplate_debian_12" {
@@ -93,11 +95,13 @@ variable "ostemplate_debian_12" {
     template = string
     ostype    = string
     template_lxcg = string
+    tag = string
   })
   default = {
     template = "local:vztmpl/debian-12-standard_12.12-1_amd64.tar.zst"
     ostype    = "debian"
     template_lxcg = "debian-12-standard_12.12-1_amd64.tar.zst"
+    tag = "d12"
   }
 }
 
@@ -107,11 +111,13 @@ variable "ostemplate_ubuntu_2404" {
     template = string
     ostype       = string
     template_lxcg = string
+    tag = string
   })
   default = {
     template = "local:vztmpl/ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
     ostype       = "ubuntu"
     template_lxcg = "ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
+    tag = "u2404"
   } 
 }
 

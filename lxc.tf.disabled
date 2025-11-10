@@ -2,7 +2,7 @@ module "plex" {
   source = "./lxc.d/plex"
  
   ssh_public_keys = var.default_ssh_keys
-  vmid            = 117
+  vmid            = 517
   hostname        = "plexing"
   cores           = 4
   memory          = 928
@@ -18,7 +18,7 @@ module "simple_lxc" {
 
   ssh_public_keys = var.default_ssh_keys
   default_password = random_password.lxc_root_password.result
-  vmid            = 199
+  vmid            = 599
   hostname        = "simple-lxc"
   cores           = 4
   memory          = 928
@@ -33,7 +33,7 @@ module "gitlab_runner" {
   source = "./lxc.d/gitlab-runner"
 
   ssh_public_keys = var.default_ssh_keys
-  vmid            = 107
+  vmid            = 507
   hostname        = "gitlab-running"
   cores           = 4
   memory          = 928
