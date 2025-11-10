@@ -41,7 +41,7 @@ validate:
 plan:
   stage: plan
   script:
-    - terraform plan -out="${TF_ROOT}/tfplan.cache"
+    - terraform plan -out="${TF_ROOT}/tfplan.cache" -lock=false
   artifacts:
     expire_in: 1 day
     paths:
@@ -54,7 +54,7 @@ plan:
 apply:
   stage: apply
   script:
-    - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
+    - terraform apply -lock=false -auto-approve "${TF_ROOT}/tfplan.cache"
   dependencies:
     - plan
   when: manual # Requires manual approval in the GitLab UI
@@ -65,7 +65,7 @@ apply:
 destroy:
   stage: destroy
   script:
-    - terraform destroy -auto-approve
+    - terraform destroy -auto-approve -lock=false
   when: manual # Requires manual approval, useful for tearing down lab environments
   only:
     - master
