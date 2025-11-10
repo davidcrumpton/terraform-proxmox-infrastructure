@@ -5,15 +5,10 @@
 This requires more init options to keep state synced in the cloud.
 
 ```sh
-    terraform init \
-  -backend-config="address=${TF_ADDRESS}" \
-  -backend-config="lock_address=${TF_ADDRESS}/lock" \
-  -backend-config="unlock_address=${TF_ADDRESS}/lock" \
-  -backend-config="username=oauth2" \
-  -backend-config="password=${CI_JOB_TOKEN}" \
-  -backend-config="lock_method=POST" \
-  -backend-config="unlock_method=DELETE" \
-  -backend-config="retry_max=10"
+terraform init -reconfigure -backend-config="address=${TF_ADDRESS}" \
+-backend-config="lock_address=${TF_ADDRESS}/lock"  -backend-config="unlock_address=${TF_ADDRESS}/lock" \
+-backend-config="username=oauth2" -backend-config="password=${GITLAB_TF_API_TOKEN}" \
+-backend-config="lock_method=POST"  -backend-config="unlock_method=DELETE"  -backend-config="retry_max=10"
 ```
 
 ## TFVARS File
