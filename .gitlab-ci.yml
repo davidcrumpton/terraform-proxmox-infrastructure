@@ -4,8 +4,11 @@ workflow:
     - changes:
       - "*.tf"
       - "*.tf.disabled"
-      - "lxc.d/*.tf"
       - .gitlab-ci.yml
+      - "*.tpl"
+      - "*.sh"
+      - "*.yml"
+      - "ansible/**"
       when: always
     # Don't run for other changes (e.g., README, LICENSE)
     - when: never
