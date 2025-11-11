@@ -95,7 +95,8 @@ destroy:
 
 ansible_deploy:
   stage: ansible
-  image: "ansible/ansible-runner:latest"
+  # image: "ansible/ansible-runner:latest"
+  image: "demisto/ansible-runner:1.0.0.5807676"
   script:
     - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml
   dependencies:
