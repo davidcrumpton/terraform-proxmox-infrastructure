@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+set -eo pipefail
+
+ENABLED_NAME=lxc_${1}.tf
+DISABLED_NAME="lxc_${1}.tf.disabled"
+if test -f $DISABLED_NAME
+then
+	echo "$1 is already disabled or duplicated"
+	exit 1
+fi
+
+if ! test -f $ENABLED_NAME
+then
+	echo "$ENABLED_NAME doesn'texist!"
+	exit 1
+fi
+
+if mv $ENABLED_NAME $DISABLED_NAME
+then
+	echo "disabled $1"
+else
+	echo "failed to disable $1"
+	exit 1
+fi
+exit 0

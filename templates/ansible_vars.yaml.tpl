@@ -3,5 +3,5 @@ tags:
 %{ for tag in tags_list ~}
   - ${tag}
 %{ endfor ~}
-docker: ${docker}
-ldap_login: ${ldap_login}
+docker: ${ansible_config_docker}
+ldap_login: ${ansible_config_ldap}

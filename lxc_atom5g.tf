@@ -67,9 +67,15 @@ output "atom5g_root_password" {
 
 locals {
   ansible_vars_atom5g = {
-    tags_list = sort(split(";", resource.proxmox_lxc.atom5g.tags))
-    docker = false
-    ldap_login = false
+    hostname     = resource.proxmox_lxc.atom5g.hostname
+    vmid         = resource.proxmox_lxc.atom5g.vmid
+    tags_list    = sort(split(";", resource.proxmox_lxc.atom5g.tags))
+    storage_pool = resource.proxmox_lxc.atom5g.rootfs[0].storage
+    ip4          = resource.proxmox_lxc.atom5g.network[0].ip
+    ip4_fallback = "hostname -I | awk '{print $1}'"
+    features     = { nesting = true }
+    ansible_config_docker       = false
+    ansible_config_ldap   = false
   }
 }
 #------------------------------------------------------------------------------

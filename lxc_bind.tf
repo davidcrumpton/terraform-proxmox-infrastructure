@@ -10,7 +10,7 @@ resource "proxmox_lxc" "ns1" {
   password = random_password.ns1_root_password.result
   start = true
   onboot      = true
-  backup = false
+
   description          = <<-EOT
       # ns1 Testing LXC Container
       Created with Terraform and Proxmox Provider
@@ -62,8 +62,8 @@ output "ns1_root_password" {
 locals {
   ansible_vars_ns1 = {
     tags_list = sort(split(";", resource.proxmox_lxc.ns1.tags))
-    docker = false
-    ldap_login = false
+    ansible_config_docker = false
+    ansible_config_ldap = false
   }
 }
 #------------------------------------------------------------------------------

@@ -75,8 +75,8 @@ output "plex_root_password" {
 locals {
   ansible_vars_plex = {
     tags_list = sort(split(";", resource.proxmox_lxc.plex.tags))
-    docker = false
-    ldap_login = false
+    ansible_config_docker = false
+    ansible_config_ldap = false
   }
 }
 #------------------------------------------------------------------------------

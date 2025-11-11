@@ -66,8 +66,8 @@ output "elk_root_password" {
 locals {
   ansible_vars_elk = {
     tags_list = sort(split(";", resource.proxmox_lxc.elk.tags))
-    docker = false
-    ldap_login = false
+    ansible_config_docker = false
+    ansible_config_ldap = false
   }
 }
 #------------------------------------------------------------------------------
