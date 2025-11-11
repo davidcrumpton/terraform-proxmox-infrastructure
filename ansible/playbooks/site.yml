@@ -13,7 +13,7 @@
 
   roles:
     - common            # baseline configuration (users, updates, etc.)
-    - networking        # optional role for static/dhcp config tuning
+  #  - networking        # optional role for static/dhcp config tuning
 
   tasks:
     - name: Display basic host info (debug sanity check)
