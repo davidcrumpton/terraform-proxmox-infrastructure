@@ -57,8 +57,8 @@ output "docker_root_password" {
 }
 
 locals {
-  ansible_vars_docker02 = {
-    tags_list = sort(split(";", resource.proxmox_lxc.simple_lxc.tags))
+  ansible_vars_docker = {
+    tags_list = sort(split(";", resource.proxmox_lxc.docker.tags))
     docker = false
     ldap_login = false
   }
@@ -66,11 +66,11 @@ locals {
 #------------------------------------------------------------------------------
 # Module-generated Ansible vars file
 #------------------------------------------------------------------------------
-resource "local_file" "ansible_vars_docker02" {
+resource "local_file" "ansible_vars_docker" {
   count = var.create_ansible_vars_yaml  == 1 ? 1 : 0
 
-  content  = templatefile("${path.module}/templates/ansible_vars.yaml.tpl", local.ansible_vars_docker02)
-  filename = "${path.cwd}/ansible-vars/${resource.proxmox_lxc.simple_lxc.hostname}.ansible_vars.yaml"
+  content  = templatefile("${path.module}/templates/ansible_vars.yaml.tpl", local.ansible_vars_docker)
+  filename = "${path.cwd}/ansible-vars/${resource.proxmox_lxc.docker.hostname}.ansible_vars.yaml"
  
   lifecycle {
     ignore_changes = [content, filename]

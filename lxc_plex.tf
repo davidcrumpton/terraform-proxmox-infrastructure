@@ -74,7 +74,7 @@ output "plex_root_password" {
 
 locals {
   ansible_vars_plex = {
-    tags_list = sort(split(";", resource.proxmox_lxc.simple_lxc.tags))
+    tags_list = sort(split(";", resource.proxmox_lxc.plex.tags))
     docker = false
     ldap_login = false
   }
@@ -86,7 +86,7 @@ resource "local_file" "ansible_vars_plex" {
   count = var.create_ansible_vars_yaml  == 1 ? 1 : 0
 
   content  = templatefile("${path.module}/templates/ansible_vars.yaml.tpl", local.ansible_vars_plex)
-  filename = "${path.cwd}/ansible-vars/${resource.proxmox_lxc.simple_lxc.hostname}.ansible_vars.yaml"
+  filename = "${path.cwd}/ansible-vars/${resource.proxmox_lxc.plex.hostname}.ansible_vars.yaml"
  
   lifecycle {
     ignore_changes = [content, filename]
