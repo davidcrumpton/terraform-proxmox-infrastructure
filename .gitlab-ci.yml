@@ -1,6 +1,6 @@
 workflow:
   rules:
-    # Run pipelines when templates, generator, data, or CI config change
+    # 1. Pipeline should run if *any* of the desired files change.
     - changes:
       - "*.tf"
       - "*.tf.disabled"
@@ -9,8 +9,10 @@ workflow:
       - "*.sh"
       - "*.yml"
       - "ansible/**"
-      when: always
-    # Don't run for other changes (e.g., README, LICENSE)
+      # No 'when' here. If this rule matches, the pipeline is included.
+
+    # 2. If the previous rule did *not* match, this is the default, 
+    #    which prevents the pipeline from running for everything else.
     - when: never
 
 stages:
