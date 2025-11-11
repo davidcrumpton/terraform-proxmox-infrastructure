@@ -99,6 +99,9 @@ ansible_deploy:
   before_script: []   # <--- disables inherited before_script
   script:
     - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml
+  needs:
+    - job: apply
+      artifacts: true  # Waits for apply and downloads its artifacts
   dependencies:
     - apply
   when: on_success
