@@ -1,9 +1,10 @@
 locals {
   # Collect ansible data from all LXC modules
   lxc_inventory = [
-    module.lxc_atom5g.ansible_data,
+   # module.lxc_atom5g.ansible_data,
+
     # Add more here, e.g.:
-    # module.lxc_gitlab_runner.ansible_data,
+    module.lxc_gl_runner.ansible_data,
     # module.lxc_keycloak.ansible_data,
   ]
 
