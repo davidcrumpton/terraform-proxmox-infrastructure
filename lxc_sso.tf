@@ -68,7 +68,7 @@ output "sso_root_password" {
 locals {
   ansible_vars_sso = {
     tags_list = sort(split(";", resource.proxmox_lxc.sso.tags))
-    docker = false
+    docker = true
     ldap_login = false
   }
 }

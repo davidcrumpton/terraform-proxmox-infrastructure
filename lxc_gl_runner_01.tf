@@ -60,7 +60,7 @@ output "gl_runner_root_password" {
 locals {
   ansible_vars_gl_runner = {
     tags_list = sort(split(";", resource.proxmox_lxc.gl_runner.tags))
-    docker = false
+    docker = true
     ldap_login = false
   }
 }

@@ -62,7 +62,7 @@ output "gitlab_root_password" {
 locals {
   ansible_vars_gitlab = {
     tags_list = sort(split(";", resource.proxmox_lxc.gitlab.tags))
-    docker = false
+    docker = true
     ldap_login = false
   }
 }
