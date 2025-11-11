@@ -78,6 +78,6 @@ resource "null_resource" "ansible_apply" {
 
   provisioner "local-exec" {
     command = "${path.root}/run_ansible.sh site.yml"
-    interpreter = ["/bin/bash", "-c"]
+    interpreter = ["/bin/sh", "-c"]
   }
 }
