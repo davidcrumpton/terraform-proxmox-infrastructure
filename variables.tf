@@ -287,3 +287,9 @@ variable target_node {
   type = string
   default = "pve02"
 }
+
+variable "create_ansible_vars_yaml" {
+  type = number
+  default = 1
+}
+

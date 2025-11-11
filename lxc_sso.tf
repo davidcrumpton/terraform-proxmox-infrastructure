@@ -63,3 +63,25 @@ output "sso_root_password" {
   value       = random_password.sso_root_password.result
   sensitive   = true
 }
+
+
+locals {
+  ansible_vars_sso = {
+    tags_list = sort(split(";", resource.proxmox_lxc.simple_lxc.tags))
+    docker = false
+    ldap_login = false
+  }
+}
+#------------------------------------------------------------------------------
+# Module-generated Ansible vars file
+#------------------------------------------------------------------------------
+resource "local_file" "ansible_vars_sso" {
+  count = var.create_ansible_vars_yaml  == 1 ? 1 : 0
+
+  content  = templatefile("${path.module}/templates/ansible_vars.yaml.tpl", local.ansible_vars_sso)
+  filename = "${path.cwd}/ansible-vars/${resource.proxmox_lxc.simple_lxc.hostname}.ansible_vars.yaml"
+ 
+  lifecycle {
+    ignore_changes = [content, filename]
+  }
+}
