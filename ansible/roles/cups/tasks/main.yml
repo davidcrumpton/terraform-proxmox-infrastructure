@@ -1,0 +1,12 @@
+---
+- name: Install and enable CUPS print service
+  ansible.builtin.apt:
+    name: cups
+    state: present
+    update_cache: yes
+
+- name: Enable and start CUPS
+  ansible.builtin.service:
+    name: cups
+    state: started
+    enabled: yes

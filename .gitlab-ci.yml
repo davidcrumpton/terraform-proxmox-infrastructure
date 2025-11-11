@@ -14,6 +14,7 @@ stages:
   - validate
   - plan
   - apply
+  - ansible
   - destroy
 
 image:
@@ -84,4 +85,15 @@ destroy:
   when: manual # Requires manual approval, useful for tearing down lab environments
   only:
     - master
+    - main
+
+ansible_deploy:
+  stage: ansible
+  image: "ansible/ansible-runner:latest"
+  script:
+    - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml
+  dependencies:
+    - apply
+  when: on_success
+  only:
     - main

@@ -1,0 +1,80 @@
+---
+# site-bootstrap.yml
+# Use this playbook to prepare a new Proxmox node for Terraform management.
+
+- name: "Bootstrap Proxmox node for Terraform and Ansible management"
+  hosts: pve_nodes
+  become: yes
+  gather_facts: yes
+
+  vars_prompt:
+    - name: proxmox_api_user
+      prompt: "Enter the Proxmox API username (e.g. root@pam)"
+      private: no
+      default: "root@pam"
+
+    - name: proxmox_api_token_name
+      prompt: "Enter a new API token name"
+      private: no
+      default: "terraform"
+
+  tasks:
+    - name: Ensure system is up to date
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install essential packages for Terraform/Ansible
+      ansible.builtin.apt:
+        name:
+          - python3
+          - python3-pip
+          - jq
+          - curl
+          - vim
+          - git
+          - sudo
+        state: present
+
+    - name: Ensure Terraform API user exists (for token-based automation)
+      ansible.builtin.user:
+        name: "{{ proxmox_api_user.split('@')[0] }}"
+        state: present
+        shell: /bin/bash
+
+    - name: Allow Terraform automation via API token (idempotent)
+      ansible.builtin.shell: |
+        pveum user token add "{{ proxmox_api_user }}" "{{ proxmox_api_token_name }}" \
+          --comment "Terraform automation token" || true
+      args:
+        executable: /bin/bash
+
+    - name: Create SSH key directory
+      ansible.builtin.file:
+        path: /root/.ssh
+        state: directory
+        mode: '0700'
+
+    - name: Copy public SSH key for automation access
+      ansible.builtin.copy:
+        src: ~/.ssh/id_rsa.pub
+        dest: /root/.ssh/authorized_keys
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Enable passwordless sudo for Terraform operations
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/terraform
+        line: "{{ proxmox_api_user.split('@')[0] }} ALL=(ALL) NOPASSWD: ALL"
+        create: yes
+        mode: '0440'
+
+    - name: Display API token information
+      ansible.builtin.shell: pveum user token list "{{ proxmox_api_user }}" | grep "{{ proxmox_api_token_name }}"
+      register: token_output
+      changed_when: false
+
+    - name: Print token details
+      ansible.builtin.debug:
+        msg: "{{ token_output.stdout_lines }}"
