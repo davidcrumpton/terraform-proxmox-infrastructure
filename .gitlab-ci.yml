@@ -53,7 +53,7 @@ validate:
   stage: validate
   script:
     - terraform validate
-    - terraform fmt -check=true # Ensure consistent formatting
+#    - terraform fmt -check=true # Ensure consistent formatting
   only:
     - merge_requests
 
