@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 PLAYBOOK="$1"
 INVENTORY="./ansible/inventory/hosts"
 
