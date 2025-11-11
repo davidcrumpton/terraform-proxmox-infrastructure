@@ -44,3 +44,10 @@ resource random_password "atom5g_root" {
   override_special = "!@#$%&*()-_=+[]{}<>:?"
   special          = true
 }
+
+
+output "atom5g_root_password" {
+  description = "Root password for the Atom5G container"
+  value       = random_password.atom5g_root.result
+  sensitive   = true
+}
