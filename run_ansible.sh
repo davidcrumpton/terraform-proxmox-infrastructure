@@ -18,4 +18,24 @@ for i in {1..10}; do
 done
 
 echo "🚀 Running playbook: $PLAYBOOK"
-ansible-playbook -i "$INVENTORY" "./ansible/playbooks/$PLAYBOOK" -u root
+
+
+# Setup SSH key if provided
+if [[ -n "${SSH_PRIVATE_KEY_BASE_64:-}" ]]; then
+    echo "Using provided SSH private key..."
+
+    mkdir -p ~/.ssh
+    chmod 700 ~/.ssh
+
+    # Decode base64 key to file
+    echo "$SSH_PRIVATE_KEY_BASE_64" | base64 --decode > ~/.ssh/terraform
+    chmod 600 ~/.ssh/terraform
+
+    # Run ansible with the SSH key
+    ansible-playbook -i "$INVENTORY" "./ansible/playbooks/$PLAYBOOK" \
+        -u root \
+        --private-key ~/.ssh/terraform
+else
+    echo "No SSH private key provided, using default SSH agent or key."
+    ansible-playbook -i "$INVENTORY" "./ansible/playbooks/$PLAYBOOK" -u root
+fi
