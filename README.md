@@ -1,5 +1,9 @@
 # Terraform ProxMox PVE02 Files
 
+## Tools and Scripts
+
+Are available in the scripts/ folder
+
 ## Terraform init command
 
 This requires more init options to keep state synced in the cloud.

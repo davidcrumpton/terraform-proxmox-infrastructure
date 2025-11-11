@@ -1,0 +1,9 @@
+---
+- name: Ensure basic packages are present
+  ansible.builtin.apt:
+    name:
+      - vim
+      - curl
+      - net-tools
+    state: present
+    update_cache: yes
