@@ -43,7 +43,6 @@ before_script:
   - cd ${TF_ROOT}
   - mkdir -p "${TF_PLUGIN_CACHE_DIR}"
   - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
-  - echo ${PM_API_TOKEN_ID}
   - terraform --version
   - echo -n "${GITLAB_ACCESS_TOKEN}" | wc -c
   - export TF_STATE_NAME=proxmox-homelab
