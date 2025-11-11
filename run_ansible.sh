@@ -28,7 +28,7 @@ if [[ -n "${SSH_PRIVATE_KEY_BASE_64:-}" ]]; then
     chmod 700 ~/.ssh
 
     # Decode base64 key to file
-    echo "$SSH_PRIVATE_KEY_BASE_64" | base64 --decode > ~/.ssh/terraform
+    echo "$SSH_PRIVATE_KEY_BASE_64" | base64 -d > ~/.ssh/terraform
     chmod 600 ~/.ssh/terraform
 
     # Run ansible with the SSH key
