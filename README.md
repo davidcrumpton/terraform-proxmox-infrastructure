@@ -78,7 +78,7 @@ environment.
 
 ```sh
 export PM_API_URL="https://pve02.localdomain:8006/api2/json"
-export PM_API_TOKEN_ID="root@pam!terraform"
+export PM_API_TOKEN_ID="proxmox@pam!terraform"
 export PM_API_TOKEN_SECRET="f0fb7021-0f0f-45ad-97b3-c7f6b589d84a"
 export CI_API_V4_URL="https://gitlab.localdomain/api/v4"
 export CI_PROJECT_ID=20
