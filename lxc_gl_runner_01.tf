@@ -26,7 +26,7 @@ EOT
   networks = [
     {
       name   = "eth0"
-      bridge = var.bridge.wifi_5g
+      bridge = var.bridge.lan
       ip     = "dhcp"
       ip6    = "dhcp"
     }
