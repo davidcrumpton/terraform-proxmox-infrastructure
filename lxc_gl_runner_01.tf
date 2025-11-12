@@ -21,6 +21,7 @@ EOT
   tags = [
     "tf-mng",
     "git",
+    "docker",
     var.ostemplate_debian_12.ostype,
     var.ostemplate_debian_12.tag,
   ]

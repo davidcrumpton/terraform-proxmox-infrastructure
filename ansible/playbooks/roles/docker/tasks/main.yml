@@ -7,6 +7,6 @@
 
 - name: Enable and start dockerd
   ansible.builtin.service:
-    name: dockerd
+    name: docker
     state: started
     enabled: yes

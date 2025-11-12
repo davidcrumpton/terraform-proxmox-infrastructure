@@ -38,5 +38,5 @@ if [[ -n "${SSH_PRIVATE_KEY_BASE_64:-}" ]]; then
         --private-key ~/.ssh/terraform
 else
     echo "No SSH private key provided, using default SSH agent or key."
-    ansible-playbook -i "$INVENTORY" "./ansible/playbooks/$PLAYBOOK" -u root
+    ansible-playbook -i "$INVENTORY" "./ansible/playbooks/$PLAYBOOK" -u root 
 fi

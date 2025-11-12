@@ -1,16 +1,27 @@
 [all]
 gl-runner-01-ng
 nextsuite-ng
+docker02-ng
 
 [net_vmbr0]
-nextsuite-ng
+docker02-ng
 
 [pve_pve02]
 gl-runner-01-ng
 nextsuite-ng
+docker02-ng
 
 [role_cloud]
 nextsuite-ng
+
+[role_d12]
+docker02-ng
+
+[role_debian]
+docker02-ng
+
+[role_docker]
+docker02-ng
 
 [role_git]
 gl-runner-01-ng
@@ -25,7 +36,7 @@ nextsuite-ng
 nextsuite-ng
 
 [role_tf-mng]
-nextsuite-ng
+docker02-ng
 
 [role_u2204]
 nextsuite-ng

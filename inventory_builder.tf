@@ -6,6 +6,7 @@ locals {
     # Add more here, e.g.:
     module.lxc_gl_runner.ansible_data,
     module.lxc_nextsuite.ansible_data,
+    module.lxc_docker02.ansible_data,
     # module.lxc_keycloak.ansible_data,
   ]
 
@@ -23,7 +24,7 @@ locals {
   # Group by tags (role_x)
   tag_groups = merge([
     for h in local.lxc_inventory : {
-      for t in h.tags_list : "role_${t}" => [h.hostname]
+      for t in h.tags : "role_${t}" => [h.hostname]
     }
   ]...)
 
