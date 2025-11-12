@@ -1,31 +1,28 @@
-module "lxc_nextsuite" {
+module "lxc_docker02" {
   source = "./modules/lxc"
 
   node        = var.node
-  vmid        = 501
-  hostname    = "nextsuite-ng"
+  vmid        = 502
+  hostname    = "docker02-ng"
   cores       = var.lxc_sizing.small.cores
   memory      = var.lxc_sizing.small.memory
   swap        = var.lxc_sizing.small.swap
-  ostemplate  = var.ostemplate_ubuntu_2204.template
+  ostemplate  = var.ostemplate_debian_12.template
   storage_pool = var.storage_pool.local
-  root_password = random_password.nextsuite_root.result
+  root_password = random_password.docker02_root.result
   ssh_public_keys = var.default_ssh_keys
   description = <<-EOT
-# Nextcloud
+# Docker image storage
 
-https://suite.eaglecreek.work
+https://docker02.crumpton.org:5000
 
 EOT
 
   tags = [
     "tf-mng",
-    "cloud",
-    "important",
-    "office",
-    "public",
-    var.ostemplate_ubuntu_2204.ostype,
-    var.ostemplate_ubuntu_2204.tag,
+    "docker",
+    var.ostemplate_debian_12.ostype,
+    var.ostemplate_debian_12.tag,
   ]
 
   networks = [
@@ -38,15 +35,15 @@ EOT
   ]
 }
 
-resource random_password "nextsuite_root" {
+resource random_password "docker02_root" {
   length          = 24
   override_special = "!@#$%&*()-_=+[]{}<>:?"
   special          = true
 }
 
 
-output "nextsuite_root_password" {
-  description = "Root password for the nextsuite container"
-  value       = random_password.nextsuite_root.result
+output "docker02_root_password" {
+  description = "Root password for the docker02 container"
+  value       = random_password.docker02_root.result
   sensitive   = true
 }

@@ -7,7 +7,7 @@ module "lxc_gl_runner" {
   cores       = var.lxc_sizing.small.cores
   memory      = var.lxc_sizing.small.memory
   swap        = var.lxc_sizing.small.swap
-  ostemplate  = var.ostemplate_ubuntu_2204.template
+  ostemplate  = var.ostemplate_debian_12.template
   storage_pool = var.storage_pool.local
   root_password = random_password.gl_runner_root.result
   ssh_public_keys = var.default_ssh_keys
@@ -20,10 +20,9 @@ EOT
 
   tags = [
     "tf-mng",
-    "cups",
-    "printserver",
-    var.ostemplate_ubuntu_2204.ostype,
-    var.ostemplate_ubuntu_2204.tag,
+    "git",
+    var.ostemplate_debian_12.ostype,
+    var.ostemplate_debian_12.tag,
   ]
 
   networks = [

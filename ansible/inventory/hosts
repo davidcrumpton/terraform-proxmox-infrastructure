@@ -1,23 +1,34 @@
 [all]
 gl-runner-01-ng
+nextsuite-ng
 
 [net_vmbr0]
-gl-runner-01-ng
+nextsuite-ng
 
 [pve_pve02]
 gl-runner-01-ng
+nextsuite-ng
 
-[role_cups]
+[role_cloud]
+nextsuite-ng
+
+[role_git]
 gl-runner-01-ng
 
-[role_printserver]
-gl-runner-01-ng
+[role_important]
+nextsuite-ng
+
+[role_office]
+nextsuite-ng
+
+[role_public]
+nextsuite-ng
 
 [role_tf-mng]
-gl-runner-01-ng
+nextsuite-ng
 
 [role_u2204]
-gl-runner-01-ng
+nextsuite-ng
 
 [role_ubuntu]
-gl-runner-01-ng
+nextsuite-ng
