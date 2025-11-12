@@ -40,7 +40,7 @@ cache:
     - "${TF_ROOT}/.terraform"
 
 before_script:
-  - echo ${$SSH_PRIVATE_KEY_BASE_64} | wc -c
+  - echo "${SSH_PRIVATE_KEY_BASE_64}"" | wc -c
   - cd ${TF_ROOT}
   - mkdir -p "${TF_PLUGIN_CACHE_DIR}"
   - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
@@ -99,7 +99,7 @@ ansible_deploy:
   image: "demisto/ansible-runner:1.0.0.5807676"
   before_script: []   # <--- disables inherited before_script
   script:
-    - echo ${$SSH_PRIVATE_KEY_BASE_64} | wc -c
+    - echo ${SSH_PRIVATE_KEY_BASE_64} | wc -c
     - mkdir -p ~/.ssh
 #    - echo "$SSH_PRIVATE_KEY_BASE_64" | fold -w 76 | base64 -d > ~/.ssh/terraform
     - echo "$SSH_PRIVATE_KEY_BASE_64" | openssl base64 -d -A > ~/.ssh/terraform
