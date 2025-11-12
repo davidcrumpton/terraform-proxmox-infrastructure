@@ -16,14 +16,14 @@
   #  - networking        # optional role for static/dhcp config tuning
 
   tasks:
-    - name: Display basic host info (debug sanity check)
-      ansible.builtin.debug:
-        msg:
-          - "Hostname: {{ hostname }}"
-          - "Node: {{ node }}"
-          - "VMID: {{ vmid }}"
-          - "Storage: {{ storage }}"
-          - "Networks: {{ networks | to_nice_yaml }}"
+    # - name: Display basic host info (debug sanity check)
+    #   ansible.builtin.debug:
+    #     msg:
+    #       - "Hostname: {{ hostname }}"
+    #       - "Node: {{ node }}"
+    #       - "VMID: {{ vmid }}"
+    #       - "Storage: {{ storage }}"
+    #       - "Networks: {{ networks | to_nice_yaml }}"
 
 #------------------------------------------------------------------------------
 # Tag-based role inclusion – dynamically applies roles based on Terraform tags
