@@ -236,13 +236,11 @@ variable "vm_sizing"{
     medium = object({
       memory = number
       cores  = number
-      swap   = number
       disk   = number
     })
     small = object({
       memory = number
       cores  = number
-      swap   = number
       disk   = number
     })
   }) 
@@ -250,13 +248,11 @@ variable "vm_sizing"{
     medium = {
       memory = 2048
       cores  = 2
-      swap   = 4096
       disk   = 32
     }
     small = {
       memory = 1024
       cores  = 1
-      swap   = 2048
       disk   = 16
     }
   }
