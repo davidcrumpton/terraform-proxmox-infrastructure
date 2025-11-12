@@ -1,0 +1,13 @@
+---
+hostname: docker02-ng
+vmid: 502
+node: pve02
+storage: local-lvm
+tags: d12, debian, docker, tf-mng
+features:
+  nesting: true
+networks:
+  - name: eth0
+    bridge: vmbr0
+    ip: dhcp
+    ip6: dhcp

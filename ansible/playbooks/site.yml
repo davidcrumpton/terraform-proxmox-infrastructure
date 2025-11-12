@@ -19,7 +19,7 @@
   tasks:
     - name: Include host-specifc vars
       ansible.builtin.include_vars:
-        file: "{{ playbook_dir }}/../../terraform/ansible-vars/{{ inventory_hostname }}.ansible_vars.yaml"
+        file: "{{ playbook_dir }}/../host_vars/{{ inventory_hostname }}/main.yml"
 
     - name: Display basic host info (debug sanity check)
       ansible.builtin.debug:

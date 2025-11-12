@@ -1,0 +1,13 @@
+---
+hostname: gl-runner-01-ng
+vmid: 507
+node: pve02
+storage: local-lvm
+tags: d12, debian, docker, git, tf-mng
+features:
+  nesting: true
+networks:
+  - name: eth0
+    bridge: vmbr0
+    ip: dhcp
+    ip6: dhcp

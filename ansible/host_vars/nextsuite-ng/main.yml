@@ -1,0 +1,13 @@
+---
+hostname: nextsuite-ng
+vmid: 501
+node: pve02
+storage: local-lvm
+tags: cloud, important, office, public, tf-mng, u2204, ubuntu
+features:
+  nesting: true
+networks:
+  - name: eth0
+    bridge: vmbr0
+    ip: dhcp
+    ip6: dhcp
