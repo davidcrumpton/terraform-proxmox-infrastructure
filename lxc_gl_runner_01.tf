@@ -2,8 +2,8 @@ module "lxc_gl_runner" {
   source = "./modules/lxc"
 
   node        = var.node
-  vmid        = 506
-  hostname    = "gl_runner_01-ng"
+  vmid        = 507
+  hostname    = "gl-runner-01-ng"
   cores       = var.lxc_sizing.small.cores
   memory      = var.lxc_sizing.small.memory
   swap        = var.lxc_sizing.small.swap
