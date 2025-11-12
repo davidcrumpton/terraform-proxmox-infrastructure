@@ -19,7 +19,7 @@ runs GitTea at https://git.crumpton.org
 EOT
 
   tags = [
-    "tf-mng",
+    "terraformed",
     "docker",
     "sso",
     "git",

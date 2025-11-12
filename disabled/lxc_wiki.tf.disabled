@@ -24,7 +24,7 @@ https://wiki.crumpton.org
 EOT
 
   tags = [
-    "tf-mng",
+    "terraformed",
     "docker",
     "sso",
     var.ostemplate_ubuntu_2204.ostype,

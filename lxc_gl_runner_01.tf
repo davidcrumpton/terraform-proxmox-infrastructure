@@ -19,7 +19,7 @@ Runs GitLab jobs with Docker support
 EOT
 
   tags = [
-    "tf-mng",
+    "terraformed",
     "git",
     "docker",
     var.ostemplate_debian_12.ostype,

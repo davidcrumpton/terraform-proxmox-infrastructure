@@ -19,7 +19,7 @@ https://suite.eaglecreek.work
 EOT
 
   tags = [
-    "tf-mng",
+    "terraformed",
     "cloud",
     "important",
     "office",

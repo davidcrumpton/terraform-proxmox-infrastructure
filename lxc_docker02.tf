@@ -19,7 +19,7 @@ https://docker02.crumpton.org:5000
 EOT
 
   tags = [
-    "tf-mng",
+    "terraformed",
     "docker",
     var.ostemplate_debian_12.ostype,
     var.ostemplate_debian_12.tag,
