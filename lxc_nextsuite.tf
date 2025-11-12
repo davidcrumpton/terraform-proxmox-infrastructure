@@ -16,6 +16,7 @@ module "lxc_nextsuite" {
 
 https://suite.eaglecreek.work
 
+EOT
 
   tags = [
     "tf-mng",
