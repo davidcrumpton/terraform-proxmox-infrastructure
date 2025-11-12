@@ -1,7 +1,7 @@
 [all]
 gl-runner-01-ng
 
-[net_vmbr10]
+[net_vmbr0]
 gl-runner-01-ng
 
 [pve_pve02]
