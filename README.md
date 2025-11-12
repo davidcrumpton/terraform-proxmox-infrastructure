@@ -1,38 +1,35 @@
 # Terraform ProxMox PVE02 Files
 
-## Tools and Scripts
+## Description
 
-Are available in the scripts/ folder
+This repository sets up LXCs and VMs in ProxMox using Terraform for provisioning and Ansible for configuration. 
+The state is stored in GitLab so it can be run in either GitLab or your CLI.  If a tag name corresponds to a role
+name, then ansible will run the role for it.  Roles are run in sorted order so order is done by ensuring the
+name comes in the order you wish.  So, your tag name might need to be *1.zabbix*, if you need that role configured
+first.
 
-## Terraform init command
+## Requirements
 
-This requires more init options to keep state synced in the cloud.
+- Ansible
+- terraform
+- git 
 
-### Scripted
 
-Paste your Personal Access Token in when prompted.
+## Usage
+
+### Enable or Disable
+
+Terraform runs all .tf files in the base directory.  To remove a VM or LXC, use its name only.
+The script below will disable openbsd.  It can determine if you have an LXC or VM but you can't
+have them both with the same name.
 
 ```sh
-./scripts/tf-init
+./scripts/enable openbsd
 ```
 
-### CLI
+## #TFVARS Example File terraform.tfvars
 
-```sh
-export GITLAB_ACCESS_TOKEN=<YOUR-ACCESS-TOKEN>
-export TF_STATE_NAME=proxmox-homelab
-terraform init \
-    -backend-config="address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME" \
-    -backend-config="lock_address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME/lock" \
-    -backend-config="unlock_address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME/lock" \
-    -backend-config="username=bear" \
-    -backend-config="password=$GITLAB_ACCESS_TOKEN" \
-    -backend-config="lock_method=POST" \
-    -backend-config="unlock_method=DELETE" \
-    -backend-config="retry_wait_min=5"
-```
-
-## TFVARS File terraform.tfvars
+You must set the values for your environment.
 
 ```text
 pm_api_url = "https://pve02.crumpton.org:8006/api2/json"
@@ -40,15 +37,44 @@ pm_user = "root@pam"
 
 # Use token-based auth where possible
 
-pm_api_token_id = "root@pam!terraform"
+pm_api_token_id = "proxmox@pam!terraform"
 pm_api_token_secret = "8B154087-D17A-4311-9D9B-ED3D651DA1CA"   #  Looks like a GUID in lowercase
 node = "pve02"
+
+# override other non login related variables below
+
 storage = "local-lvm"
+
 ```
+
+## GitLab CI/CD Variables
+
+Set the following in GitLab CI/CD:
+
+*ANSIBLE_HOST_KEY_CHECKING* - Ignore host keys or not
+
+*GITLAB_ACCESS_TOKEN*       - Your personal access token
+
+The dot is converted to a bang (!) on run.
+
+*PM_API_TOKEN_ID*           - proxmox@pam.terraform
+
+*PM_API_TOKEN_SECRET*       - Token generated within ProxMox
+
+*PM_API_URL*                - https://proxbox:8006/api2/json
+
+*PM_USER*                   - proxmox@pam
+
+The private key below will be passed to ansible to login.  It will also
+need to be set in the Terraform LXC file. 
+
+SSH_PRIVATE_KEY_BASE_64   - `base64 -w 0 ~/.ssh/terraform.ssh.private.key`
 
 ## Shell Variables for terraform
 
-Source the variables below after proper setup.  Your token should be created in your personal account config.
+Source the variables below after proper setup.  Your token should be created in your personal account config.  
+There is no script file for this at this writing but these should be in a file you source into your shell
+environment.
 
 ```sh
 export PM_API_URL="https://pve02.crumpton.org:8006/api2/json"
@@ -57,5 +83,62 @@ export PM_API_TOKEN_SECRET="f0fb7021-0f0f-45ad-97b3-c7f6b589d84a"
 export CI_API_V4_URL="https://gitlab.crumpton.org/api/v4"
 export CI_PROJECT_ID=20
 export TF_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/proxmox-homelab"
-# export GITLAB_TOKEN=glpat-a3...
+# export GITLAB_ACCESS_TOKEN=glpat-a3...
 ```
+## Template Setup
+### LXC
+
+Copy the lxc_docker02.tf file to a new name like *lxc_ansible.tf*.
+Edit the file and change all occurrences of *docker* to *ansible*.
+
+Set sizing as needed.  You can change the pre-defined sizes in
+var.lxc.sizing to exactly what you desire.
+
+Replace all **debian_12** with **ubuntu_2022** if you want Ubuntu 22.04.
+
+Set your description to the markdown you desire.
+
+Set your tags to what you desire.  Some tag names are mapped to roles
+and will cause ansible to make role based changes.
+
+Set networks as you wish.
+
+Add your lxc to *inventory_builder.tf* so it can make the ansible inventory.
+
+```
+  lxc_inventory = [
+    # Add more here, e.g.:
+    module.lxc_gl_runner.ansible_data,
+# new one below can be anywhere in this list
+    module.lxc_ansible.ansible_data,
+
+    module.lxc_docker02.ansible_data,
+    # module.lxc_keycloak.ansible_data,
+  ]
+```
+
+### Virtual Machines
+
+Use the vm_openbsd.tf template as a starting point and make change
+similar to what you did above.
+
+## Example Run
+
+Use the following commands to build out your ProxMox instances.
+
+```sh
+export GITLAB_ACCESS_TOKEN=gl-pat-a3...
+./scripts/tf-init
+terraform plan -out plan.out
+terraform apply plan.out
+terraform output    # Lists all output values
+terraform output   <an_output_from_list>
+```
+
+## Issues
+
+- Only LXCs are automated.  Ansible doesn't run for VMs.
+- root is hard coded for the Ansible user.
+- Expects the chosen host name to register with DNS or fails
+- lxc_hostname.tf file should grab the SSH key from the environment so it doesn't need to be set twice.
+
