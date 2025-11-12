@@ -2,7 +2,7 @@
 set -eo pipefail
 
 ENABLED_NAME=lxc_${1}.tf
-DISABLED_NAME="lxc_${1}.tf.disabled"
+DISABLED_NAME="disabled/lxc_${1}.tf.disabled"
 if test -f $DISABLED_NAME
 then
 	echo "$1 is already disabled or duplicated"
