@@ -1,6 +1,6 @@
 ---
 # site.yml
-# Master playbook to configure all LXCs provisioned by Terraform.
+# Primary playbook to configure all LXCs provisioned by Terraform.
 
 - name: "Base configuration for all LXCs"
   hosts: all

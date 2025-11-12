@@ -1,10 +1,28 @@
 #!/usr/bin/env bash
 
+ENV_FILE=".env"
+TF_STATE_NAME="proxmox-homelab"
 
-echo -n "Input GITLAB_ACCESS_TOKEN? "
-read -s GITLAB_ACCESS_TOKEN
+# Load .env if it exists
+if [ -f "$ENV_FILE" ]; then
+    # shellcheck disable=SC1090
+    source "$ENV_FILE"
+fi
+
+# Prompt only if GITLAB_ACCESS_TOKEN is not set
+if [ -z "$GITLAB_ACCESS_TOKEN" ]; then
+    echo -n "Input GITLAB_ACCESS_TOKEN? "
+    read -s GITLAB_ACCESS_TOKEN
+    echo
+
+    # Save token to .env file for next time
+    echo "GITLAB_ACCESS_TOKEN=$GITLAB_ACCESS_TOKEN" > "$ENV_FILE"
+    echo "Saved token to $ENV_FILE"
+fi
+
 export GITLAB_ACCESS_TOKEN
-export TF_STATE_NAME=proxmox-homelab
+export TF_STATE_NAME
+
 terraform init \
     -backend-config="address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME" \
     -backend-config="lock_address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME/lock" \
@@ -13,5 +31,5 @@ terraform init \
     -backend-config="password=$GITLAB_ACCESS_TOKEN" \
     -backend-config="lock_method=POST" \
     -backend-config="unlock_method=DELETE" \
-    -backend-config="retry_wait_min=5" -reconfigure
-    
+    -backend-config="retry_wait_min=5" \
+    -reconfigure

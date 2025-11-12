@@ -11,7 +11,8 @@ provider "proxmox" {
   # You can provide credentials via variables (below) or via the provider's
   # environment variables (PM_API_URL, PM_USER, PM_PASSWORD, PM_API_TOKEN_ID,
   # PM_API_TOKEN_SECRET, PM_TLS_INSECURE). The provider will use what is
-  # available — prefer token-based auth for automation.
+  # available — prefer token-based auth for automation.  Variables can be
+  # overwritten via terraform.tfvars
 
   # pm_api_url       = var.pm_api_url        # e.g. "https://proxmox.example:8006/api2/json"
   # pm_user          = var.pm_user           # e.g. "root@pam" or "terraform@pve"

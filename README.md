@@ -8,14 +8,15 @@ Are available in the scripts/ folder
 
 This requires more init options to keep state synced in the cloud.
 
-### Personal
+### Scripted
+
+Paste your Personal Access Token in when prompted.
+
 ```sh
-terraform init -reconfigure -backend-config="address=${TF_ADDRESS}" \
--backend-config="lock_address=${TF_ADDRESS}/lock"  -backend-config="unlock_address=${TF_ADDRESS}/lock" \
--backend-config="username=oauth2" -backend-config="password=${GITLAB_TF_API_TOKEN}" \
--backend-config="lock_method=POST"  -backend-config="unlock_method=DELETE"  -backend-config="retry_max=10"
+./scripts/tf-init
 ```
-### Formal
+
+### CLI
 
 ```sh
 export GITLAB_ACCESS_TOKEN=<YOUR-ACCESS-TOKEN>
@@ -31,7 +32,7 @@ terraform init \
     -backend-config="retry_wait_min=5"
 ```
 
-## TFVARS File terraform.tfvars 
+## TFVARS File terraform.tfvars
 
 ```text
 pm_api_url = "https://pve02.crumpton.org:8006/api2/json"
