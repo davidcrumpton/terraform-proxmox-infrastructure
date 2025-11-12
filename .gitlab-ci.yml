@@ -45,7 +45,7 @@ before_script:
 #    - echo "$SSH_PRIVATE_KEY_BASE_64" | fold -w 76 | base64 -d > ~/.ssh/terraform
   - echo -n "${SSH_PRIVATE_KEY_BASE_64}" | base64 -d > ~/.ssh/terraform
   - chmod 0600 ~/.ssh/terraform && chmod 700 ~/.ssh
-  - head ~/.ssh/terraform && ls -l ~/.ssh/terraform
+#  - head ~/.ssh/terraform && ls -l ~/.ssh/terraform
   - cd ${TF_ROOT}
   - mkdir -p "${TF_PLUGIN_CACHE_DIR}"
   - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
