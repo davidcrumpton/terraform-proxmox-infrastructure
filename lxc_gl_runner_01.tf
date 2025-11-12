@@ -12,7 +12,10 @@ module "lxc_gl_runner" {
   root_password = random_password.gl_runner_root.result
   ssh_public_keys = var.default_ssh_keys
   description = <<-EOT
-Print Server CUPS for 5G Network Users
+# gl-runner-01
+
+Runs GitLab jobs with Docker support
+
 EOT
 
   tags = [

@@ -1,0 +1,12 @@
+---
+- name: Install and enable docker.io container service
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+    update_cache: yes
+
+- name: Enable and start dockerd
+  ansible.builtin.service:
+    name: dockerd
+    state: started
+    enabled: yes

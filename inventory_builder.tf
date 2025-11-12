@@ -5,6 +5,7 @@ locals {
 
     # Add more here, e.g.:
     module.lxc_gl_runner.ansible_data,
+    module.lxc_nextsuite.ansible_data,
     # module.lxc_keycloak.ansible_data,
   ]
 
