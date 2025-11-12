@@ -29,12 +29,6 @@ EOT
       bridge = var.bridge.wifi_5g
       ip     = "dhcp"
       ip6    = "dhcp"
-    },
-    {
-      name   = "eth1"
-      bridge = var.bridge.lan
-      ip     = "192.168.1.247/24"
-      ip6    = "dhcp"
     }
   ]
 }

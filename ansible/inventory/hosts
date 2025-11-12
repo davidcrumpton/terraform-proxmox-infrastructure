@@ -1,9 +1,6 @@
 [all]
 gl-runner-01-ng
 
-[net_vmbr0]
-gl-runner-01-ng
-
 [net_vmbr10]
 gl-runner-01-ng
 
