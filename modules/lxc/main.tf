@@ -64,7 +64,6 @@ locals {
 # write YAML vars
 resource "local_file" "ansible_vars" {
   content  = templatefile("${path.module}/templates/ansible_vars.yaml.tpl", local.ansible_vars)
- # filename = "${path.root}/terraform/ansible-vars/${var.hostname}.ansible_vars.yaml"
   filename = "${path.root}/ansible/host_vars/${var.hostname}/main.yml"
 }
 
