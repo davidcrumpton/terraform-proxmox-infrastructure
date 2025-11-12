@@ -35,9 +35,9 @@ if [[ -n "${SSH_PRIVATE_KEY_BASE_64:-}" ]]; then
     # Run ansible with the SSH key
     ansible-playbook -i "$INVENTORY" "./ansible/playbooks/$PLAYBOOK" \
         -u root \
-        --private-key ~/.ssh/terraform
+        --private-key ~/.ssh/terraform -vvv
 else
     echo "No SSH private key provided, using default SSH agent or key."
-    ansible-playbook -i "$INVENTORY" "./ansible/playbooks/$PLAYBOOK" -u root 
+    ansible-playbook -i "$INVENTORY" "./ansible/playbooks/$PLAYBOOK" -u root -v
 fi
 exit 0
