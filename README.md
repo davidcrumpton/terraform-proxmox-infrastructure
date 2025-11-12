@@ -32,7 +32,7 @@ have them both with the same name.
 You must set the values for your environment.
 
 ```text
-pm_api_url = "https://pve02.crumpton.org:8006/api2/json"
+pm_api_url = "https://pve02.localdomain:8006/api2/json"
 pm_user = "root@pam"
 
 # Use token-based auth where possible
@@ -77,10 +77,10 @@ There is no script file for this at this writing but these should be in a file y
 environment.
 
 ```sh
-export PM_API_URL="https://pve02.crumpton.org:8006/api2/json"
+export PM_API_URL="https://pve02.localdomain:8006/api2/json"
 export PM_API_TOKEN_ID="root@pam!terraform"
 export PM_API_TOKEN_SECRET="f0fb7021-0f0f-45ad-97b3-c7f6b589d84a"
-export CI_API_V4_URL="https://gitlab.crumpton.org/api/v4"
+export CI_API_V4_URL="https://gitlab.localdomain/api/v4"
 export CI_PROJECT_ID=20
 export TF_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/proxmox-homelab"
 # export GITLAB_ACCESS_TOKEN=glpat-a3...
@@ -90,6 +90,8 @@ export TF_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/pr
 
 Copy the lxc_docker02.tf file to a new name like *lxc_ansible.tf*.
 Edit the file and change all occurrences of *docker* to *ansible*.
+
+Your taget_node name will be different from *pve02* so change this.
 
 Set sizing as needed.  You can change the pre-defined sizes in
 var.lxc.sizing to exactly what you desire.
