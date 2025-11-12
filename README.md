@@ -60,8 +60,6 @@ storage = "local-lvm"
 | `PM_USER` | `proxmox@pam` |
 | `SSH_PRIVATE_KEY_BASE_64` | Base64-encoded SSH private key used by Ansible |
 
-SSH_PRIVATE_KEY_BASE_64   - `base64 -w 0 ~/.ssh/terraform.ssh.private.key`
-
 ## Shell Variables for terraform
 
 Source the variables below after proper setup.  Your token should be created in your personal account config.  
