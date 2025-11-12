@@ -1,136 +1,151 @@
-# Terraform ProxMox Files
+# Terraform Proxmox Infrastructure
 
-## Description
+This repository automates provisioning and configuration of **LXC containers** and **virtual machines** in **Proxmox** using **Terraform** for infrastructure definition and **Ansible** for configuration management.
+Terraform state is stored in **GitLab**, allowing you to run the pipeline directly in GitLab CI/CD or from your local CLI.
 
-This repository sets up LXCs and VMs in ProxMox using Terraform for provisioning and Ansible for configuration. 
-The state is stored in GitLab so it can be run in either GitLab or your CLI.  If a tag name corresponds to a role
-name, then ansible will run the role for it.  Roles are run in sorted order so order is done by ensuring the
-name comes in the order you wish.  So, your tag name might need to be *1.zabbix*, if you need that role configured
-first.
+If a tag name matches a role name, Ansible automatically applies that role.
+Roles run in alphabetical order—so prefix tags to control sequencing (e.g., `1.zabbix` ensures the Zabbix role runs first).
 
-## Requirements
+---
 
-- Ansible
-- terraform
-- git 
+## 🧰 Requirements
 
+Before using this repository, ensure the following tools are installed:
 
-## Usage
+* [Ansible](https://www.ansible.com/)
+* [Terraform](https://www.terraform.io/)
+* [Git](https://git-scm.com/)
 
-### Enable or Disable
+---
 
-Terraform runs all .tf files in the base directory.  To remove a VM or LXC, use its name only.
-The script below will disable openbsd.  It can determine if you have an LXC or VM but you can't
-have them both with the same name.
+## 🚀 Usage
 
-```sh
+### Enabling or Disabling Instances
+
+Terraform runs all `.tf` files in the root directory.
+To **remove** or **disable** a VM or LXC, use its name only. The included script detects whether it’s an LXC or VM (but you cannot have both with the same name).
+
+```bash
 ./scripts/enable openbsd
 ```
 
-## TFVARS Example File terraform.tfvars
+---
 
-You must set the values for your environment.
+## ⚙️ TFVARS Example (`terraform.tfvars`)
 
-```text
-pm_api_url = "https://pve02.localdomain:8006/api2/json"
-pm_user = "root@pam"
+Set these values to match your environment:
 
-# Use token-based auth where possible
-
-pm_api_token_id = "proxmox@pam!terraform"
-pm_api_token_secret = "8B154087-D17A-4311-9D9B-ED3D651DA1CA"   #  Looks like a GUID in lowercase
-node = "pve02"
-
-# override other non login related variables below
-
-storage = "local-lvm"
-
+```hcl
+pm_api_url          = "https://pve02.localdomain:8006/api2/json"
+pm_user             = "root@pam" # Use token-based auth where possible
+pm_api_token_id     = "proxmox@pam!terraform"
+pm_api_token_secret = "8b154087-d17a-4311-9d9b-ed3d651da1ca" # GUID-style secret
+node                = "pve02"
+storage             = "local-lvm"
 ```
 
-## GitLab CI/CD Variables
+---
 
+## 🧩 GitLab CI/CD Variables
 
-| Variable | Description |
-|-----------|-------------|
-| `ANSIBLE_HOST_KEY_CHECKING` | Ignore host keys or not |
-| `GITLAB_ACCESS_TOKEN` | Your personal access token |
-| `PM_API_TOKEN_ID` | `proxmox@pam.terraform` |
-| `PM_API_TOKEN_SECRET` | Token generated within ProxMox |
-| `PM_API_URL` | `https://proxbox:8006/api2/json` |
-| `PM_USER` | `proxmox@pam` |
-| `SSH_PRIVATE_KEY_BASE_64` | Base64-encoded SSH private key used by Ansible |
+Set these variables under your project’s **Settings → CI/CD → Variables**:
 
-## Shell Variables for terraform
+| Variable                    | Description                                    |
+| --------------------------- | ---------------------------------------------- |
+| `ANSIBLE_HOST_KEY_CHECKING` | Enable/disable SSH host key checking           |
+| `GITLAB_ACCESS_TOKEN`       | Your personal access token                     |
+| `PM_API_TOKEN_ID`           | `proxmox@pam.terraform`                        |
+| `PM_API_TOKEN_SECRET`       | Token generated within Proxmox                 |
+| `PM_API_URL`                | `https://proxbox:8006/api2/json`               |
+| `PM_USER`                   | `proxmox@pam`                                  |
+| `SSH_PRIVATE_KEY_BASE_64`   | Base64-encoded SSH private key used by Ansible |
 
-Source the variables below after proper setup.  Your token should be created in your personal account config.  
-There is no script file for this at this writing but these should be in a file you source into your shell
-environment.
+---
 
-```sh
+## 🐚 Shell Environment Variables
+
+Source these variables locally before running Terraform.
+Store them in a script (e.g., `env.sh`) and source it with `source ./env.sh`.
+
+```bash
 export PM_API_URL="https://pve02.localdomain:8006/api2/json"
 export PM_API_TOKEN_ID="proxmox@pam!terraform"
 export PM_API_TOKEN_SECRET="f0fb7021-0f0f-45ad-97b3-c7f6b589d84a"
+
 export CI_API_V4_URL="https://gitlab.localdomain/api/v4"
 export CI_PROJECT_ID=20
 export TF_ADDRESS="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/proxmox-homelab"
-# export GITLAB_ACCESS_TOKEN=glpat-a3...
+
+# Optional: Personal access token for CLI operations
+# export GITLAB_ACCESS_TOKEN="glpat-xxxxxx"
 ```
-## Template Setup
-### LXC
 
-Copy the lxc_docker02.tf file to a new name like *lxc_ansible.tf*.
-Edit the file and change all occurrences of *docker* to *ansible*.
+---
 
-Your taget_node name will be different from *pve02* so change this.
+## 🧱 Template Setup
 
-Set sizing as needed.  You can change the pre-defined sizes in
-var.lxc.sizing to exactly what you desire.
+### LXC Containers
 
-Replace all **debian_12** with **ubuntu_2022** if you want Ubuntu 22.04.
+Use an existing container definition (e.g., `lxc_docker02.tf`) as a template:
 
-Set your description to the markdown you desire.
+1. Copy it to a new file (e.g., `lxc_ansible.tf`).
+2. Replace all occurrences of `docker` with your desired container name.
+3. Adjust:
 
-Set your tags to what you desire.  Some tag names are mapped to roles
-and will cause ansible to make role based changes.
+   * `target_node` for your Proxmox host
+   * Resource sizing (`var.lxc.sizing`)
+   * OS template (`debian_12` → `ubuntu_2022`, if preferred)
+   * Description and tags (tags can trigger Ansible roles)
+   * Network definitions
 
-Set networks as you wish.
+Finally, register the new container in **`inventory_builder.tf`**:
 
-Add your lxc to *inventory_builder.tf* so it can make the ansible inventory.
-
+```hcl
+lxc_inventory = [
+  module.lxc_gl_runner.ansible_data,
+  module.lxc_ansible.ansible_data,
+  module.lxc_docker02.ansible_data,
+  # module.lxc_keycloak.ansible_data,
+]
 ```
-  lxc_inventory = [
-    # Add more here, e.g.:
-    module.lxc_gl_runner.ansible_data,
-# new one below can be anywhere in this list
-    module.lxc_ansible.ansible_data,
 
-    module.lxc_docker02.ansible_data,
-    # module.lxc_keycloak.ansible_data,
-  ]
-```
+---
 
 ### Virtual Machines
 
-Use the vm_openbsd.tf template as a starting point and make change
-similar to what you did above.
+For virtual machines, use the `vm_openbsd.tf` file as a starting point.
+Modify it similarly to the LXC template to match your desired OS, node, and resources but *don't*
+add it to inventoy builder terraform file.
 
-## Example Run
+---
 
-Use the following commands to build out your ProxMox instances.
+## ▶️ Example Run
 
-```sh
-export GITLAB_ACCESS_TOKEN=gl-pat-a3...
+Run the following commands to initialize and deploy your infrastructure:
+
+```bash
+export GITLAB_ACCESS_TOKEN="glpat-xxxxxx"
+
 ./scripts/tf-init
 terraform plan -out plan.out
 terraform apply plan.out
-terraform output    # Lists all output values
-terraform output   <an_output_from_list>
+
+# List all outputs
+terraform output
+
+# Or display a specific output
+terraform output <output_name>
 ```
 
-## Issues
+---
 
-- Only LXCs are automated.  Ansible doesn't run for VMs.
-- root is hard coded for the Ansible user.
-- Expects the chosen host name to register with DNS or fails
-- lxc_hostname.tf file should grab the SSH key from the environment so it doesn't need to be set twice.
+## ⚠️ Known Issues
 
+* Only **LXC containers** are fully automated; **Ansible** does not run for VMs.
+* The Ansible user is currently **hard-coded as `root`**.
+* Hostnames must resolve via DNS; otherwise, provisioning will fail.
+* The `lxc_hostname.tf` file should eventually fetch the SSH key from the environment to avoid duplication.
+
+---
+
+© 2025 David Crumpton • ProxMox Automation with Terraform + Ansible
