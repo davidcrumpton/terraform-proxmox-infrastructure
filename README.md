@@ -141,7 +141,7 @@ terraform output <output_name>
 
 ## ⚠️ Known Issues
 
-* Only **LXC containers** are fully automated; **Ansible** does not run for VMs.
+* Only **LXC containers** are fully automated; **Ansible** takes no action for VMs.
 * The Ansible user is currently **hard-coded as `root`**.
 * Hostnames must resolve via DNS; otherwise, provisioning will fail.
 * The `lxc_hostname.tf` file should eventually fetch the SSH key from the environment to avoid duplication.
