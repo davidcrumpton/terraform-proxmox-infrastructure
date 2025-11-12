@@ -9,10 +9,6 @@ workflow:
       - "*.sh"
       - "*.yml"
       - "ansible/**"
-      # No 'when' here. If this rule matches, the pipeline is included.
-
-    # 2. If the previous rule did *not* match, this is the default, 
-    #    which prevents the pipeline from running for everything else.
     - when: never
 
 stages:
