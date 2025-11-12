@@ -101,6 +101,8 @@ ansible_deploy:
     - ls -l ~/.ssh/terraform
     - ansible --version
   script:
+    - ANSIBLE_CONFIG=ansible/absible.cfg
+    - ANSIBLE_ROLES_PATH=ansible/playbook/roles
     - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
   needs:
     - job: apply
