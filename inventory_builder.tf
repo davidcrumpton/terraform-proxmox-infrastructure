@@ -24,7 +24,7 @@ locals {
   # Group by tags (role_x)
   tag_groups = merge([
     for h in local.lxc_inventory : {
-      for t in h.tags : "role_${t}" => [h.hostname]
+      for t in h.tags_list : "role_${t}" => [h.hostname]
     }
   ]...)
 
