@@ -49,24 +49,17 @@ storage = "local-lvm"
 
 ## GitLab CI/CD Variables
 
-Set the following in GitLab CI/CD:
+### GitLab CI/CD Variables
 
-*ANSIBLE_HOST_KEY_CHECKING* - Ignore host keys or not
-
-*GITLAB_ACCESS_TOKEN*       - Your personal access token
-
-The dot is converted to a bang (!) on run.
-
-*PM_API_TOKEN_ID*           - proxmox@pam.terraform
-
-*PM_API_TOKEN_SECRET*       - Token generated within ProxMox
-
-*PM_API_URL*                - https://proxbox:8006/api2/json
-
-*PM_USER*                   - proxmox@pam
-
-The private key below will be passed to ansible to login.  It will also
-need to be set in the Terraform LXC file. 
+| Variable | Description |
+|-----------|-------------|
+| `ANSIBLE_HOST_KEY_CHECKING` | Ignore host keys or not |
+| `GITLAB_ACCESS_TOKEN` | Your personal access token |
+| `PM_API_TOKEN_ID` | `proxmox@pam.terraform` |
+| `PM_API_TOKEN_SECRET` | Token generated within ProxMox |
+| `PM_API_URL` | `https://proxbox:8006/api2/json` |
+| `PM_USER` | `proxmox@pam` |
+| `SSH_PRIVATE_KEY_BASE_64` | Base64-encoded SSH private key used by Ansible |
 
 SSH_PRIVATE_KEY_BASE_64   - `base64 -w 0 ~/.ssh/terraform.ssh.private.key`
 
