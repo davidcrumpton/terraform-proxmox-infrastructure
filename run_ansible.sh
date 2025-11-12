@@ -40,3 +40,4 @@ else
     echo "No SSH private key provided, using default SSH agent or key."
     ansible-playbook -i "$INVENTORY" "./ansible/playbooks/$PLAYBOOK" -u root 
 fi
+exit 0
