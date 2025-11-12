@@ -49,7 +49,6 @@ storage = "local-lvm"
 
 ## GitLab CI/CD Variables
 
-### GitLab CI/CD Variables
 
 | Variable | Description |
 |-----------|-------------|
