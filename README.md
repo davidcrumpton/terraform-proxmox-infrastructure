@@ -27,7 +27,7 @@ have them both with the same name.
 ./scripts/enable openbsd
 ```
 
-## #TFVARS Example File terraform.tfvars
+## TFVARS Example File terraform.tfvars
 
 You must set the values for your environment.
 
