@@ -99,10 +99,9 @@ ansible_deploy:
     - echo -n "${SSH_PRIVATE_KEY_BASE_64}" | base64 -d > ~/.ssh/terraform
     - chmod 0600 ~/.ssh/terraform && chmod 700 ~/.ssh
     - ls -l ~/.ssh/terraform
-
   script:
-    - ANSIBLE_CONFIG=ansible/absible.cfg
-    - ANSIBLE_ROLES_PATH=ansible/playbook/roles
+    - export ANSIBLE_CONFIG=ansible/absible.cfg
+    - export ANSIBLE_ROLES_PATH=ansible/playbook/roles
     - ansible --version
     - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
   needs:
