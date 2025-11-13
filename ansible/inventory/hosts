@@ -11,6 +11,9 @@ gl-runner-01-ng
 nextsuite-ng
 docker02-ng
 
+[role_certsys]
+docker02-ng
+
 [role_cloud]
 nextsuite-ng
 
@@ -35,7 +38,7 @@ nextsuite-ng
 [role_public]
 nextsuite-ng
 
-[role_tf-mng]
+[role_terraformed]
 docker02-ng
 
 [role_u2204]

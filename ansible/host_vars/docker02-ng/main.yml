@@ -3,7 +3,7 @@ hostname: docker02-ng
 vmid: 502
 node: pve02
 storage: local-lvm
-tags_list: d12, debian, docker, tf-mng
+tags_list: certsys, d12, debian, docker, terraformed
 features:
   nesting: true
 networks:
