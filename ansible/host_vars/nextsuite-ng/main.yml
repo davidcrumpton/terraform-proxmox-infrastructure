@@ -3,7 +3,7 @@ hostname: nextsuite-ng
 vmid: 501
 node: pve02
 storage: local-lvm
-tags: cloud, important, office, public, tf-mng, u2204, ubuntu
+tags_list: cloud, important, office, public, tf-mng, u2204, ubuntu
 features:
   nesting: true
 networks:

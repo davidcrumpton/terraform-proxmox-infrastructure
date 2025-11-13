@@ -3,7 +3,7 @@ hostname: ${hostname}
 vmid: ${vmid}
 node: ${node}
 storage: ${storage}
-tags: ${join(", ", tags_list)}
+tags_list: ${join(", ", tags_list)}
 features:
   nesting: ${features.nesting}
 networks:

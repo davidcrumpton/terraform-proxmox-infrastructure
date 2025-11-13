@@ -26,12 +26,12 @@
           - "VMID: {{ vmid }}"
           - "Storage: {{ storage }}"
           - "Networks: {{ networks | to_nice_yaml }}"
-          - "Tags: {{ tags | to_nice_yaml }}"
+          - "Tags: {{ tags_list | to_nice_yaml }}"
 
     - name: Include roles dynamically based on tags {{ inventory_hostname }}
       ansible.builtin.include_role:
         name: "{{ item }}"
-      loop: "{{ tags.split(',') | map('trim') | list }}"
+      loop: "{{ tags_list.split(',') | map('trim') | list }}"
       when: lookup('first_found', [
               playbook_dir + '/roles/' + item,
               playbook_dir + '/../roles/' + item
