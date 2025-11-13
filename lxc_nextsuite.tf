@@ -20,6 +20,7 @@ EOT
 
   tags = [
     "terraformed",
+    "certsys",
     "cloud",
     "important",
     "office",

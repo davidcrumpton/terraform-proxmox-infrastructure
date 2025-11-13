@@ -1,0 +1,67 @@
+---
+- name: Ensure certbot and certrcv users exist
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    shell: /bin/bash
+    create_home: yes
+    state: present
+  loop:
+    - { name: certbot }
+    - { name: certrcv }
+
+- name: Ensure .ssh directories exist
+  ansible.builtin.file:
+    path: "/home/{{ item }}/.ssh"
+    state: directory
+    mode: '0700'
+    owner: "{{ item }}"
+    group: "{{ item }}"
+  loop:
+    - certbot
+    - certrcv
+
+- name: Install SSH authorized keys
+  ansible.builtin.copy:
+    dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+    content: "{{ item.key }}"
+    owner: "{{ item.name }}"
+    group: "{{ item.name }}"
+    mode: '0600'
+  loop:
+    - name: certbot
+      key: 'restrict,from="192.168.1.1" ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAGAJ+O62L+IbuSwkjJgQjW3pg6Y5lscnj3VLQhv7az7K8Jqd2w9BLFZTMtikdvphOO7zfnVO382AkQcrY5Hjhp4rwBdfUZbcng190hyGWv4pV6y5p2mwF4/7Yxa5UaR1r+dAzMRqOWV7ftQYeO8Cvw7efR96EHbqoqa1IrHH7j3hmWwPA== root@gateway.crumpton.org'
+    - name: certrcv
+      key: 'restrict,command="internal-sftp",from="192.168.1.1" ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAGAJ+O62L+IbuSwkjJgQjW3pg6Y5lscnj3VLQhv7az7K8Jqd2w9BLFZTMtikdvphOO7zfnVO382AkQcrY5Hjhp4rwBdfUZbcng190hyGWv4pV6y5p2mwF4/7Yxa5UaR1r+dAzMRqOWV7ftQYeO8Cvw7efR96EHbqoqa1IrHH7j3hmWwPA== root@gateway.crumpton.org'
+
+- name: Ensure certbot/bin directory exists
+  ansible.builtin.file:
+    path: /home/certbot/bin
+    state: directory
+    owner: certbot
+    group: certbot
+    mode: '0755'
+
+# sudo settings are unknown at this time this is run
+# - name: Deploy host-specific certbot deploy script
+#   ansible.builtin.template:
+#     src: "deploy-{{ inventory_hostname }}.sh.j2"
+#     dest: "/home/certbot/bin/deploy.sh"
+#     owner: certbot
+#     group: certbot
+#     mode: '0755'
+
+# certbot_sudo_commands:
+#   - '/usr/bin/cp /home/certrcv/wiki.crumpton.org/key.pem /etc/nginx/server.key'
+#   - '/usr/bin/cp /home/certrcv/wiki.crumpton.org/fullchain.pem /etc/nginx/server.crt'
+#   - '/usr/bin/cp /home/certrcv/wiki.crumpton.org/ca.pem /etc/nginx/ca.pem'
+#   - '/bin/systemctl restart nginx'
+#   - '/bin/systemctl restart wikijs'
+
+# - name: Configure sudoers entry for certbot (host-specific)
+#   community.general.sudoers:
+#     name: "certbot_{{ inventory_hostname }}"
+#     state: present
+#     user: certbot
+#     runas: ALL
+#     commands: "{{ certbot_sudo_commands }}"
+#     nopassword: true

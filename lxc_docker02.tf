@@ -21,6 +21,7 @@ EOT
   tags = [
     "terraformed",
     "docker",
+    "certsys",
     var.ostemplate_debian_12.ostype,
     var.ostemplate_debian_12.tag,
   ]
