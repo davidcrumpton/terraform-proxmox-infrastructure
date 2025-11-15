@@ -3,6 +3,7 @@ resource "proxmox_vm_qemu" "minimal_example" {
   target_node = "pve02"
   memory      = var.vm_sizing.small.memory
   cpu { cores = var.vm_sizing.small.cores }
+  tags        = "lab"
   description = <<-EOT
 # openbsd-ng
 
@@ -36,8 +37,10 @@ EOT
         disk {
           size    = var.vm_sizing.small.disk
           storage = "local-lvm"
+          serial  = "SCSI10001DA"
         }
       }
     }
   }
 }
+
