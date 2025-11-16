@@ -2,7 +2,7 @@ resource "proxmox_vm_qemu" "truenas" {
   name        = "truenas"
   target_node = "pve02"
   memory      = 8192
-  cpu { cores = 2 }
+  cpu { cores = 4 }
   tags        = "lab"
   description = <<-EOT
 # TrueNAS
