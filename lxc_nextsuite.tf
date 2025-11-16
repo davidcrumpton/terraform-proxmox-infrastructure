@@ -51,3 +51,4 @@ output "nextsuite_root_password" {
   value       = random_password.nextsuite_root.result
   sensitive   = true
 }
+
