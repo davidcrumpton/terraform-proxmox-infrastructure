@@ -19,3 +19,4 @@ venv/
 ansible-vars/
 ansible/inventory/hosts
 .env
+.env
