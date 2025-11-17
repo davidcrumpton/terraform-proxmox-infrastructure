@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+
+
+if [ -d scripts ]
+then
+	echo archiving without the baggage...
+	tar  --exclude=venv  --exclude=.git  --exclude=\*.tfvars  --exclude=.terraform --exclude=./plan.out --exclude=.terraform.lock.hcl --exclude=terraform/ansible-vars/ -czf  ~/Downloads/terraform_home_lab.tar.gz .
+else
+	echo "Ensure you are in the project root before running the archiver"
+	exit 1;
+fi
