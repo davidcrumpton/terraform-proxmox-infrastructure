@@ -119,7 +119,8 @@ ansible_deploy:
 license_check:
   stage: validate
   image: alpine:latest
-  before_script: []
+  before_script: 
+    - apk update && apk add --no-cache git
   script:
     - echo "Checking LICENSE file..."
     - test -f LICENSE
