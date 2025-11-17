@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 ---
 - name: Install and enable docker.io container service
   ansible.builtin.apt:

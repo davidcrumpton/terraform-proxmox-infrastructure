@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 ---
 - name: Install and enable CUPS print service
   ansible.builtin.apt:

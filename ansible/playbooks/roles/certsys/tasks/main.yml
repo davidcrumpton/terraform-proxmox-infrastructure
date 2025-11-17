@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 ---
 - name: Ensure certbot and certrcv users exist
   ansible.builtin.user:
