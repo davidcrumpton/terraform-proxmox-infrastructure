@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 ---
 hostname: docker02-ng
 vmid: 502

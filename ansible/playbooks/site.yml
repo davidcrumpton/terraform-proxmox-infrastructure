@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 ---
 # site.yml
 # Primary playbook to configure all LXCs provisioned by Terraform.

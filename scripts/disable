@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
+# SPDX-License-Identifier: MIT
+
 set -eo pipefail
 
 LXC_ENABLED_NAME=lxc_${1}.tf

@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 module "lxc_docker02" {
   source = "./modules/lxc"
 

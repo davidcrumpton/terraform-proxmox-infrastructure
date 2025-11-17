@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 module "lxc_nextsuite" {
   source = "./modules/lxc"
 

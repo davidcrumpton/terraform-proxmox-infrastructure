@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: MIT -->
+
 # Terraform Proxmox Infrastructure
 
 This repository automates provisioning and configuration of **LXC containers** and **virtual machines** in **Proxmox** using **Terraform** for infrastructure definition and **Ansible** for configuration management.
@@ -17,6 +19,14 @@ Before using this repository, ensure the following tools are installed:
 * [Git](https://git-scm.com/)
 
 ---
+## 📜 License
+
+This project is licensed under the MIT License.
+
+You are free to use, modify, distribute, and sublicense this code for any purpose, including commercial use.  
+See the [LICENSE](./LICENSE) file for full details.
+
+SPDX-License-Identifier: MIT
 
 ## 🚀 Usage
 

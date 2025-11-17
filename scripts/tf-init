@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+
 
 ENV_FILE=".env"
 TF_STATE_NAME="proxmox-homelab"

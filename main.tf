@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 terraform {
   required_providers {
     proxmox = {

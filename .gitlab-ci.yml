@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 workflow:
   rules:
     # 1. Pipeline should run if *any* of the desired files change.
@@ -112,3 +114,27 @@ ansible_deploy:
   when: on_success
   only:
     - main
+
+
+license_check:
+  stage: validate
+  image: alpine:latest
+  script:
+    - echo "Checking LICENSE file..."
+    - test -f LICENSE
+
+    - echo "Checking SPDX headers..."
+    # File extensions to check
+    - FILES=$(git ls-files '*.tf' '*.sh' '*.yml' '*.yaml' '*.md')
+    - |
+      for f in $FILES; do
+        if ! grep -q "SPDX-License-Identifier: MIT" "$f"; then
+          echo "Missing SPDX header in: $f"
+          exit 1
+        fi
+      done
+
+    - echo "All SPDX headers present."
+  only:
+    - main
+    - merge_requests

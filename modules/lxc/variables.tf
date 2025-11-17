@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 variable "node" {}
 variable "vmid" {}
 variable "hostname" {}

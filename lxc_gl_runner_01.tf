@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 module "lxc_gl_runner" {
   source = "./modules/lxc"
 

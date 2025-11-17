@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 variable "pm_api_url" {
   type = string
   description = "ProxMox API URL (https://host:8006/api2/json). Can be set via PM_API_URL env var."

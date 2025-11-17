@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 ---
 # site-bootstrap.yml
 # Use this playbook to prepare a new Proxmox node for Terraform management.

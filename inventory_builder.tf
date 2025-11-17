@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+
 locals {
   # Collect ansible data from all LXC modules
   lxc_inventory = [
