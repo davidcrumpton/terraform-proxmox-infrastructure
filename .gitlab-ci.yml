@@ -119,6 +119,7 @@ ansible_deploy:
 license_check:
   stage: validate
   image: alpine:latest
+  before_script: []
   script:
     - echo "Checking LICENSE file..."
     - test -f LICENSE
