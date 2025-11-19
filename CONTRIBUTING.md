@@ -1,3 +1,4 @@
+<!-- SPDX-License-Identifier: MIT -->
 # Contributing to CrumptonOrg Terraform
 
 Thank you for considering contributing to this project! This repository automates provisioning and configuration of LXC containers and virtual machines in Proxmox using **Terraform** for infrastructure definition and **Ansible** for configuration management. Contributions help improve automation, documentation, and reliability.
