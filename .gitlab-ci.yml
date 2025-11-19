@@ -10,6 +10,7 @@ variables:
 
 # Shared cleanup steps
 .before_cleanup: &before_cleanup
+  - apk update && apk add --no-cache git
   - git clone --depth=1 $CI_REPOSITORY_URL repo-clean
   - cd repo-clean
   - git fetch --unshallow || true
