@@ -15,11 +15,11 @@ workflow:
 
 stages:
   - validate
-  - sync_to_gitea
+  - sync_internal
   - plan
   - apply
   - ansible
-  - sync_to_github
+  - sync_external
   - destroy
 
 image:
@@ -144,7 +144,7 @@ license_check:
     - merge_requests
 
 sync_to_gitea:
-  stage: sync
+  stage: sync_internal
   script:
     - git clone --depth=1 $CI_REPOSITORY_URL repo-clean
     - cd repo-clean
@@ -157,7 +157,7 @@ sync_to_gitea:
   #   - if: '$CI_COMMIT_TAG =~ /^v\.\d+\.\d+\.\d+$/'
 
 sync_to_github:
-  stage: sync
+  stage: sync_external
   script:
     - git clone --depth=1 $CI_REPOSITORY_URL repo-clean
     - cd repo-clean
