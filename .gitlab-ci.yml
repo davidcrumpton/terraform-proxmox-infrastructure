@@ -40,7 +40,8 @@ cache:
     - "${TF_ROOT}/.terraform"
 
 before_script:
-
+  - git config --global user.email "${GITEA_EMAIL}"
+  - git config --global user.name "$(echo ${GITEA_MYNAME} | sed 's/\./ /g')"
   - cd ${TF_ROOT}
   - mkdir -p "${TF_PLUGIN_CACHE_DIR}"
   - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
