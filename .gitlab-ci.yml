@@ -1,8 +1,17 @@
 # SPDX-License-Identifier: MIT
-stages:
-  - validate
-  - sync_internal
-  - sync_external
+
+workflow:
+  rules:
+    # 1. Pipeline should run if *any* of the desired files change.
+    - changes:
+      - "*.tf"
+      - "*.tf.disabled"
+      - .gitlab-ci.yml
+      - "*.tpl"
+      - "*.sh"
+      - "*.yml"
+      - "ansible/**"
+    - when: never
 
 variables:
   GIT_DEPTH: 0   # ensure full history, not shallow
@@ -41,3 +50,137 @@ sync_to_github:
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\.\d+\.\d+\.\d+$/'
   when: manual   # requires manual approval in GitLab UI
+
+
+
+
+
+
+stages:
+  - validate
+  - sync_internal
+  - plan
+  - apply
+  - ansible
+  - sync_external
+  - destroy
+
+image:
+  name: "hashicorp/terraform:latest"
+  entrypoint:
+    - "/usr/bin/env"
+    - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+variables:
+  TF_ROOT: "${CI_PROJECT_DIR}" # Assumes your .tf files are in a 'terraform' directory
+  TF_PLUGIN_CACHE_DIR: "${CI_PROJECT_DIR}/.terraform-plugin-cache" # Cache plugins to speed up jobs
+  TF_ADDRESS: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/proxmox-homelab" # 'proxmox-homelab' is an arbitrary name for your state file/environment
+
+
+cache:
+  paths:
+    - "${TF_PLUGIN_CACHE_DIR}"
+    - "${TF_ROOT}/.terraform"
+
+before_script:
+  - cd ${TF_ROOT}
+  - mkdir -p "${TF_PLUGIN_CACHE_DIR}"
+  - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
+  - terraform --version
+  - echo -n "${GITLAB_ACCESS_TOKEN}" | wc -c
+  - export TF_STATE_NAME=proxmox-homelab
+  - terraform init -backend-config="address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME" -backend-config="lock_address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME/lock" -backend-config="unlock_address=https://gitlab.crumpton.org/api/v4/projects/20/terraform/state/$TF_STATE_NAME/lock" -backend-config="username=bear" -backend-config="password=$GITLAB_ACCESS_TOKEN" -backend-config="lock_method=POST" -backend-config="unlock_method=DELETE" -backend-config="retry_wait_min=5" -reconfigure
+validate:
+  stage: validate
+  script:
+    - terraform validate
+    - terraform fmt -check=true # Ensure consistent formatting
+  only:
+    - merge_requests
+
+plan:
+  stage: plan
+  script:
+    - terraform plan -out="${TF_ROOT}/tfplan.cache" 
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - "${TF_ROOT}/tfplan.cache"
+  only:
+    - merge_requests
+    - master
+    - main
+
+apply:
+  stage: apply
+  script:
+    - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
+  dependencies:
+    - plan
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - "${TF_ROOT}/ansible-vars"
+  when: manual # Requires manual approval in the GitLab UI
+  only:
+    - master
+    - main
+
+destroy:
+  stage: destroy
+  script:
+    - terraform destroy -auto-approve
+  when: manual # Requires manual approval, useful for tearing down lab environments
+  only:
+    - master
+    - main
+
+ansible_deploy:
+  stage: ansible
+  # image: "ansible/ansible-runner:latest"
+  image: "demisto/ansible-runner:1.0.0.5807676"
+  before_script: 
+    - echo -n "${SSH_PRIVATE_KEY_BASE_64}" | wc -c
+    - mkdir -p ~/.ssh
+    - echo -n "${SSH_PRIVATE_KEY_BASE_64}" | base64 -d > ~/.ssh/terraform
+    - chmod 0600 ~/.ssh/terraform && chmod 700 ~/.ssh
+    - ls -l ~/.ssh/terraform
+  script:
+    - export ANSIBLE_CONFIG=ansible/absible.cfg
+    - export ANSIBLE_ROLES_PATH=ansible/playbook/roles
+    - ansible --version
+    - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
+  needs:
+    - job: apply
+      artifacts: true  # Waits for apply and downloads its artifacts
+  dependencies:
+    - apply
+  when: on_success
+  only:
+    - main
+
+
+license_check:
+  stage: validate
+  image: alpine:latest
+  before_script: 
+    - apk update && apk add --no-cache git
+  script:
+    - echo "Checking LICENSE file..."
+    - test -f LICENSE
+
+    - echo "Checking SPDX headers..."
+    # File extensions to check
+    - FILES=$(git ls-files '*.tf' '*.sh' '*.yml' '*.yaml' '*.md')
+    - |
+      for f in $FILES; do
+        if ! grep -q "SPDX-License-Identifier: MIT" "$f"; then
+          echo "Missing SPDX header in: $f"
+          exit 1
+        fi
+      done
+
+    - echo "All SPDX headers present."
+  only:
+    - main
+    - merge_requests
