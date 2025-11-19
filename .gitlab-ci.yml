@@ -147,7 +147,7 @@ sync_to_github:
   script:
     - git clone --depth=1 $CI_REPOSITORY_URL repo-clean
     - cd repo-clean
-    - rm -rf internal_docs secrets/ *.tfvars
+    - rm -rf .env terraform/ansible-vars/* *.tfvars
     - git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/davidcrumpton/terraform-proxmox-infrastructure.git
     - git commit -am "Cleaned sync"
     - git push github main --force
