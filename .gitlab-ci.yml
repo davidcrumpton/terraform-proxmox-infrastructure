@@ -16,6 +16,8 @@ workflow:
 variables:
   GIT_DEPTH: 0   # ensure full history, not shallow
   TF_ROOT: "${CI_PROJECT_DIR}"
+  TF_PLUGIN_CACHE_DIR: "${CI_PROJECT_DIR}/.terraform-plugin-cache" # Cache plugins to speed up jobs
+  TF_ADDRESS: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/proxmox-homelab" # 'proxmox-homelab' is an arbitrary name for your state file/environment
 
 # Shared cleanup steps
 .before_cleanup: &before_cleanup
@@ -65,12 +67,6 @@ image:
   entrypoint:
     - "/usr/bin/env"
     - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-variables:
-  TF_ROOT: "${CI_PROJECT_DIR}" # Assumes your .tf files are in a 'terraform' directory
-  TF_PLUGIN_CACHE_DIR: "${CI_PROJECT_DIR}/.terraform-plugin-cache" # Cache plugins to speed up jobs
-  TF_ADDRESS: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/proxmox-homelab" # 'proxmox-homelab' is an arbitrary name for your state file/environment
-
 
 cache:
   paths:
