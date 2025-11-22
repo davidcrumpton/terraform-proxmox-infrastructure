@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 # SPDX-License-Identifier: MIT
 
 PLAYBOOK="$1"
