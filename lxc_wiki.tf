@@ -3,7 +3,7 @@ module "lxc_wiki" {
 
   node        = var.node
   vmid        = 514
-  hostname    = "wiki"
+  hostname    = "wiki-js"
   cores       = var.lxc_sizing.small.cores
   memory      = var.lxc_sizing.small.memory
   swap        = var.lxc_sizing.small.swap
