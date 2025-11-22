@@ -34,6 +34,7 @@ fi
 if mv $ENABLED_NAME $DISABLED_NAME
 then
 	echo "disabled $1"
+	echo "#    module.lxc_$1.ansible_data," 
 else
 	echo "failed to disable $1"
 	exit 1
