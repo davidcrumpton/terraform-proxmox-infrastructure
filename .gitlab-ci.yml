@@ -164,12 +164,14 @@ license_check:
     # File extensions to check
     - FILES=$(git ls-files '*.tf' '*.sh' '*.yml' '*.yaml' '*.md')
     - |
+      NO_ERRORS=true
       for f in $FILES; do
         if ! grep -q "SPDX-License-Identifier: MIT" "$f"; then
-          echo "Missing SPDX header in: $f"
-          exit 1
+          echo "---------------------> Missing SPDX header in: $f"
+          NO_ERRORS=false
         fi
       done
+      $NO_ERRORS
 
     - echo "All SPDX headers present."
   only:
