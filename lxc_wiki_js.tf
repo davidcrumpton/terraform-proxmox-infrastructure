@@ -66,7 +66,7 @@ resource "local_file" "ansible_vault" {
 
   content = <<EOF
 wikijs_db_password: ${random_password.wikijs_db.result}
-wikijs_admin_password: ${random_password.wiki.result}
+wikijs_admin_password: ${random_password.wikijs_admin.result}
 ...
 EOF
 }
