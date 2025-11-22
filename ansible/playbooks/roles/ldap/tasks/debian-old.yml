@@ -9,29 +9,29 @@
       - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
       - "{{ ansible_distribution }}.yml"
 
-  - name: Set LDAP URI external
-    set_fact: 
-      ldap_url: "{{ ldap.service.schema }}://{{ ldap.service.ext_hostname }}:{{ ldap.service.port }}"
-    when: external_host is defined
+  # - name: Set LDAP URI external
+  #   set_fact: 
+  #     ldap_url: "{{ ldap.service.schema }}://{{ ldap.service.ext_hostname }}:{{ ldap.service.port }}"
+  #   when: external_host is defined
 
-  - name: Set LDAP URI internal
-    set_fact: 
-      ldap_url: "{{ ldap.service.schema }}://{{ ldap.service.hostname }}:{{ ldap.service.port }}"
-    when: external_host is undefined or external_host is false
+  # - name: Set LDAP URI internal
+  #   set_fact: 
+  #     ldap_url: "{{ ldap.service.schema }}://{{ ldap.service.hostname }}:{{ ldap.service.port }}"
+  #   when: external_host is undefined or external_host is false
 
-  - name: Install LDAP packages
-    ansible.builtin.package:
-      name:
-        - libpam-ldap
-        - ldap-utils
-        - libnss-ldapd
-      state: latest
+  # - name: Install LDAP packages
+  #   ansible.builtin.package:
+  #     name:
+  #       - libpam-ldap
+  #       - ldap-utils
+  #       - libnss-ldapd
+  #     state: latest
 
-  - name: Install LDAP nss packages
-    ansible.builtin.package:
-      name:
-       - libnss-ldap 
-      state: latest
+  # - name: Install LDAP nss packages
+  #   ansible.builtin.package:
+  #     name:
+  #      - libnss-ldap 
+  #     state: latest
 
   - name: Install Google 2FA
     ansible.builtin.package:
@@ -39,26 +39,26 @@
         - libpam-google-authenticator
       state: latest
 
-  - name: Ensure target directory exists
-    ansible.builtin.file:
-      path: /etc/ldap/
-      state: directory
-      owner: root
-      group: root
-      mode: '0755'
+  # - name: Ensure target directory exists
+  #   ansible.builtin.file:
+  #     path: /etc/ldap/
+  #     state: directory
+  #     owner: root
+  #     group: root
+  #     mode: '0755'
 
-  - name: Set search BASE in ldap.conf
-    ansible.builtin.lineinfile:
-      backup: yes
-      dest: /etc/ldap/ldap.conf
-      regexp: '^#BASE'
-      line: 'BASE dc=crumpton,dc=org'
+  # - name: Set search BASE in ldap.conf
+  #   ansible.builtin.lineinfile:
+  #     backup: yes
+  #     dest: /etc/ldap/ldap.conf
+  #     regexp: '^#BASE'
+  #     line: 'BASE dc=crumpton,dc=org'
 
-  - name: Set search URI in ldap.conf
-    ansible.builtin.lineinfile:
-      dest: /etc/ldap/ldap.conf
-      regexp: '^#URI'
-      line: 'URI {{ ldap_url }}'
+  # - name: Set search URI in ldap.conf
+  #   ansible.builtin.lineinfile:
+  #     dest: /etc/ldap/ldap.conf
+  #     regexp: '^#URI'
+  #     line: 'URI {{ ldap_url }}'
 
   - name: Set sshd_config ChallengeResponseAuthentication
     ansible.builtin.lineinfile:
@@ -109,23 +109,24 @@
     notify:
     - restart sshd
 
-  - name: Create /var/run
-    ansible.builtin.file:
-      path: /run/sshd
-      state: directory
-      mode: '0755'
+  # - name: Create /var/run
+  #   ansible.builtin.file:
+  #     path: /run/sshd
+  #     state: directory
+  #     mode: '0755'
 
-  - name: Add ldap to nsswitch passwords
-    ansible.builtin.lineinfile:
-      backup: yes
-      dest: /etc/nsswitch.conf
-      regexp: '^passwd:'
-      line: 'passwd: compat systemd ldap'
-  - name: Add ldap to nsswitch groups
-    ansible.builtin.lineinfile:
-      dest: /etc/nsswitch.conf
-      regexp: '^group:'
-      line: 'group: compat systemd ldap'
+  # - name: Add ldap to nsswitch passwords
+  #   ansible.builtin.lineinfile:
+  #     backup: yes
+  #     dest: /etc/nsswitch.conf
+  #     regexp: '^passwd:'
+  #     line: 'passwd: compat systemd ldap'
+
+  # - name: Add ldap to nsswitch groups
+  #   ansible.builtin.lineinfile:
+  #     dest: /etc/nsswitch.conf
+  #     regexp: '^group:'
+  #     line: 'group: compat systemd ldap'
 
   - name: Remove authtok from pam common-password
     ansible.builtin.lineinfile:
@@ -134,12 +135,12 @@
       regexp: ' use_authtok'
       line: 'password   [success=1 user_unknown=ignore default=die]     pam_ldap.so try_first_pass'
 
-  - name: Enable pam to make home directories
-    ansible.builtin.lineinfile:
-      path: /etc/pam.d/common-session
-      backup: yes
-      insertafter: EOF
-      line: 'session optional pam_mkhomedir.so skel=/etc/skel umask=077'
+  # - name: Enable pam to make home directories
+  #   ansible.builtin.lineinfile:
+  #     path: /etc/pam.d/common-session
+  #     backup: yes
+  #     insertafter: EOF
+  #     line: 'session optional pam_mkhomedir.so skel=/etc/skel umask=077'
 
   - name: Ensure local certs directory exists
     file: state=directory path=/usr/local/share/ca-certificates
@@ -153,17 +154,17 @@
   - name: Freshen cert index
     shell: /usr/sbin/update-ca-certificates --fresh
 
-  - name: Install ldap configuration
-    ansible.builtin.template:
-      backup: yes
-      src: "{{ configuration.template_base }}/ldap.conf.j2"
-      dest: /etc/ldap.conf
+  # - name: Install ldap configuration
+  #   ansible.builtin.template:
+  #     backup: yes
+  #     src: "{{ configuration.template_base }}/ldap.conf.j2"
+  #     dest: /etc/ldap.conf
 
-  - name: Install ldapsearch configuration
-    ansible.builtin.template:
-      backup: yes
-      src: "{{ configuration.template_base }}/etc-ldap-ldap.conf.j2"
-      dest: /etc/ldap.ldap.conf
+  # - name: Install ldapsearch configuration
+  #   ansible.builtin.template:
+  #     backup: yes
+  #     src: "{{ configuration.template_base }}/etc-ldap-ldap.conf.j2"
+  #     dest: /etc/ldap.ldap.conf
 
   - name: Install authorized_keys_ldap
     ansible.builtin.template:

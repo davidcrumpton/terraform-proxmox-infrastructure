@@ -3,6 +3,12 @@
   - name: gather global variables
     include_vars: "global-{{ tier }}.yml"
 
+  - name: gather os specific variables
+    include_vars: "{{ item }}"
+    with_first_found:
+      - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
+      - "{{ ansible_distribution }}.yml"
+
   - name: Install LDAP/SSSD packages
     apt:
       name:
@@ -81,3 +87,97 @@
       enabled: true
 
 
+  - name: Install Google 2FA
+    ansible.builtin.package:
+      name:
+        - libpam-google-authenticator
+      state: latest
+
+  - name: Set sshd_config ChallengeResponseAuthentication
+    ansible.builtin.lineinfile:
+      backup: yes
+      dest: /etc/ssh/sshd_config
+      regexp: '^ChallengeResponseAuthentication'
+      line: 'ChallengeResponseAuthentication no'
+    notify:
+    - restart sshd
+
+  - name: Uncomment sshd_config ChallengeResponseAuthentication
+    ansible.builtin.lineinfile: 
+      dest: /etc/ssh/sshd_config
+      regexp: '^#ChallengeResponseAuthentication'
+      line: 'ChallengeResponseAuthentication no'
+    notify:
+    - restart sshd
+
+  - name: Set sshd_config PasswordAuthentication when commented out
+    ansible.builtin.lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: '^#PasswordAuthentication'
+      line: '#PasswordAuthentication yes'
+    notify:
+    - restart sshd
+
+  - name: sshd_config PasswordAuthentication
+    ansible.builtin.lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: '^PasswordAuthentication'
+      line: '#PasswordAuthentication yes'
+    notify:
+    - restart sshd
+
+  - name: Set sshd_config AuthorizedKeysCommand when commented
+    ansible.builtin.lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: '^#AuthorizedKeysCommandUser'
+      line: 'AuthorizedKeysCommandUser nobody'
+    notify:
+    - restart sshd
+
+  - name: Uncomment sshd_config AuthorizedKeysUser
+    ansible.builtin.lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: '^#AuthorizedKeysCommand'
+      line: 'AuthorizedKeysCommand /usr/local/bin/authorized_keys_ldap'
+    notify:
+    - restart sshd
+
+  - name: Remove authtok from pam common-password
+    ansible.builtin.lineinfile:
+      dest: /etc/pam.d/common-password
+      backup: yes
+      regexp: ' use_authtok'
+      line: 'password   [success=1 user_unknown=ignore default=die]     pam_ldap.so try_first_pass'
+
+  - name: Ensure local certs directory exists
+    file: state=directory path=/usr/local/share/ca-certificates
+
+  - name: Install eaglecreek cert
+    copy: src=eaglecreek4096.crt dest=/usr/local/share/ca-certificates/
+
+  - name: Update cert index
+    shell: /usr/sbin/update-ca-certificates
+
+  - name: Freshen cert index
+    shell: /usr/sbin/update-ca-certificates --fresh
+
+  - name: Install authorized_keys_ldap
+    ansible.builtin.template:
+      src: authorized_keys_ldap.j2
+      dest: /usr/local/bin/authorized_keys_ldap
+      mode: 'u=rx,g=rx,o=rx'
+      backup: yes
+
+  - name: Enable auth pam succeeded if
+    ansible.builtin.lineinfile:
+      path: /etc/pam.d/sshd
+      backup: yes
+      insertafter: EOF
+      line: 'auth [default=ignore success=1] pam_succeed_if.so quiet uid < 2000'
+
+  - name: Enable auth pam google_authenticator
+    ansible.builtin.lineinfile:
+      path: /etc/pam.d/sshd
+      backup: yes
+      insertafter: EOF
+      line: 'auth required pam_google_authenticator.so'
