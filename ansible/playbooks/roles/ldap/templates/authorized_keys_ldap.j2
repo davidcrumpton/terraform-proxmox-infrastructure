@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# {{ ansible_managed }}
+# SPDX-License-Identifier: MIT
+
+PATH="$PATH:/usr/local/bin"
+export PATH
+
+set -eou pipefail
+IFS=$'\n\t'
+
+
+result=$(ldapsearch -x '(&(objectClass=posixAccount)(uid='"$1"'))' 'sshPublicKey')
+attrLine=$(echo "$result" | awk '/^sshPublicKey/{$1=""; p=1} /^$/{p=0} {printf p?$0:""}' | sed 's/ //g')
+
+if test "x$attrLine" == x
+then
+	exit 1
+else
+	echo $attrLine | base64 -d
+	exit 0
+fi

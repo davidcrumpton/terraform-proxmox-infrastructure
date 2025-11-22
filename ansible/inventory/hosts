@@ -1,5 +1,4 @@
 [all]
-gl-runner-01-ng
 nextsuite-ng
 docker02-ng
 
@@ -7,7 +6,6 @@ docker02-ng
 docker02-ng
 
 [pve_pve02]
-gl-runner-01-ng
 nextsuite-ng
 docker02-ng
 
@@ -25,9 +23,6 @@ docker02-ng
 
 [role_docker]
 docker02-ng
-
-[role_git]
-gl-runner-01-ng
 
 [role_important]
 nextsuite-ng

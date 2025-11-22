@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: MIT
+---
+  - name: restart sshd
+    service: name=sshd state=restarted
+  - name: restart ypldap
+    service: name=ypldap state=restarted
+  - name: restart sssd
+    service:
+      name: sssd
+      state: restarted

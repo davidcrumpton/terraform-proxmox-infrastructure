@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: MIT
+---
+configuration:
+  template_base: "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}/"
+
+sshd:
+  server:
+    authorized_keys_command: /usr/local/bin/authorized_keys_ldap
+  service:
+    denygroups: denyssh
+
+paths:
+  bash: /bin/bash
+  sshd_config: /etc/ssh/sshd_config
+  nss_ldap_conf: /usr/local/etc/nss_ldap.conf
+  nss_switch_conf: /etc/nsswitch.conf
+  eaglecreek_crt: /usr/local/etc/ssl/eaglecreek.crt
+  ldap_conf: /usr/local/etc/ldap.conf
+  openldap_conf: /usr/local/etc/openldap/ldap.conf
+  sshd: /etc/pam.d/sshd

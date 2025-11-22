@@ -1,0 +1,83 @@
+# SPDX-License-Identifier: MIT
+---
+  - name: gather global variables
+    include_vars: "global-{{ tier }}.yml"
+
+  - name: Install LDAP/SSSD packages
+    apt:
+      name:
+        - sssd
+        - sssd-tools
+        - sssd-ldap
+        - libpam-sss
+        - libnss-sss
+        - ldap-utils
+        - oddjob-mkhomedir
+        - oddjob
+      state: present
+      update_cache: yes
+
+  - name: Enable mkhomedir (PAM)
+    lineinfile:
+      path: /etc/pam.d/common-session
+      regexp: '^session\s+required\s+pam_mkhomedir.so'
+      line: 'session required pam_mkhomedir.so'
+      state: present
+
+  - name: Configure NSS to use SSSD
+    lineinfile:
+      path: /etc/nsswitch.conf
+      regexp: '^passwd:'
+      line: 'passwd:         files systemd sss'
+    notify: restart sssd
+
+  - name: Ensure group entry uses SSS
+    lineinfile:
+      path: /etc/nsswitch.conf
+      regexp: '^group:'
+      line: 'group:          files systemd sss'
+    notify: restart sssd
+
+  - name: Create SSSD config directory
+    file:
+      path: /etc/sssd
+      state: directory
+      mode: 0755
+
+  - name: Deploy /etc/sssd/sssd.conf
+    copy:
+      dest: /etc/sssd/sssd.conf
+      mode: '600'
+      content: |
+        [sssd]
+        services = nss, pam
+        config_file_version = 2
+        domains = {{ domainname }}
+
+        [domain/{{ domainname }}]
+        id_provider = ldap
+        auth_provider = ldap
+        chpass_provider = ldap
+        ldap_uri = {{ ldap.service.schema }}://{{ ldap.service.hostname }}:{{ ldap.service.port }}
+        ldap_search_base = {{ ldap.service.basedn }}
+        ldap_id_use_start_tls = False
+        ldap_tls_reqcert = demand
+        ldap_tls_cacert = /etc/ssl/certs/ca-certificates.crt
+        ldap_default_bind_dn = {{ '' if ldap.service.bindanonymous else ldap.service.manager }}
+        ldap_default_authtok_type = {{ 'none' if ldap.service.bindanonymous else 'password' }}
+        cache_credentials = True
+        enumerate = False
+        fallback_homedir = /home/%u
+        access_provider = simple
+
+        [pam]
+        reconnection_retries = 3
+    notify: restart sssd
+
+  - name: Enable & start SSSD
+    service:
+      name: sssd
+      state: started
+      enabled: true
+
+

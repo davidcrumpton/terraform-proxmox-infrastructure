@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: MIT
+---
+  - include: freebsd.yml
+    when: ansible_distribution == "FreeBSD"
+  - include: debian.yml
+    when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+  - include: openbsd.yml
+    when: ansible_distribution == "OpenBSD"

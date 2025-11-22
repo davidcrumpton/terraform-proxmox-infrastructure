@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+# SPDX-License-Identifier: MIT
+host={{ ldap.service.schema }}://{{ ldap.service.hostname }}
+# cacert={{ paths.eaglecreek_crt }}
+scope=sub
+basedn={{ ldap.service.basedn }}
+filter=(&(objectClass=posixAccount)(uid=%u))

@@ -1,0 +1,154 @@
+# SPDX-License-Identifier: MIT
+---
+#
+# Credit to https://ywstd.fr/blog/2020/openbsd-ldap.html for the steps used herein.
+#
+  - name: Load global variables
+    include_vars: "global-{{ tier }}.yml"
+
+  - name: Load OS specific variables
+    include_vars: "{{ item }}"
+    with_first_found:
+      - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
+      - "{{ ansible_distribution }}.yml"
+    tags: vars
+
+  - name: Install LDAP Required Packages
+    ansible.builtin.package:
+      name:
+        - openldap-client-2.4.59v0
+      state: latest
+
+  - name: Install OS Applications
+    ansible.builtin.package:
+      name:
+        - bash
+        - base64
+      state: latest
+
+  - name: Put bash where LDAP expects it
+    ansible.builtin.file:
+      src: /usr/local/bin/bash
+      dest: "{{ paths.bash }}"
+      state: link
+
+  - name: Update sshd configuration and vaildate it
+    ansible.builtin.template:
+      src: "{{ configuration.template_base }}/sshd_config.j2"
+      dest: "{{ paths.sshd_config }}"
+      owner: root
+      group: wheel
+      mode: '0644'
+      validate: /usr/sbin/sshd -t -f %s
+      backup: yes
+    notify: restart sshd
+
+  - name: Install LDAP CA cert
+    copy: src=eaglecreek.crt dest={{ paths.eaglecreek_crt }}
+
+  - name: Install openldap configuration
+    ansible.builtin.template:
+      src: "{{ configuration.template_base }}/openldap.conf.j2"
+      dest: "{{ paths.openldap_conf }}"
+      backup: yes
+
+  - name: Install authorized_keys_ldap
+    ansible.builtin.template:
+      src: authorized_keys_ldap.j2
+      dest: "{{ sshd.server.authorized_keys_command }}"
+      mode: 'u=rx,g=rx,o=rx'
+
+  - name: Update login_ldap.conf
+    ansible.builtin.template:
+      src: "{{ configuration.template_base }}/login_ldap.conf.j2"
+      dest: "{{ paths.login_ldap_conf }}"
+      owner: root
+      group: auth
+      mode: '0640'
+      backup: yes
+
+  - name: Update yp_ldap.conf and validate it
+    ansible.builtin.template:
+      src: "{{ configuration.template_base }}/ypldap.conf.j2"
+      dest: "{{ paths.ypldap_conf }}"
+      owner: root
+      group: auth
+      mode: '0640'
+      validate: ypldap -n -f %s
+      backup: yes
+
+  - name: Update /etc/domainname 
+    ansible.builtin.template:
+      src: "{{ configuration.template_base }}/domainname.j2"
+      dest: "{{ paths.domainname }}"
+      owner: root
+      group: wheel
+      mode: '0644'
+      backup: yes
+    register: tld
+
+  - name: Add YP entry to /etc/master.passwd
+    ansible.builtin.lineinfile:
+      path: /etc/master.passwd
+      insertafter: EOF
+      line: '+:*::::::::'
+    register: yp_master_passwd
+
+  - name: Add YP entry to /etc/group
+    ansible.builtin.lineinfile:
+      path: /etc/group
+      insertafter: EOF
+      line: '+:*::'
+    register: yp_group
+
+  - name: Run PW mkdb command if needed
+    command:
+      cmd: pwd_mkdb -p /etc/master.passwd
+    when: yp_master_passwd.changed
+
+  - name: Set Domain Name 
+    command:
+      cmd: domainname {{ domainname }}
+    when: tld.changed
+    
+  - name: Start service portmap, if not started
+    ansible.builtin.service:
+      name: portmap
+      enabled: yes
+      state: started
+
+  - name: Start service ypldap, if not started
+    ansible.builtin.service:
+      name: ypldap
+      enabled: yes
+      state: started
+
+  - name: Start service ypbind, if not started
+    ansible.builtin.service:
+      name: ypbind
+      enabled: yes
+      state: started
+
+  - name: Update login.conf 
+    ansible.builtin.template:
+      src: "{{ configuration.template_base }}/login.conf.j2"
+      dest: "{{ paths.login_conf }}"
+      owner: root
+      group: wheel
+      mode: '0644'
+      backup: yes
+    register: login_conf
+
+  - name: Read users from CSV file and return a list
+    community.general.read_csv:
+      path: files/users.csv
+    register: userscsv
+    delegate_to: localhost
+    
+  - name: Add the users from the CSV
+    ansible.builtin.user:
+      name: "{{ item.username }}"
+      comment: "{{ item.gecos }}"
+      uid: "{{ item.uid }}"
+      group: "{{ item.gid }}"
+    loop: "{{ userscsv.list }}"

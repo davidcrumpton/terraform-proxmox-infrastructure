@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+
+echo username,pwd,uid,gid,gecos,homedir,shell,
+for username in $*
+do
+getent passwd $username |
+awk '                                  # awk it is
+BEGIN { FS=":";OFS=",";start=1 }         # separators
+NR>=start && $0!="" {                    # define start line and remove empties
+    # sub(/\r/,"",$NF)                   # uncomment to remove windows line endings
+    for(i=1;i<=NF;i++)                   # all cols 
+        a[i]=a[i] (NR==start?"":OFS) $i  # gather
+    }
+END {                                    # in the end
+    for(j=1;j<i;j++)                     # all ..
+        print a[j]                       # outputed
+}' | while read field; do  printf "\"$field\","; done
+printf "\n"
+done

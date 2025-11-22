@@ -1,0 +1,17 @@
+# {{ ansible_managed }}
+# SPDX-License-Identifier: MIT
+#
+# LDAP Defaults
+#
+
+# See ldap.conf(5) for details
+# This file should be world readable but not world writable.
+
+BASE	{{ ldap.service.basedn }}
+URI	{{ ldap.service.schema }}://{{ ldap.service.hostname }}
+
+#SIZELIMIT	12
+#TIMELIMIT	15
+#DEREF		never
+
+# TLS_CACERT {{ paths.eaglecreek_crt }}

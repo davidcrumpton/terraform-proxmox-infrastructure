@@ -1,0 +1,18 @@
+# {{ ansible_managed }}
+# SPDX-License-Identifier: MIT
+#
+# nsswitch.conf(5) - name service switch configuration file
+# $FreeBSD: releng/12.2/lib/libc/net/nsswitch.conf 338729 2018-09-17 18:56:47Z brd $
+#
+group: files ldap
+group_compat: nis
+hosts: files dns
+netgroup: compat
+networks: files
+passwd: files ldap
+passwd_compat: nis
+shells: files
+services: compat
+services_compat: nis
+protocols: files
+rpc: files
