@@ -11,9 +11,12 @@ variable "root_password" { sensitive = true }
 variable "ssh_public_keys" { default = "" }
 variable "tags" { type = list(string) }
 variable "features_nesting" { default = true }
+variable "features_keyctl" { default = false }
 variable "storage_pool" {}
 variable "disk_size" { default = "8G" }
 variable "description" { default = "" }
+variable "unprivileged" { default = "true" }
+  
 
 variable "networks" {
   description = "List of network interfaces"

@@ -1,0 +1,42 @@
+---
+# SPDX-License-Identifier: MIT
+- name: Install PostgreSQL server
+  ansible.builtin.package:
+    name: postgresql
+    state: present
+
+- name: Install psycopg2 dependencies
+  ansible.builtin.apt:
+    name:
+      - python3-psycopg2
+    state: present
+
+    update_cache: yes
+
+- name: Install PostgreSQL contrib (optional)
+  ansible.builtin.package:
+    name: postgresql-contrib
+    state: present
+  ignore_errors: true
+
+- name: Ensure PostgreSQL service is running
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Ensure Wiki.js DB user exists
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: "{{ wikijs_db_user }}"
+    password: "{{ wikijs_db_password }}"
+    state: present
+
+- name: Ensure Wiki.js database exists
+  become_user: postgres
+  community.postgresql.postgresql_db:
+    name: "{{ wikijs_db_name }}"
+    owner: "{{ wikijs_db_user }}"
+    encoding: UTF8
+    template: template0
+    state: present

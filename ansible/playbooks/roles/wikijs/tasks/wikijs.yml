@@ -1,0 +1,43 @@
+---
+# SPDX-License-Identifier: MIT
+- name: Create wikijs system user
+  ansible.builtin.user:
+    name: "{{ wikijs_user }}"
+    system: yes
+    create_home: no
+
+- name: Create directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ wikijs_user }}"
+    group: "{{ wikijs_group }}"
+    mode: '0755'
+  loop:
+    - "{{ wikijs_install_dir }}"
+    - "{{ wikijs_data_dir }}"
+
+- name: Download Wiki.js release
+  ansible.builtin.unarchive:
+  # https://github.com/requarks/wiki/releases/download/v2.5.308/wiki-js.tar.gz
+    src: "https://github.com/requarks/wiki/releases/download/v{{ wikijs_version }}/wiki-js.tar.gz"
+    dest: "{{ wikijs_install_dir }}"
+    remote_src: yes
+    owner: "{{ wikijs_user }}"
+    group: "{{ wikijs_group }}"
+
+- name: Deploy Wiki.js config file
+  ansible.builtin.template:
+    src: config.yml.j2
+    dest: "{{ wikijs_install_dir }}/config.yml"
+    owner: "{{ wikijs_user }}"
+    group: "{{ wikijs_group }}"
+    mode: '0640'
+  notify: Restart Wiki.js
+
+- name: Deploy systemd service
+  ansible.builtin.template:
+    src: wikijs.service.j2
+    dest: /etc/systemd/system/wikijs.service
+    mode: '0644'
+  notify: Reload systemd

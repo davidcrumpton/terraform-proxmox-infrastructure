@@ -12,6 +12,8 @@ Roles run in alphabetical order—so prefix tags to control sequencing (e.g., `1
 
 ## 🧰 Requirements
 
+You need a ProxMox token with admin permissions and a root level token if you wish to make priveleged containers or features other than nesting.
+
 Before using this repository, ensure the following tools are installed:
 
 * [Ansible](https://www.ansible.com/)

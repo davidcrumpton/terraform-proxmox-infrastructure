@@ -1,11 +1,13 @@
 [all]
 gl-runner-01-ng
+wiki-js
 
 [net_vmbr0]
-gl-runner-01-ng
+wiki-js
 
 [pve_pve02]
 gl-runner-01-ng
+wiki-js
 
 [role_d12]
 gl-runner-01-ng
@@ -23,4 +25,13 @@ gl-runner-01-ng
 gl-runner-01-ng
 
 [role_terraformed]
-gl-runner-01-ng
+wiki-js
+
+[role_u2204]
+wiki-js
+
+[role_ubuntu]
+wiki-js
+
+[role_wikijs]
+wiki-js

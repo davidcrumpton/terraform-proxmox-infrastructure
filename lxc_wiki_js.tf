@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-module "lxc_wiki" {
+module "lxc_wikijs" {
   source = "./modules/lxc"
 
   node        = var.node
@@ -10,12 +10,14 @@ module "lxc_wiki" {
   swap        = var.lxc_sizing.small.swap
   ostemplate  = var.ostemplate_ubuntu_2204.template
   storage_pool = var.storage_pool.local
-  root_password = random_password.wiki_root.result
+  root_password = random_password.wikijs_root.result
   ssh_public_keys = var.default_ssh_keys
+  # features_keyctl = true
+  # unprivileged = false
   description = <<-EOT
-# Wiki for CrumptonOrg
+# wikijs for CrumptonOrg
 
-https://wiki.crumpton.org
+https://wiki-js.crumpton.org
 
 ## Runs
 
@@ -26,8 +28,7 @@ EOT
 
   tags = [
     "terraformed",
-    "docker",
-    "ldap",
+    "wikijs",
     var.ostemplate_ubuntu_2204.ostype,
     var.ostemplate_ubuntu_2204.tag,
   ]
@@ -42,15 +43,26 @@ EOT
   ]
 }
 
-resource random_password "wiki_root" {
+resource random_password "wikijs_root" {
   length          = 24
   override_special = "!@#$%&*()-_=+[]{}<>:?"
   special          = true
 }
 
+resource random_password "wikijs_db" {
+  length          = 24
+  override_special = "!@#$%&*()-_=+[]{}<>:?"
+  special          = true
+}
 
-output "wiki_root_password" {
-  description = "Root password for the wiki container"
-  value       = random_password.wiki_root.result
+output "wikijs_root_password" {
+  description = "Root password for the wikijs container"
+  value       = random_password.wikijs_root.result
+  sensitive   = true
+}
+
+output "wikijs_db_password" {
+  description = "Database password for the wikijs container"
+  value       = random_password.wikijs_db.result
   sensitive   = true
 }

@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: MIT
+port: 3000
+
+bindIP: 0.0.0.0
+
+db:
+  type: postgres
+  host: "{{ wikijs_db_host }}"
+  port: "{{ wikijs_db_port }}"
+  user: "{{ wikijs_db_user }}"
+  pass: "{{ wikijs_db_password }}"
+  db: "{{ wikijs_db_name }}"
+  ssl: false
+
+paths:
+  data: "{{ wikijs_data_dir }}"

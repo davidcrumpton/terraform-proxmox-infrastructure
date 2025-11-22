@@ -1,10 +1,10 @@
-# SPDX-License-Identifier: MIT
 ---
+# SPDX-License-Identifier: MIT
 hostname: wiki-js
 vmid: 514
 node: pve02
 storage: local-lvm
-tags_list: docker, ldap, terraformed, u2204, ubuntu
+tags_list: terraformed, u2204, ubuntu, wikijs
 features:
   nesting: true
 networks:
