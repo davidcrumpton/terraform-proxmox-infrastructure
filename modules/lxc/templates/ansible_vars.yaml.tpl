@@ -1,5 +1,5 @@
-# SPDX-License-Identifier: MIT
 ---
+# SPDX-License-Identifier: MIT
 hostname: ${hostname}
 vmid: ${vmid}
 node: ${node}
