@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 ---
 hostname: ${hostname}
 vmid: ${vmid}
