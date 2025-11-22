@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 module "lxc_wiki" {
   source = "./modules/lxc"
 
