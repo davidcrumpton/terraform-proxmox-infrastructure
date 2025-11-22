@@ -17,6 +17,7 @@ override.tf.json
 *.out
 venv/
 ansible-vars/
+ansible/host_vars/
 ansible/inventory/hosts
 .env
 .env
