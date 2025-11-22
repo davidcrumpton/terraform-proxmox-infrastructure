@@ -27,7 +27,7 @@ EOT
   tags = [
     "terraformed",
     "docker",
-    "sso",
+    "ldap",
     var.ostemplate_ubuntu_2204.ostype,
     var.ostemplate_ubuntu_2204.tag,
   ]

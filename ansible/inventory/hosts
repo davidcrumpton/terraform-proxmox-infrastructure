@@ -1,31 +1,28 @@
 [all]
 nextsuite-ng
-docker02-ng
+wiki-js
 
 [net_vmbr0]
-docker02-ng
+wiki-js
 
 [pve_pve02]
 nextsuite-ng
-docker02-ng
+wiki-js
 
 [role_certsys]
-docker02-ng
+nextsuite-ng
 
 [role_cloud]
 nextsuite-ng
 
-[role_d12]
-docker02-ng
-
-[role_debian]
-docker02-ng
-
 [role_docker]
-docker02-ng
+wiki-js
 
 [role_important]
 nextsuite-ng
+
+[role_ldap]
+wiki-js
 
 [role_office]
 nextsuite-ng
@@ -34,10 +31,10 @@ nextsuite-ng
 nextsuite-ng
 
 [role_terraformed]
-docker02-ng
+wiki-js
 
 [role_u2204]
-nextsuite-ng
+wiki-js
 
 [role_ubuntu]
-nextsuite-ng
+wiki-js
