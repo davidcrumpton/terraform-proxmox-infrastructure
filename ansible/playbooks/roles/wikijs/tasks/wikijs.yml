@@ -6,6 +6,12 @@
     system: yes
     create_home: no
 
+- name: Install nodejs package
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+    update_cache: yes
+
 - name: Create directories
   ansible.builtin.file:
     path: "{{ item }}"
@@ -45,18 +51,6 @@
 - name: Ensure Wiki.js is running
   ansible.builtin.service:
     name: wikijs
-    state: started
+    state: stopped
   register: wikijs_service
 
-
-- name: Ensure Wiki.js admin user exists
-  become: true
-  become_user: "{{ wikijs_user }}"
-  ansible.builtin.command: >
-    node server configure
-    --admin-email "{{ wikijs_admin_email }}"
-    --admin-password "{{ wikijs_admin_password }}"
-  args:
-    chdir: "{{ wikijs_install_dir }}"
-  register: wikijs_admin
-  changed_when: "'Admin account already exists' not in wikijs_admin.stdout"
