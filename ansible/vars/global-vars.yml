@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 ---
 configuration:
   template_base: "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}/"
