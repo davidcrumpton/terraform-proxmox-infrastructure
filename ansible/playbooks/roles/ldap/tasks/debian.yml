@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 ---
   - name: gather global variables
-    include_vars: "global-{{ tier }}.yml"
+    include_vars: "global-prod.yml"
 
   - name: gather os specific variables
     include_vars: "{{ item }}"

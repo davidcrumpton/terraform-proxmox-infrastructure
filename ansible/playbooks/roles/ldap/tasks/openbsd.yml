@@ -4,7 +4,7 @@
 # Credit to https://ywstd.fr/blog/2020/openbsd-ldap.html for the steps used herein.
 #
   - name: Load global variables
-    include_vars: "global-{{ tier }}.yml"
+    include_vars: "global-prod.yml"
 
   - name: Load OS specific variables
     include_vars: "{{ item }}"
