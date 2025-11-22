@@ -74,10 +74,6 @@ cache:
     - "${TF_ROOT}/.terraform"
 
 before_script:
-  - export TF_VAR_pm_api_url="$PM_API_URL"
-  - export TF_VAR_pm_user="$PM_USER"
-  - export TF_VAR_pm_api_token_id="$PM_API_TOKEN_ID"
-  - export TF_VAR_pm_api_token_secret="$PM_API_TOKEN_SECRET"
   - cd ${TF_ROOT}
   - mkdir -p "${TF_PLUGIN_CACHE_DIR}"
   - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
@@ -96,7 +92,11 @@ validate:
 plan:
   stage: plan
   script:
-    - terraform plan -out="${TF_ROOT}/tfplan.cache" 
+  - export TF_VAR_pm_api_url="$PM_API_URL"
+  - export TF_VAR_pm_user="$PM_USER"
+  - export TF_VAR_pm_api_token_id="$PM_API_TOKEN_ID"
+  - export TF_VAR_pm_api_token_secret="$PM_API_TOKEN_SECRET"
+  - terraform plan -out="${TF_ROOT}/tfplan.cache" 
   artifacts:
     expire_in: 1 day
     paths:
