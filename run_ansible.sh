@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-# SPDX-License-Identifier: MIT
 
 PLAYBOOK="$1"
 INVENTORY="./ansible/inventory/hosts"
