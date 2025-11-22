@@ -111,7 +111,7 @@ apply:
   artifacts:
     expire_in: 1 day
     paths:
-      - "${TF_ROOT}/ansible-vars"
+      - "${TF_ROOT}/ansible/host_vars/*"
   when: manual # Requires manual approval in the GitLab UI
   only:
     - master
