@@ -24,6 +24,7 @@ EOT
     "terraformed",
     "docker",
     "certsys",
+    "ldap",
     var.ostemplate_debian_12.ostype,
     var.ostemplate_debian_12.tag,
   ]
