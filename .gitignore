@@ -21,3 +21,4 @@ ansible/inventory/hosts
 .env
 .env
 vault-unencrypted.yml
+vault.yml
