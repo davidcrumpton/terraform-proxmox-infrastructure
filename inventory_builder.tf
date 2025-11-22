@@ -6,9 +6,9 @@ locals {
    # module.lxc_atom5g.ansible_data,
 
     # Add more here, e.g.:
-#    module.lxc_gl_runner.ansible_data,
-    module.lxc_nextsuite.ansible_data,
-    module.lxc_wiki.ansible_data,
+    module.lxc_gl_runner.ansible_data,
+#    module.lxc_nextsuite.ansible_data,
+#    module.lxc_wiki.ansible_data,
 #    module.lxc_docker02.ansible_data,
     # module.lxc_keycloak.ansible_data,
   ]
