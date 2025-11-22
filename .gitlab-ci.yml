@@ -142,7 +142,7 @@ ansible_deploy:
     - ansible --version
     - test -f ansible/vault-unencrypted.yml && ansible-vault encrypt ansible/vault-unencrypted.yml --output ansible/vault.yml --vault-id default@<(echo "$ANSIBLE_VAULT_PASSWORD")
     - test -f ansible/vault-unencrypted.yml && rm ansible/vault-unencrypted.yml
-    - test -f ansible/vault-unencrypted.yml && ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
+    - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
   needs:
     - job: apply
       artifacts: true  # Waits for apply and downloads its artifacts
