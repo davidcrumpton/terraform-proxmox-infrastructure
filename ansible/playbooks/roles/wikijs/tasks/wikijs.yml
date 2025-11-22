@@ -41,3 +41,22 @@
     dest: /etc/systemd/system/wikijs.service
     mode: '0644'
   notify: Reload systemd
+
+- name: Ensure Wiki.js is running
+  ansible.builtin.service:
+    name: wikijs
+    state: started
+  register: wikijs_service
+
+
+- name: Ensure Wiki.js admin user exists
+  become: true
+  become_user: "{{ wikijs_user }}"
+  ansible.builtin.command: >
+    node server configure
+    --admin-email "{{ wikijs_admin_email }}"
+    --admin-password "{{ wikijs_admin_password }}"
+  args:
+    chdir: "{{ wikijs_install_dir }}"
+  register: wikijs_admin
+  changed_when: "'Admin account already exists' not in wikijs_admin.stdout"

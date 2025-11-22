@@ -140,6 +140,10 @@ ansible_deploy:
     - export ANSIBLE_CONFIG=ansible/absible.cfg
     - export ANSIBLE_ROLES_PATH=ansible/playbook/roles
     - ansible --version
+    - ansible-vault encrypt ansible/vault-unencrypted.yml \
+        --output ansible/vault.yml \
+        --vault-password-file <(echo "$ANSIBLE_VAULT_PASSWORD")
+    - rm ansible/vault-unencrypted.yml
     - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
   needs:
     - job: apply

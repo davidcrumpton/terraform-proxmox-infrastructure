@@ -55,6 +55,23 @@ resource random_password "wikijs_db" {
   special          = true
 }
 
+resource random_password "wikijs_admin" {
+  length          = 24
+  override_special = "!@#$%&*()-_=+[]{}<>:?"
+  special          = true
+}
+
+resource "local_file" "ansible_vault" {
+  filename = "${path.module}/ansible/vault-unencrypted.yml"
+
+  content = <<EOF
+wikijs_db_password: ${random_password.wikijs_db.result}
+wikijs_admin_password: ${random_password.wiki.result}
+...
+EOF
+}
+
+
 output "wikijs_root_password" {
   description = "Root password for the wikijs container"
   value       = random_password.wikijs_root.result
@@ -65,4 +82,10 @@ output "wikijs_db_password" {
   description = "Database password for the wikijs container"
   value       = random_password.wikijs_db.result
   sensitive   = true
+}
+
+output "wikijs_admin_password" {
+  description = "WikiJS Admin Password"
+  value = random_password.wikijs_admin
+  sensitive = true
 }

@@ -14,3 +14,6 @@ wikijs_db_port: 5432
 # System user
 wikijs_user: wikijs
 wikijs_group: wikijs
+
+wikijs_admin_email: admin@crumpton.org
+wikijs_admin_password: "picksomethingstrong"
