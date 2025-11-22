@@ -2,16 +2,16 @@
 
 workflow:
   rules:
-    # 1. Pipeline should run if *any* of the desired files change.
     - changes:
-      - "*.tf"
-      - "*.tf.disabled"
-      - .gitlab-ci.yml
-      - "*.tpl"
-      - "*.sh"
-      - "*.yml"
+      - "**/*.tf"
+      - "**/*.tf.disabled"
+      - ".gitlab-ci.yml"
+      - "**/*.tpl"
+      - "**/*.sh"
+      - "**/*.yml"
       - "ansible/**"
     - when: never
+
 
 variables:
   GIT_DEPTH: 0   # ensure full history, not shallow
