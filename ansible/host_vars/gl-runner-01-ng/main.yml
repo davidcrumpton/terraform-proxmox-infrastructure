@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: MIT
+---
+hostname: gl-runner-01-ng
+vmid: 507
+node: pve02
+storage: local-lvm
+tags_list: d12, debian, docker, git, ldap, terraformed
+features:
+  nesting: true
+networks:
+  - name: eth0
+    bridge: vmbr0
+    ip: dhcp
+    ip6: dhcp

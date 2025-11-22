@@ -1,40 +1,26 @@
 [all]
-nextsuite-ng
-wiki-js
+gl-runner-01-ng
 
 [net_vmbr0]
-wiki-js
+gl-runner-01-ng
 
 [pve_pve02]
-nextsuite-ng
-wiki-js
+gl-runner-01-ng
 
-[role_certsys]
-nextsuite-ng
+[role_d12]
+gl-runner-01-ng
 
-[role_cloud]
-nextsuite-ng
+[role_debian]
+gl-runner-01-ng
 
 [role_docker]
-wiki-js
+gl-runner-01-ng
 
-[role_important]
-nextsuite-ng
+[role_git]
+gl-runner-01-ng
 
 [role_ldap]
-wiki-js
-
-[role_office]
-nextsuite-ng
-
-[role_public]
-nextsuite-ng
+gl-runner-01-ng
 
 [role_terraformed]
-wiki-js
-
-[role_u2204]
-wiki-js
-
-[role_ubuntu]
-wiki-js
+gl-runner-01-ng
