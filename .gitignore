@@ -20,3 +20,4 @@ ansible-vars/
 ansible/inventory/hosts
 .env
 .env
+vault-unencrypted.yml
