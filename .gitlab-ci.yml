@@ -110,9 +110,9 @@ plan:
 
 apply:
   stage: apply
-  image: hashicorp/terraform:light # Based on job context
+  # image: hashicorp/terraform:light # Based on job context
   script:
-    - apk update && apk add --no-cache jq ansible bash
+    # - apk update && apk add --no-cache jq ansible bash
     # --- 1. SETUP: Create temporary files and configs for non-interactive encryption ---
     - export ANSIBLE_CONFIG="${TF_ROOT}/ansible.tmp.cfg"
     - export VAULT_PASS_FILE="${TF_ROOT}/.vault_pass"
