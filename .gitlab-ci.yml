@@ -110,30 +110,39 @@ plan:
 
 apply:
   stage: apply
+  # image: hashicorp/terraform:light (Assumed from plan job)
   script:
-  # --- 1. SETUP: Create temporary files and configs for non-interactive encryption ---
+    # --- 1. SETUP: Create temporary files and configs for non-interactive encryption ---
+    # Create the temporary password file and config file paths
     - export ANSIBLE_CONFIG="${TF_ROOT}/ansible.tmp.cfg"
     - export VAULT_PASS_FILE="${TF_ROOT}/.vault_pass"
     
-    # Create the temporary password file (Zero-persistence, but on disk for a moment)
+    # Create the temporary password file (Zero-persistence, deleted instantly)
+    # The -n prevents adding a newline character, which Ansible might see as part of the password.
     - echo -n "${ANSIBLE_VAULT_PASSWORD}" > "${VAULT_PASS_FILE}"
-    - chmod 0600 "${VAULT_PASS_FILE}"
+    - chmod 0600 "${VAULT_PASS_FILE}" # Secure permissions
     
     # Create a temporary ansible.cfg pointing to the password file
     - echo "[defaults]" > "${ANSIBLE_CONFIG}"
     - echo "vault_password_file = ${VAULT_PASS_FILE}" >> "${ANSIBLE_CONFIG}"
     
     # --- 2. EXECUTE: Export and Run Terraform ---
-    # The external script (encrypt.sh) will now use the temporary config.
-    - export ANSIBLE_VAULT_PASSWORD=ignored # We set this to prevent interactive prompts
-    - export TF_STATE_NAME=proxmox-homelab
-    - export ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD}"
+    # We set ANSIBLE_VAULT_PASSWORD to be ignored by the script itself, 
+    # but the temporary config file is what Ansible will use.
+    - export ANSIBLE_VAULT_PASSWORD=ignored 
+    
+    # Run terraform commands. The external script will now execute successfully.
+    - terraform init -upgrade -input=false -backend-config="bucket=${TF_VAR_TF_BUCKET}"
+    - terraform plan -input=false -out="${TF_ROOT}/tfplan.cache"
     - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
-
+    
     # --- 3. CLEANUP: Delete the files immediately after use ---
+    # This ensures zero-persistence; the password file is destroyed before the job ends.
     - rm -f "${VAULT_PASS_FILE}"
     - rm -f "${ANSIBLE_CONFIG}"
-    - terraform output -json > "${TF_ROOT}/tf_outputs.json" 
+    
+    # --- 4. OUTPUT: Generate final outputs for the next stage ---
+    - terraform output -json > "${TF_ROOT}/tf_outputs.json"
   dependencies:
     - plan
   artifacts:
