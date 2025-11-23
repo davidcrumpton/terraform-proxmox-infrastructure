@@ -110,6 +110,7 @@ plan:
 apply:
   stage: apply
   script:
+  - apk update && apk add --no-cache jq
   - export ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD}"
   - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
   - terraform output -json > "${TF_ROOT}/tf_outputs.json" 
