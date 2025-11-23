@@ -91,11 +91,12 @@ validate:
 
 plan:
   stage: plan
+  variables:
+    TF_VAR_pm_api_url: "$PM_API_URL"
+    TF_VAR_pm_user: "$PM_USER"
+    TF_VAR_pm_api_token_id: "$PM_API_TOKEN_ID"
+    TF_VAR_pm_api_token_secret: "$PM_API_TOKEN_SECRET"
   script:
-  - export TF_VAR_pm_api_url="$PM_API_URL"
-  - export TF_VAR_pm_user="$PM_USER"
-  - export TF_VAR_pm_api_token_id="$PM_API_TOKEN_ID"
-  - export TF_VAR_pm_api_token_secret="$PM_API_TOKEN_SECRET"
   - terraform plan -out="${TF_ROOT}/tfplan.cache" 
   artifacts:
     expire_in: 1 day
@@ -108,11 +109,6 @@ plan:
 
 apply:
   stage: apply
-  variables:
-    TF_VAR_pm_api_url: "$PM_API_URL"
-    TF_VAR_pm_user: "$PM_USER"
-    TF_VAR_pm_api_token_id: "$PM_API_TOKEN_ID"
-    TF_VAR_pm_api_token_secret: "$PM_API_TOKEN_SECRET"
   script:
   - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
   dependencies:
@@ -121,6 +117,7 @@ apply:
     expire_in: 1 day
     paths:
       - "${TF_ROOT}/ansible/host_vars/*"
+      - "${TF_ROOT}/tfplan.cache"
   when: manual # Requires manual approval in the GitLab UI
   only:
     - master
