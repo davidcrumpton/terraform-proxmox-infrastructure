@@ -109,7 +109,6 @@ plan:
 
 apply:
   stage: apply
-  image: hashicorp/terraform:light
   script:
   - export ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD}"
   - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
