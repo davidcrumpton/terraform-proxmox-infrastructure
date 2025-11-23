@@ -79,7 +79,8 @@ cache:
 before_script:
   - cd ${TF_ROOT}
   - mkdir -p "${TF_PLUGIN_CACHE_DIR}"
-  - export PM_API_TOKEN_ID=$(echo $PM_API_TOKEN_ID | sed 's/\./!/g')
+  - export TF_VAR_pm_api_token_id="$PM_API_TOKEN_ID"
+  - export TF_VAR_pm_api_token_secret="$PM_API_TOKEN_SECRET"
   - terraform --version
   - echo -n "${GITLAB_ACCESS_TOKEN}" | wc -c
   - export TF_STATE_NAME=proxmox-homelab
@@ -98,8 +99,8 @@ plan:
   variables:
     TF_VAR_pm_api_url: "$PM_API_URL"
     TF_VAR_pm_user: "$PM_USER"
-    TF_VAR_pm_api_token_id: "$PM_API_TOKEN_ID"
     TF_VAR_pm_api_token_secret: "$PM_API_TOKEN_SECRET"
+    TF_VAR_pm_api_token_id: "$PM_API_TOKEN_ID"
   script:
     - terraform plan -out="${TF_ROOT}/tfplan.cache"
   artifacts:
