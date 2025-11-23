@@ -61,16 +61,27 @@ resource random_password "wikijs_admin" {
   special          = true
 }
 
-resource "local_file" "ansible_vault" {
-  filename = "${path.module}/ansible/vault-unencrypted.yml"
-
-  content = <<EOF
-# SPDX-License-Identifier: MIT
-wikijs_db_password: ${random_password.wikijs_db.result}
-wikijs_admin_password: ${random_password.wikijs_admin.result}
-...
-EOF
+# This is the map of secrets we want to encrypt for the wiki-js LXC
+locals {
+  wikijs_secrets = {
+    wikijs_db_password    = random_password.wikijs_db.result
+    wikijs_admin_password = random_password.wikijs_admin.result
+    # Add more secrets here, and the system handles it automatically
+  }
 }
+
+data "external" "encrypted_vault" {
+  program = ["${path.module}/scripts/encrypt.sh"]
+  
+  # The input data (plaintext secrets) sent to the script's stdin (popen input)
+  query = {
+    # Render the YAML template using the local secrets map
+    plaintext_yaml = templatefile("${path.module}/templates/vault.yml.tpl", {
+      secrets = local.wikijs_secrets
+    })
+  }
+}
+
 
 
 output "wikijs_root_password" {
