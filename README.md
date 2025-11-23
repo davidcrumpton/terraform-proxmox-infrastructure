@@ -65,7 +65,14 @@ Set these variables under your project’s **Settings → CI/CD → Variables**:
 
 | Variable                    | Description                                    |
 | --------------------------- | ---------------------------------------------- |
+| `ANSIBLE_VAULT_PASSWORD`    | Enable encrypted storage during run            |
 | `ANSIBLE_HOST_KEY_CHECKING` | Enable/disable SSH host key checking           |
+| `GITEA_EMAIL`               | gitea known email for check in                 |
+| `GITEA_MYNAME`              | gitea display name for check in                |
+| `GITEA_TOKEN`               | gitea push token                               |
+| `GITHUB_EMAIL`              | github known email for check in                |
+| `GITHUB_MYNAME`             | github display name for check in               |
+| `GITHUB_TOKEN`              | github push token                              |
 | `GITLAB_ACCESS_TOKEN`       | Your personal access token                     |
 | `PM_API_TOKEN_ID`           | `proxmox@pam.terraform`                        |
 | `PM_API_TOKEN_SECRET`       | Token generated within Proxmox                 |
@@ -158,6 +165,44 @@ terraform output <output_name>
 * The Ansible user is currently **hard-coded as `root`**.
 * Hostnames must resolve via DNS; otherwise, provisioning will fail.
 * The `lxc_hostname.tf` file should eventually fetch the SSH key from the environment to avoid duplication.
+
+## 📝 Pipeline Summary
+
+This pipeline is designed to manage the infrastructure as code (IaC) using **Terraform** and configure the deployed resources using **Ansible**. It includes stages for validation, synchronization to external repositories, planning, applying, configuration management, and destruction.
+
+### Pipeline Stages
+
+The pipeline defines the following stages, executed in this order:
+
+1. **`validate`**: Runs checks on the code quality and licensing.
+2. **`sync_internal`**: Synchronizes the repository to an internal Gitea instance.
+3. **`plan`**: Generates an execution plan for Terraform changes.
+4. **`apply`**: Executes the Terraform plan to make infrastructure changes.
+5. **`ansible`**: Runs Ansible playbooks for post-provisioning configuration.
+6. **`sync_external`**: Synchronizes the repository to an external GitHub instance.
+7. **`destroy`**: Runs a Terraform destroy to tear down the infrastructure.
+
+---
+
+### Key Jobs and Their Logic
+
+| Job Name | Stage | Description & Trigger Logic |
+| :--- | :--- | :--- |
+| **`license_check`** | `validate` | Checks for the required `LICENSE` file and ensures all `.tf`, `.sh`, `.yml`, `.yaml`, and `.md` files contain the **`SPDX-License-Identifier: MIT`** header. **Runs on merge requests and `*-stable` branches.** |
+| **`validate`** | `validate` | Runs `terraform validate` and `terraform fmt -check=true`. **Runs only on merge requests.** |
+| **`sync_to_gitea`** | `sync_internal` | Cleans the repository and forces a push to a private **Gitea** instance. **Runs only when a tag matching `v.X.X.X` is pushed.** |
+| **`plan`** | `plan` | Generates the Terraform execution plan (`tfplan.cache`). **Runs on merge requests and `*-stable` branches.** |
+| **`apply`** | `apply` | Applies the cached plan. **Manual job that runs only on `*-stable` branches.** |
+| **`ansible_deploy`** | `ansible` | Runs Ansible playbooks to configure the provisioned infrastructure. It needs artifacts from the **`apply`** job. **Runs automatically on success of `apply`, only on `*-stable` branches.** |
+| **`sync_to_github`** | `sync_external` | Cleans the repository and pushes to a public **GitHub** instance. **Manual job that runs only when a tag matching `v.X.X.X` is pushed.** |
+| **`destroy`** | `destroy` | Runs `terraform destroy`. **Manual job that runs only on `*-stable` branches.** |
+
+### Key Details
+
+* **Default Image**: The pipeline uses the **`hashicorp/terraform:latest`** image for most Terraform-related jobs.
+* **Ansible Image**: The **`ansible_deploy`** job uses a separate **`demisto/ansible-runner:1.0.0.5807676`** image.
+* **Terraform Backend**: The state is managed remotely using the **GitLab Terraform HTTP Backend** for the state named **`proxmox-homelab`**.
+* **Artifacts/Cache**: Terraform plugins and state are cached. The `plan` and `apply` jobs generate artifacts like the `tfplan.cache` and the Ansible inventory.
 
 ---
 
