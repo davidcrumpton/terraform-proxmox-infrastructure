@@ -48,6 +48,7 @@ sync_to_github:
   stage: sync_external
   script:
     - *before_cleanup
+    - echo "$GITHUB_TOKEN" | wc -c
     - git config --global user.email $GITHUB_EMAIL
     - git config --global user.name $GITHUB_MYNAME
     - git remote add github https://oauth2:${GITHUB_TOKEN}@github.com/davidcrumpton/terraform-proxmox-infrastructure.git
