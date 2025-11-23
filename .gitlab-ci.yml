@@ -5,12 +5,13 @@ workflow:
     - changes:
         - "**/*.tf"
         - "**/*.tf.disabled"
-        - ".gitlab-ci.yml"
         - "**/*.tpl"
         - "**/*.sh"
         - "**/*.yml"
         - "ansible/**"
-      when: never
+      when: always
+    - when: never
+
 
 variables:
   GIT_DEPTH: 0
