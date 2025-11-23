@@ -151,6 +151,7 @@ apply:
       - "${TF_ROOT}/ansible/host_vars/*"
       - "${TF_ROOT}/tfplan.cache"
       - "${TF_ROOT}/ansible/inventory/hosts"
+      - "${TF_ROOT}/tf_outputs.json"
   when: manual # Requires manual approval in the GitLab UI
   only:
     - master
