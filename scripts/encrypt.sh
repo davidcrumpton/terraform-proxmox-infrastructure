@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env sh
 # SPDX-License-Identifier: MIT
 # scripts/encrypt.sh
 # Performs secure, ephemeral disk encryption for Ansible Vault.
 # Guaranteed to work in restricted LXC/Docker environments.
-set -e
+set -ve
 
 # --- 1. Read JSON Input from Terraform (stdin) ---
 JSON_INPUT=$(cat /dev/stdin)
