@@ -118,6 +118,7 @@ apply:
     paths:
       - "${TF_ROOT}/ansible/host_vars/*"
       - "${TF_ROOT}/tfplan.cache"
+      - "${TF_ROOT}/ansible/inventory/hosts"
   when: manual # Requires manual approval in the GitLab UI
   only:
     - master
