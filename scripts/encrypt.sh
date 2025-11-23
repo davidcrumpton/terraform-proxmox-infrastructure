@@ -12,7 +12,8 @@ PLAINTEXT_VAULT=$(echo "$JSON_INPUT" | jq -r '.plaintext_yaml')
 # 3. Encrypt the plaintext YAML content using Ansible Vault and pipe it to stdout.
 # The 'ansible-vault encrypt /dev/stdin' reads the pipe, encrypts it, 
 # and the entire encrypted result is printed to stdout.
-ENCRYPTED_CONTENT=$(echo "$PLAINTEXT_VAULT" | ansible-vault encrypt /dev/stdin --output - --vault-id default@<(echo "$ANSIBLE_VAULT_PASSWORD"))
+
+ENCRYPTED_CONTENT=$(echo "$PLAINTEXT_VAULT" | ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" ansible-vault encrypt /dev/stdin --output - --vault-id default)
 
 # 4. Output the result in the expected Terraform JSON format
 jq -n --arg content "$ENCRYPTED_CONTENT" '{"encrypted_content": $content}'
