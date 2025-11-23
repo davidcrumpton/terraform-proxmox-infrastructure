@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env sh
 # SPDX-License-Identifier: MIT
-set -e
+set -ve
 
 # 1. Read JSON input from Terraform (stdin)
 JSON_INPUT=$(cat /dev/stdin)
