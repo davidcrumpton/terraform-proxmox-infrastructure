@@ -131,7 +131,7 @@ apply:
     - export ANSIBLE_VAULT_PASSWORD=ignored 
     
     # Run terraform commands. The external script will now execute successfully.
-    - terraform init -upgrade -input=false -backend-config="bucket=${TF_VAR_TF_BUCKET}"
+    - terraform init -upgrade -input=false"
     - terraform plan -input=false -out="${TF_ROOT}/tfplan.cache"
     - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
     
