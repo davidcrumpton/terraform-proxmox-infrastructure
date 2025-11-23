@@ -27,14 +27,15 @@ variables:
   - git fetch --unshallow || true
   # Strip sensitive files before syncing
   - rm -rf .env terraform/ansible-vars/* *.tfvars
-  - git config --global user.email "bear@crumpton.org"
-  - git config --global user.name "David Crumpton"
+
 
 # Internal sync (Gitea)
 sync_to_gitea:
   stage: sync_internal
   script:
     - *before_cleanup
+    - git config --global user.email "bear@crumpton.org"
+    - git config --global user.name "David Crumpton"
     - git remote add gitea https://oauth2:${GITEA_TOKEN}@git.crumpton.org/bear/terraform-proxmox-infrastructure.git
     - git commit -am "Cleaned sync" || true
     - git push gitea main --force
