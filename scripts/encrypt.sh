@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: MIT
 # scripts/encrypt.sh
-# Uses encrypt_string for guaranteed non-interactive, zero-disk-for-secrets encryption.
-set -ve
+# Performs secure, ephemeral disk encryption using standard Ansible config lookup.
+set -e
 
 # --- 1. Read JSON Input and Extract Plaintext ---
 JSON_INPUT=$(cat /dev/stdin)
-# We must remove the trailing newline from jq output for clean encryption
-PLAINTEXT_VAULT=$(echo "$JSON_INPUT" | jq -r '.plaintext_yaml' | tr -d '\n')
+# Ensure jq is installed in the image for this script to work!
+PLAINTEXT_VAULT=$(echo "$JSON_INPUT" | jq -r '.plaintext_yaml')
 
 # --- 2. Setup: Use mktemp for secure, ephemeral file storage ---
 TEMP_FILE=$(mktemp) 
@@ -16,16 +16,13 @@ TEMP_FILE=$(mktemp)
 # Write plaintext content to the temporary file
 echo "$PLAINTEXT_VAULT" > "$TEMP_FILE"
 
-# Use encrypt_string to encrypt the ENTIRE FILE CONTENT as a single string.
-# The 'vault-id' is used to identify the password, which will be found via the environment variable.
-ENCRYPTED_CONTENT=$(ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
-                    ansible-vault encrypt_string @$TEMP_FILE \
-                    --name 'vault_data' \
-                    --encrypt-vault-id 'ci_vault')
+# Encrypt the temporary file. Ansible will automatically look up the 
+# password from the vault_password_file defined in the temporary ansible.cfg
+ENCRYPTED_CONTENT=$(ansible-vault encrypt "$TEMP_FILE" --output -)
 
 # --- 4. Cleanup and Output ---
-rm -f "$TEMP_FILE" # Securely delete the temporary file
+# Securely delete the temporary file immediately after encryption
+rm -f "$TEMP_FILE"
 
 # Output the result in the expected Terraform JSON format
-# The output will be a single, long encrypted YAML string.
 jq -n --arg content "$ENCRYPTED_CONTENT" '{"encrypted_content": $content}'

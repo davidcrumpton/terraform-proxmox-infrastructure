@@ -110,14 +110,15 @@ plan:
 
 apply:
   stage: apply
-  # ... other config ...
+  image: hashicorp/terraform:light # Assuming this is your image
   script:
     # --- 1. SETUP: Create temporary files and configs for non-interactive encryption ---
-    # Define temporary file paths
+    # Define temporary file paths in the workspace
     - export ANSIBLE_CONFIG="${TF_ROOT}/ansible.tmp.cfg"
     - export VAULT_PASS_FILE="${TF_ROOT}/.vault_pass"
     
     # Create the temporary password file (Zero-persistence, deleted instantly)
+    # The -n is crucial to prevent a newline character from becoming part of the password.
     - echo -n "${ANSIBLE_VAULT_PASSWORD}" > "${VAULT_PASS_FILE}"
     - chmod 0600 "${VAULT_PASS_FILE}" # Secure permissions
     
@@ -126,7 +127,7 @@ apply:
     - echo "vault_password_file = ${VAULT_PASS_FILE}" >> "${ANSIBLE_CONFIG}"
     
     # --- 2. EXECUTE: Export and Run Terraform ---
-    # Set the environment variable to be ignored, as the config file handles the password.
+    # The environment variable is set to 'ignored' as the temporary config will handle the password.
     - export ANSIBLE_VAULT_PASSWORD=ignored 
     
     # Run terraform commands. The external script will now execute successfully.
@@ -135,6 +136,7 @@ apply:
     - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
     
     # --- 3. CLEANUP: Delete the files immediately after use ---
+    # This ensures zero-persistence; the password file is destroyed before the job ends.
     - rm -f "${VAULT_PASS_FILE}"
     - rm -f "${ANSIBLE_CONFIG}"
     
