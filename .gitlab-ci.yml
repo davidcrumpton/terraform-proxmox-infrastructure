@@ -97,7 +97,6 @@ plan:
     TF_VAR_pm_api_token_id: "$PM_API_TOKEN_ID"
     TF_VAR_pm_api_token_secret: "$PM_API_TOKEN_SECRET"
   script:
-  - apk update && apk add --no-cache jq ansible bash
   - terraform plan -out="${TF_ROOT}/tfplan.cache" 
   artifacts:
     expire_in: 1 day
@@ -110,39 +109,8 @@ plan:
 
 apply:
   stage: apply
-  # image: hashicorp/terraform:light # Based on job context
   script:
-    - apk update && apk add --no-cache jq ansible bash
-    # --- 1. SETUP: Create temporary files and configs for non-interactive encryption ---
-    - export ANSIBLE_CONFIG="${TF_ROOT}/ansible.tmp.cfg"
-    - export VAULT_PASS_FILE="${TF_ROOT}/.vault_pass"
-    
-    # Create the temporary password file (Zero-persistence, deleted instantly)
-    # The -n is crucial to prevent a newline character from becoming part of the password.
-    - echo -n "${ANSIBLE_VAULT_PASSWORD}" > "${VAULT_PASS_FILE}"
-    - chmod 0600 "${VAULT_PASS_FILE}" # Secure permissions
-    
-    # Create a temporary ansible.cfg pointing to the password file
-    - echo "[defaults]" > "${ANSIBLE_CONFIG}"
-    - echo "vault_password_file = ${VAULT_PASS_FILE}" >> "${ANSIBLE_CONFIG}"
-    
-    # --- 2. EXECUTE: Export and Run Terraform ---
-    # Set the environment variable to be ignored, as the config file handles the password.
-    - export ANSIBLE_VAULT_PASSWORD=ignored 
-    
-    # Run terraform commands. The external script will now execute successfully.
-    - terraform init -upgrade -input=false
-    - terraform plan -input=false -out="${TF_ROOT}/tfplan.cache"
-    - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
-    
-    # --- 3. CLEANUP: Delete the files immediately after use ---
-    - rm -f "${VAULT_PASS_FILE}"
-    - rm -f "${ANSIBLE_CONFIG}"
-    
-    # --- 4. OUTPUT: Generate final outputs for the next stage ---
-    - terraform output -json > "${TF_ROOT}/tf_outputs.json"
-    
-  # ... (rest of the job configuration)
+  - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
   dependencies:
     - plan
   artifacts:
@@ -151,7 +119,6 @@ apply:
       - "${TF_ROOT}/ansible/host_vars/*"
       - "${TF_ROOT}/tfplan.cache"
       - "${TF_ROOT}/ansible/inventory/hosts"
-      - "${TF_ROOT}/tf_outputs.json"
   when: manual # Requires manual approval in the GitLab UI
   only:
     - master
@@ -171,7 +138,6 @@ ansible_deploy:
   # image: "ansible/ansible-runner:latest"
   image: "demisto/ansible-runner:1.0.0.5807676"
   before_script: 
-    - apt update && apt install -y jq ansible bash
     - echo -n "${SSH_PRIVATE_KEY_BASE_64}" | wc -c
     - mkdir -p ~/.ssh
     - echo -n "${SSH_PRIVATE_KEY_BASE_64}" | base64 -d > ~/.ssh/terraform
@@ -181,30 +147,9 @@ ansible_deploy:
     - export ANSIBLE_CONFIG=ansible/absible.cfg
     - export ANSIBLE_ROLES_PATH=ansible/playbook/roles
     - ansible --version
-    - DB_PASS=$(jq -r '.wikijs_db_password.value' "${TF_ROOT}/tf_outputs.json")
-    - ADMIN_PASS=$(jq -r '.wikijs_admin_password.value' "${TF_ROOT}/tf_outputs.json")
-    - |
-        # Extract DB and Admin passwords from tf_outputs.json safely
-        DB_PASS=$(jq -r '.wikijs_db_password.value' "${TF_ROOT}/tf_outputs.json")
-        ADMIN_PASS=$(jq -r '.wikijs_admin_password.value' "${TF_ROOT}/tf_outputs.json")
-
-        # Write the Ansible vault password to a temporary file
-        VAULT_FILE=$(mktemp)
-        echo "$ANSIBLE_VAULT_PASSWORD" > "$VAULT_FILE"
-        chmod 600 "$VAULT_FILE"
-
-        # Export environment variables for Ansible
-        export ANSIBLE_CONFIG=ansible/ansible.cfg
-        export ANSIBLE_ROLES_PATH=ansible/playbook/roles
-
-        # Run Ansible commands pointing to the vault file
-        ansible-playbook -i inventory.yml site.yml --vault-password-file "$VAULT_FILE"
-
-        # Clean up temporary vault file
-        rm -f "$VAULT_FILE"
-    - export ANSIBLE_CONFIG=ansible/ansible.cfg
-    - export ANSIBLE_ROLES_PATH=ansible/playbook/roles
-    - ansible-playbook ansible/playbook/site.yml
+    - test ! -f ansible/vault-unencrypted.yml && touch ansible/vault-unencrypted.yml
+    - ansible-vault encrypt ansible/vault-unencrypted.yml --output ansible/vault.yml --vault-id default@<(echo "$ANSIBLE_VAULT_PASSWORD")
+    - rm ansible/vault-unencrypted.yml
     - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
   needs:
     - job: apply
