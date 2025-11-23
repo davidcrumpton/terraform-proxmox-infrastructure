@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 # scripts/encrypt.sh
 # Uses encrypt_string for guaranteed non-interactive, zero-disk-for-secrets encryption.
-set -e
+set -ve
 
 # --- 1. Read JSON Input and Extract Plaintext ---
 JSON_INPUT=$(cat /dev/stdin)
