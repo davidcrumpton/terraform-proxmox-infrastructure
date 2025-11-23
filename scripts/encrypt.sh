@@ -1,29 +1,30 @@
-#!/usr/bin/env sh
+#!/bin/bash
 # SPDX-License-Identifier: MIT
-set -ve
+# scripts/encrypt.sh
+# Performs secure, ephemeral disk encryption for Ansible Vault.
+# Guaranteed to work in restricted LXC/Docker environments.
+set -e
 
-# 1. Read JSON input from Terraform (stdin)
+# --- 1. Read JSON Input from Terraform (stdin) ---
 JSON_INPUT=$(cat /dev/stdin)
 PLAINTEXT_VAULT=$(echo "$JSON_INPUT" | jq -r '.plaintext_yaml')
 
-# --- ZERO-DISK FIX: Use a Named Pipe (FIFO) in /tmp ---
-# The /tmp directory is guaranteed to be available in any container.
-PIPE_FILE="/tmp/ansible_vault_pipe_$$"
-mkfifo "$PIPE_FILE"
+# --- 2. Setup: Use mktemp for secure, ephemeral file storage ---
+# This creates a unique temporary file path and is guaranteed to be available.
+TEMP_FILE=$(mktemp) 
 
-# 2. Write the vault password to the pipe in the background
-# This command is non-blocking and provides the password when needed.
-echo "$ANSIBLE_VAULT_PASSWORD" > "$PIPE_FILE" &
-PASSWORD_WRITER_PID=$!
+# --- 3. Write and Encrypt ---
+# Write plaintext content to the temporary file
+echo "$PLAINTEXT_VAULT" > "$TEMP_FILE"
 
-# 3. Encrypt the plaintext YAML content
-# Pass the content via pipe, and the password via the named pipe file.
-ENCRYPTED_CONTENT=$(echo "$PLAINTEXT_VAULT" | \
-                    ansible-vault encrypt /dev/stdin --output - --vault-password-file "$PIPE_FILE")
+# Encrypt the temporary file, reading password from the environment variable.
+# ANSIBLE_VAULT_PASSWORD must be exported in the GitLab CI 'apply' job.
+ENCRYPTED_CONTENT=$(ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
+                    ansible-vault encrypt "$TEMP_FILE" --output -)
 
-# 4. Cleanup and Error Handling
-rm -f "$PIPE_FILE"  # Delete the pipe file immediately
-wait $PASSWORD_WRITER_PID 2>/dev/null || true # Kill the background process if it's still running
+# --- 4. Cleanup and Output ---
+# Securely delete the temporary file IMMEDIATELY after encryption
+rm -f "$TEMP_FILE"
 
-# 5. Output the result for Terraform
+# Output the result in the expected Terraform JSON format
 jq -n --arg content "$ENCRYPTED_CONTENT" '{"encrypted_content": $content}'
