@@ -116,7 +116,7 @@ plan:
       - "${TF_ROOT}/tfplan.cache"
   only:
     - merge_requests
-    - release
+    - /^.*-stable$/
 
 apply:
   stage: apply
@@ -132,7 +132,7 @@ apply:
       - "${TF_ROOT}/ansible/inventory/hosts"
   when: manual
   only:
-    - release
+    - /^.*-stable$/
 
 destroy:
   stage: destroy
@@ -140,7 +140,7 @@ destroy:
     - terraform destroy -auto-approve
   when: manual
   only:
-    - release
+    - /^.*-stable$/
 
 ansible_deploy:
   stage: ansible
@@ -166,7 +166,7 @@ ansible_deploy:
     - apply
   when: on_success
   only:
-    - release
+    - /^.*-stable$/
 
 license_check:
   stage: validate
@@ -188,5 +188,5 @@ license_check:
       done
       $NO_ERRORS
   only:
-    - release
+    - /^.*-stable$/
     - merge_requests
