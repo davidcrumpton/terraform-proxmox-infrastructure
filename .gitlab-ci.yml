@@ -184,12 +184,24 @@ ansible_deploy:
     - DB_PASS=$(jq -r '.wikijs_db_password.value' "${TF_ROOT}/tf_outputs.json")
     - ADMIN_PASS=$(jq -r '.wikijs_admin_password.value' "${TF_ROOT}/tf_outputs.json")
     - |
-      echo "$ANSIBLE_VAULT_PASSWORD" > /tmp/vault_pass.txt
-      printf "wikijs_db_password: %s\nwikijs_admin_password: %s\n" \
-            "$DB_PASS" \
-            "$ADMIN_PASS" | \
-      ansible-vault encrypt /dev/stdin --output ansible/vault.yml --vault-password-file /tmp/vault_pass.txt
-      rm /tmp/vault_pass.txt
+        # Extract DB and Admin passwords from tf_outputs.json safely
+        DB_PASS=$(jq -r '.wikijs_db_password.value' "${TF_ROOT}/tf_outputs.json")
+        ADMIN_PASS=$(jq -r '.wikijs_admin_password.value' "${TF_ROOT}/tf_outputs.json")
+
+        # Write the Ansible vault password to a temporary file
+        VAULT_FILE=$(mktemp)
+        echo "$ANSIBLE_VAULT_PASSWORD" > "$VAULT_FILE"
+        chmod 600 "$VAULT_FILE"
+
+        # Export environment variables for Ansible
+        export ANSIBLE_CONFIG=ansible/ansible.cfg
+        export ANSIBLE_ROLES_PATH=ansible/playbook/roles
+
+        # Run Ansible commands pointing to the vault file
+        ansible-playbook -i inventory.yml site.yml --vault-password-file "$VAULT_FILE"
+
+        # Clean up temporary vault file
+        rm -f "$VAULT_FILE" 
     - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
   needs:
     - job: apply
