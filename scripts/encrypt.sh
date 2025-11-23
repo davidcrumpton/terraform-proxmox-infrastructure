@@ -1,4 +1,5 @@
 #!/bin/bash
+# SPDX-License-Identifier: MIT
 # scripts/encrypt.sh
 # Performs secure, ephemeral disk encryption using standard Ansible config lookup.
 set -e
