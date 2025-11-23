@@ -1,28 +1,11 @@
 [all]
-gl-runner-01-ng
 wiki-js
 
 [net_vmbr0]
 wiki-js
 
 [pve_pve02]
-gl-runner-01-ng
 wiki-js
-
-[role_d12]
-gl-runner-01-ng
-
-[role_debian]
-gl-runner-01-ng
-
-[role_docker]
-gl-runner-01-ng
-
-[role_git]
-gl-runner-01-ng
-
-[role_ldap]
-gl-runner-01-ng
 
 [role_terraformed]
 wiki-js

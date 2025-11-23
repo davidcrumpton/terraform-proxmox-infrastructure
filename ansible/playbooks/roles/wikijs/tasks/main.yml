@@ -3,6 +3,9 @@
 - name: Install Wiki.js + PostgreSQL
   ansible.builtin.include_tasks: postgres.yml
 
+- name: Install nginx with https
+  ansible.builtin.include_tasks: nginx.yml
+
 - name: Install Wiki.js core
   ansible.builtin.include_tasks: wikijs.yml
 

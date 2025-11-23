@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MIT
+# {{ ansible_managed }}
 
 locals {
   # Collect ansible data from all LXC modules
