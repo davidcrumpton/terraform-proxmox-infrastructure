@@ -3,17 +3,17 @@
 module "lxc_nextsuite" {
   source = "./modules/lxc"
 
-  node        = var.target_node
-  vmid        = 501
-  hostname    = "nextsuite-ng"
-  cores       = var.lxc_sizing.small.cores
-  memory      = var.lxc_sizing.small.memory
-  swap        = var.lxc_sizing.small.swap
-  ostemplate  = var.ostemplate_ubuntu_2204.template
-  storage_pool = var.storage_pool.local
-  root_password = random_password.nextsuite_root.result
+  node            = var.target_node
+  vmid            = 501
+  hostname        = "nextsuite-ng"
+  cores           = var.lxc_sizing.small.cores
+  memory          = var.lxc_sizing.small.memory
+  swap            = var.lxc_sizing.small.swap
+  ostemplate      = var.ostemplate_ubuntu_2204.template
+  storage_pool    = var.storage_pool.local
+  root_password   = random_password.nextsuite_root.result
   ssh_public_keys = var.default_ssh_keys
-  description = <<-EOT
+  description     = <<-EOT
 # Nextcloud
 
 https://suite.eaglecreek.work
@@ -41,8 +41,8 @@ EOT
   ]
 }
 
-resource random_password "nextsuite_root" {
-  length          = 24
+resource "random_password" "nextsuite_root" {
+  length           = 24
   override_special = "!@#$%&*()-_=+[]{}<>:?"
   special          = true
 }

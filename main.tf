@@ -3,7 +3,7 @@
 terraform {
   required_providers {
     proxmox = {
-      source = "Telmate/proxmox"
+      source  = "Telmate/proxmox"
       version = "3.0.2-rc05"
     }
   }
@@ -30,5 +30,5 @@ resource "random_password" "lxc_root_password" {
   length           = 24
   override_special = "!@#$%&*()-_=+[]{}<>:?"
   special          = true
-} 
+}
 

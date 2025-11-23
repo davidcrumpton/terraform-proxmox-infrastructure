@@ -1,71 +1,71 @@
 # SPDX-License-Identifier: MIT
 
 variable "pm_api_url" {
-  type = string
+  type        = string
   description = "ProxMox API URL (https://host:8006/api2/json). Can be set via PM_API_URL env var."
-  default = ""
+  default     = ""
 }
 
 variable "pm_user" {
-  type = string
+  type        = string
   description = "ProxMox username (e.g. root@pam or terraform@pve). Can be set via PM_USER env var."
-  default = ""
+  default     = ""
 }
 
 variable "pm_password" {
-  type = string
+  type        = string
   description = "ProxMox password (prefer token). Can be set via PM_PASSWORD env var."
-  default = ""
-  sensitive = true
+  default     = ""
+  sensitive   = true
 }
 
 variable "pm_api_token_id" {
-  type = string
+  type        = string
   description = "ProxMox API token id (preferred). Can be set via PM_API_TOKEN_ID env var."
-  default = ""
+  default     = ""
 }
 
 variable "pm_api_token_secret" {
-  type = string
+  type        = string
   description = "ProxMox API token secret. Can be set via PM_API_TOKEN_SECRET env var."
-  default = ""
-  sensitive = true
+  default     = ""
+  sensitive   = true
 }
 
 variable "pm_tls_insecure" {
-  type = bool
+  type    = bool
   default = false
 }
 
-variable "node" { 
-  type = string
-  default = "proxmox" 
- }
+variable "node" {
+  type    = string
+  default = "proxmox"
+}
 
-variable "storage" { 
-  type = string
- default = "local-lvm" 
- }
+variable "storage" {
+  type    = string
+  default = "local-lvm"
+}
 
 # VM defaults
 variable "vm_name" {
-  type = string
-  default = "terraform-vm" 
- }
+  type    = string
+  default = "terraform-vm"
+}
 
-variable "cores" { 
-  type = number
- default = 2 
- }
+variable "cores" {
+  type    = number
+  default = 2
+}
 
 variable "memory" {
-   type = number
-    default = 2048 
+  type    = number
+  default = 2048
 }
 
 variable "disk_size_gb" {
-   type = number
-   default = 16 
+  type    = number
+  default = 16
 }
 
 variable "default_ssh_keys" {
@@ -82,91 +82,91 @@ variable "default_password" {
 
 variable "ostemplate_ubuntu_2204" {
   type = object({
-    template = string
-    ostype       = string
+    template      = string
+    ostype        = string
     template_lxcg = string
-    tag = string
+    tag           = string
   })
   default = {
-    template = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
+    template      = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
     template_lxcg = "ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
-    ostype       = "ubuntu"
-    tag = "u2204"
+    ostype        = "ubuntu"
+    tag           = "u2204"
   }
 }
 variable "ostemplate_debian_12" {
   type = object({
-    template = string
-    ostype    = string
+    template      = string
+    ostype        = string
     template_lxcg = string
-    tag = string
+    tag           = string
   })
   default = {
-    template = "local:vztmpl/debian-12-standard_12.12-1_amd64.tar.zst"
-    ostype    = "debian"
+    template      = "local:vztmpl/debian-12-standard_12.12-1_amd64.tar.zst"
+    ostype        = "debian"
     template_lxcg = "debian-12-standard_12.12-1_amd64.tar.zst"
-    tag = "d12"
+    tag           = "d12"
   }
 }
 
 # ubuntu 24
 variable "ostemplate_ubuntu_2404" {
   type = object({
-    template = string
-    ostype       = string
+    template      = string
+    ostype        = string
     template_lxcg = string
-    tag = string
+    tag           = string
   })
   default = {
-    template = "local:vztmpl/ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
-    ostype       = "ubuntu"
+    template      = "local:vztmpl/ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
+    ostype        = "ubuntu"
     template_lxcg = "ubuntu-24.04-standard_24.04-1_amd64.tar.zst"
-    tag = "u2404"
-  } 
-}
-
-variable "bridge"{
-  type = object({
-    lan = string
-    internal = string
-    wifi_5g = string
-  }) 
-  default = {
-    lan = "vmbr0"
-    internal = "vmbr1"
-    wifi_5g = "vmbr10"
+    tag           = "u2404"
   }
 }
 
-variable "storage_pool"{
+variable "bridge" {
   type = object({
-    local = string
-    zfs = string
-    directory_media = string
-  }) 
+    lan      = string
+    internal = string
+    wifi_5g  = string
+  })
   default = {
-    local = "local-lvm"
-    zfs = "local-zfs"
+    lan      = "vmbr0"
+    internal = "vmbr1"
+    wifi_5g  = "vmbr10"
+  }
+}
+
+variable "storage_pool" {
+  type = object({
+    local           = string
+    zfs             = string
+    directory_media = string
+  })
+  default = {
+    local           = "local-lvm"
+    zfs             = "local-zfs"
     directory_media = "media"
   }
 }
 
-variable "common_tags"{
+variable "common_tags" {
   type = object({
-    lxc = string
-    lxcg = string
-    vm = string
+    lxc           = string
+    lxcg          = string
+    vm            = string
     docker_in_lxc = string
-  }) 
+  })
   default = {
-    lxc = "lxc"
-    lxcg = "lxcg"
-    vm = "VM"
+    lxc           = "lxc"
+    lxcg          = "lxcg"
+    vm            = "VM"
     docker_in_lxc = "lxc-docker"
   }
 }
 
-variable "lxc_sizing"{
+variable "lxc_sizing" {
   type = object({
     xlarge = object({
       memory = number
@@ -197,8 +197,8 @@ variable "lxc_sizing"{
       cores  = number
       swap   = number
       disk   = number
-    })  
-  }) 
+    })
+  })
   default = {
     xlarge = {
       memory = 4096
@@ -233,7 +233,7 @@ variable "lxc_sizing"{
   }
 }
 
-variable "vm_sizing"{
+variable "vm_sizing" {
   type = object({
     medium = object({
       memory = number
@@ -245,7 +245,7 @@ variable "vm_sizing"{
       cores  = number
       disk   = number
     })
-  }) 
+  })
   default = {
     medium = {
       memory = 2048
@@ -262,34 +262,34 @@ variable "vm_sizing"{
 
 # VM ISO
 # vm_iso.OS_FAMIILY.iso = "storage:iso/filename.iso"
-variable vm_iso {
+variable "vm_iso" {
   type = object({
     ubuntu_2204 = string
     ubuntu_2404 = string
     debian_12   = string
     freebsd_13  = string
-    openbsd_76 = string
-    netbsd_10 = string
-    minix_76 = string
-  }) 
+    openbsd_76  = string
+    netbsd_10   = string
+    minix_76    = string
+  })
   default = {
     ubuntu_2204 = "local:iso/ubuntu-22.04.6-live-server-amd64.iso"
     ubuntu_2404 = "local:iso/ubuntu-24.04.2-live-server-amd64.iso"
     debian_12   = "local:iso/debian-12.12.0-amd64-netinst.iso"
     freebsd_13  = "local:iso/FreeBSD-13.3-RELEASE-amd64-disc1.iso"
-    openbsd_76 = "local:iso/install76.iso"
-    netbsd_10 = "local:iso/netbsd-10.3-amd64.iso"
-    minix_76 = "local:iso/minix76.iso"
+    openbsd_76  = "local:iso/install76.iso"
+    netbsd_10   = "local:iso/netbsd-10.3-amd64.iso"
+    minix_76    = "local:iso/minix76.iso"
   }
 }
 
-variable target_node {
-  type = string
+variable "target_node" {
+  type    = string
   default = "pve02"
 }
 
 variable "create_ansible_vars_yaml" {
-  type = number
+  type    = number
   default = 1
 }
 
