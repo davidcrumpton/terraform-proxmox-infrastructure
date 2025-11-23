@@ -2,7 +2,7 @@
 module "lxc_wikijs" {
   source = "./modules/lxc"
 
-  node        = var.node
+  node        = var.target_node
   vmid        = 514
   hostname    = "wiki-js"
   cores       = var.lxc_sizing.small.cores
