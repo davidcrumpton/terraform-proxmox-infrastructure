@@ -16,12 +16,12 @@ provider "proxmox" {
   # available — prefer token-based auth for automation.  Variables can be
   # overwritten via terraform.tfvars
 
-  # pm_api_url       = var.pm_api_url        # e.g. "https://proxmox.example:8006/api2/json"
-  # pm_user          = var.pm_user           # e.g. "root@pam" or "terraform@pve"
-  # pm_password      = var.pm_password       # optional when using token
-  # pm_api_token_id     = var.pm_api_token_id
-  # pm_api_token_secret = var.pm_api_token_secret
-  # pm_tls_insecure  = var.pm_tls_insecure
+  pm_api_url          = var.pm_api_url  # e.g. "https://proxmox.example:8006/api2/json"
+  pm_user             = var.pm_user     # e.g. "root@pam" or "terraform@pve"
+  pm_password         = var.pm_password # optional when using token
+  pm_api_token_id     = var.pm_api_token_id
+  pm_api_token_secret = var.pm_api_token_secret
+  pm_tls_insecure     = var.pm_tls_insecure
 }
 
 # generate random root password of 24 characters
