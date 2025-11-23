@@ -1,7 +1,7 @@
 module "lxc_git" {
   source = "./modules/lxc"
 
-  node        = var.node
+  node        = var.target_node
   vmid        = 509
   hostname    = "git"
   cores       = var.lxc_sizing.small.cores

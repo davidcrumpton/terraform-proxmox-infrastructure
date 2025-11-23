@@ -3,7 +3,7 @@
 module "lxc_docker02" {
   source = "./modules/lxc"
 
-  node        = var.node
+  node        = var.target_node
   vmid        = 502
   hostname    = "docker02-ng"
   cores       = var.lxc_sizing.small.cores

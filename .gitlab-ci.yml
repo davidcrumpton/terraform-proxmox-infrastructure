@@ -110,7 +110,6 @@ plan:
 apply:
   stage: apply
   script:
-  - terraform show -json tfplan.cache | grep pm_
   - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
   dependencies:
     - plan

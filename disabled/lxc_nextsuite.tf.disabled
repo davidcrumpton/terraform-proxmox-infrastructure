@@ -3,7 +3,7 @@
 module "lxc_nextsuite" {
   source = "./modules/lxc"
 
-  node        = var.node
+  node        = var.target_node
   vmid        = 501
   hostname    = "nextsuite-ng"
   cores       = var.lxc_sizing.small.cores
