@@ -51,6 +51,6 @@
 - name: Ensure Wiki.js is running
   ansible.builtin.service:
     name: wikijs
-    state: stopped
+    state: started
   register: wikijs_service
 

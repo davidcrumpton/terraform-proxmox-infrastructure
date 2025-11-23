@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: MIT
+
+- name: Ensure Nginx is installed
+  ansible.builtin.package:
+    name: nginx
+    state: present
+
+- name: Ensure pyOpenSSL is installed
+  ansible.builtin.package:
+    name: python3-openssl
+    state: present
+
+- name: Ensure SSL directory exists
+  ansible.builtin.file:
+    path: "/etc/ssl/{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - certs
+    - private
+
+- name: Create a private key
+  openssl_privatekey:
+    path: "/etc/ssl/private/{{ ansible_fqdn }}.key"
+    size: 2048
+
+- name: Generate self-signed certificate if missing
+  ansible.builtin.openssl_certificate:
+    path: "/etc/ssl/certs/{{ ansible_fqdn }}.crt"
+    privatekey_path: "/etc/ssl/private/{{ ansible_fqdn }}.key"
+    provider: selfsigned
+    state: present
+
+- name: Deploy Nginx configuration for Wiki.js
+  ansible.builtin.template:
+    src: wikijs.nginx.j2
+    dest: /etc/nginx/sites-available/wikijs.conf
+    mode: '0644'
+  notify: Reload Nginx
+
+- name: Ensure Nginx site is enabled
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/wikijs.conf
+    dest: /etc/nginx/sites-enabled/wikijs.conf
+    state: link
+  notify: Reload Nginx
+
+- name: Ensure Nginx is started and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+
