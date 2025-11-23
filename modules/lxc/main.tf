@@ -57,7 +57,7 @@ locals {
     tags_list  = sort(split(";", proxmox_lxc.this.tags))
     ip_addrs   = [for net in proxmox_lxc.this.network : net.ip]
     macs       = [for net in proxmox_lxc.this.network : net.hwaddr]
-    node       = var.node
+    node       = node = var.target_node
     features   = { nesting = var.features_nesting }
     storage    = var.storage_pool
     networks   = var.networks
