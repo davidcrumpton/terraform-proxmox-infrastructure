@@ -111,9 +111,29 @@ plan:
 apply:
   stage: apply
   script:
-  - export ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD}"
-  - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
-  - terraform output -json > "${TF_ROOT}/tf_outputs.json" 
+  # --- 1. SETUP: Create temporary files and configs for non-interactive encryption ---
+    - export ANSIBLE_CONFIG="${TF_ROOT}/ansible.tmp.cfg"
+    - export VAULT_PASS_FILE="${TF_ROOT}/.vault_pass"
+    
+    # Create the temporary password file (Zero-persistence, but on disk for a moment)
+    - echo -n "${ANSIBLE_VAULT_PASSWORD}" > "${VAULT_PASS_FILE}"
+    - chmod 0600 "${VAULT_PASS_FILE}"
+    
+    # Create a temporary ansible.cfg pointing to the password file
+    - echo "[defaults]" > "${ANSIBLE_CONFIG}"
+    - echo "vault_password_file = ${VAULT_PASS_FILE}" >> "${ANSIBLE_CONFIG}"
+    
+    # --- 2. EXECUTE: Export and Run Terraform ---
+    # The external script (encrypt.sh) will now use the temporary config.
+    - export ANSIBLE_VAULT_PASSWORD=ignored # We set this to prevent interactive prompts
+    - export TF_STATE_NAME=proxmox-homelab
+    - export ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD}"
+    - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
+
+    # --- 3. CLEANUP: Delete the files immediately after use ---
+    - rm -f "${VAULT_PASS_FILE}"
+    - rm -f "${ANSIBLE_CONFIG}"
+    - terraform output -json > "${TF_ROOT}/tf_outputs.json" 
   dependencies:
     - plan
   artifacts:
