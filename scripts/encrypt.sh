@@ -1,32 +1,31 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: MIT
-set -ve
+# scripts/encrypt.sh
+# Uses encrypt_string for guaranteed non-interactive, zero-disk-for-secrets encryption.
+set -e
 
-# --- Setup and Input ---
+# --- 1. Read JSON Input and Extract Plaintext ---
 JSON_INPUT=$(cat /dev/stdin)
-PLAINTEXT_VAULT=$(echo "$JSON_INPUT" | jq -r '.plaintext_yaml')
+# We must remove the trailing newline from jq output for clean encryption
+PLAINTEXT_VAULT=$(echo "$JSON_INPUT" | jq -r '.plaintext_yaml' | tr -d '\n')
+
+# --- 2. Setup: Use mktemp for secure, ephemeral file storage ---
 TEMP_FILE=$(mktemp) 
-ENCRYPTED_FILE=$(mktemp) 
 
-# --- 1. Initial Empty Encryption (Non-Interactive Setup) ---
-# Create a temporary, empty vault file using the password from the environment.
-# 'create' is interactive; 'rekey' is not. We trick it by creating an empty file 
-# and passing it to the non-interactive 'rekey'.
+# --- 3. Write and Encrypt ---
+# Write plaintext content to the temporary file
+echo "$PLAINTEXT_VAULT" > "$TEMP_FILE"
 
-# Create a temporary file with the password
-echo "$ANSIBLE_VAULT_PASSWORD" > "$TEMP_FILE"
+# Use encrypt_string to encrypt the ENTIRE FILE CONTENT as a single string.
+# The 'vault-id' is used to identify the password, which will be found via the environment variable.
+ENCRYPTED_CONTENT=$(ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
+                    ansible-vault encrypt_string @$TEMP_FILE \
+                    --name 'vault_data' \
+                    --encrypt-vault-id 'ci_vault')
 
-# Create an empty vault file using the password file mechanism.
-# We are creating a placeholder that Ansible Vault now trusts.
-ansible-vault create --vault-password-file "$TEMP_FILE" "$ENCRYPTED_FILE" <<< "" > /dev/null
+# --- 4. Cleanup and Output ---
+rm -f "$TEMP_FILE" # Securely delete the temporary file
 
-# --- 2. Rekey with Actual Content (The Encryption Step) ---
-# Rekey is non-interactive and replaces the content of the vault file.
-# The 'new' content is our plaintext secrets.
-ENCRYPTED_CONTENT=$(echo "$PLAINTEXT_VAULT" | \
-                    ANSIBLE_VAULT_PASSWORD="$ANSIBLE_VAULT_PASSWORD" \
-                    ansible-vault rekey --stdin-data @- "$ENCRYPTED_FILE" --output -)
-
-# --- 3. Cleanup and Output ---
-rm -f "$TEMP_FILE" "$ENCRYPTED_FILE" # Delete both temporary files
+# Output the result in the expected Terraform JSON format
+# The output will be a single, long encrypted YAML string.
 jq -n --arg content "$ENCRYPTED_CONTENT" '{"encrypted_content": $content}'
