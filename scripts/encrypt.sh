@@ -25,8 +25,10 @@ echo "$YAML_CONTENT" > "$PLAIN_FILE"
 # Encrypt YAML → encrypted_vault.yml
 ansible-vault encrypt \
   --vault-password-file "$PASSWORD_FILE" \
+  --encrypt-vault-id default \
   --output "${PATH_MODULE}/encrypted_vault.yml" \
   "$PLAIN_FILE"
+
 
 # Cleanup
 rm "$PLAIN_FILE"
