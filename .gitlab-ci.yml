@@ -27,8 +27,8 @@ variables:
   - git fetch --unshallow || true
   # Strip sensitive files before syncing
   - rm -rf .env terraform/ansible-vars/* *.tfvars
-  - git config --global user.email "gitlab@crumpton.org"
-  - git config --global user.name "GitLab Automation"
+  - git config --global user.email "bear@crumpton.org"
+  - git config --global user.name "David Crumpton"
 
 # Internal sync (Gitea)
 sync_to_gitea:
