@@ -72,8 +72,9 @@ locals {
 
 data "external" "encrypted_vault" {
   program = ["${path.module}/scripts/encrypt.sh"]
-}
 
+  query = local.wikijs_secrets
+}
 
 
 output "wikijs_root_password" {
