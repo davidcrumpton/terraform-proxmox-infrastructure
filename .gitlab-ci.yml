@@ -201,7 +201,10 @@ ansible_deploy:
         ansible-playbook -i inventory.yml site.yml --vault-password-file "$VAULT_FILE"
 
         # Clean up temporary vault file
-        rm -f "$VAULT_FILE" 
+        rm -f "$VAULT_FILE"
+    - export ANSIBLE_CONFIG=ansible/ansible.cfg
+    - export ANSIBLE_ROLES_PATH=ansible/playbook/roles
+    - ansible-playbook ansible/playbook/site.yml
     - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
   needs:
     - job: apply
