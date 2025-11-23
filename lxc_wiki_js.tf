@@ -76,7 +76,7 @@ data "external" "encrypted_vault" {
   # The input data (plaintext secrets) sent to the script's stdin (popen input)
   query = {
     # Render the YAML template using the local secrets map
-    plaintext_yaml = templatefile("${path.module}/templates/vault.yml.tpl", {
+    plaintext_yaml = templatefile("${path.module}/modules/lxc/templates/vault.yml.tpl", {
       secrets = local.wikijs_secrets
     })
   }
