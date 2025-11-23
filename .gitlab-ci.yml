@@ -184,10 +184,12 @@ ansible_deploy:
     - DB_PASS=$(jq -r '.wikijs_db_password.value' "${TF_ROOT}/tf_outputs.json")
     - ADMIN_PASS=$(jq -r '.wikijs_admin_password.value' "${TF_ROOT}/tf_outputs.json")
     - |
+      echo "$ANSIBLE_VAULT_PASSWORD" > /tmp/vault_pass.txt
       printf "wikijs_db_password: %s\nwikijs_admin_password: %s\n" \
-             "$DB_PASS" \
-             "$ADMIN_PASS" | \
-      ansible-vault encrypt /dev/stdin --output ansible/vault.yml --vault-id default@<(echo "$ANSIBLE_VAULT_PASSWORD")
+            "$DB_PASS" \
+            "$ADMIN_PASS" | \
+      ansible-vault encrypt /dev/stdin --output ansible/vault.yml --vault-password-file /tmp/vault_pass.txt
+      rm /tmp/vault_pass.txt
     - ansible-playbook -i ansible/inventory/hosts ansible/playbooks/site.yml --private-key ~/.ssh/terraform -u root
   needs:
     - job: apply
