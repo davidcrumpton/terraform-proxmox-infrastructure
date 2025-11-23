@@ -1,12 +1,11 @@
-#!/usr/bin/env bash
-# SPDX-License-Identifier: MIT
+#!/bin/bash
 # scripts/encrypt.sh
 # Performs secure, ephemeral disk encryption using standard Ansible config lookup.
 set -e
 
 # --- 1. Read JSON Input and Extract Plaintext ---
+# Read the plaintext YAML block that Terraform rendered.
 JSON_INPUT=$(cat /dev/stdin)
-# Ensure jq is installed in the image for this script to work!
 PLAINTEXT_VAULT=$(echo "$JSON_INPUT" | jq -r '.plaintext_yaml')
 
 # --- 2. Setup: Use mktemp for secure, ephemeral file storage ---
@@ -17,7 +16,8 @@ TEMP_FILE=$(mktemp)
 echo "$PLAINTEXT_VAULT" > "$TEMP_FILE"
 
 # Encrypt the temporary file. Ansible will automatically look up the 
-# password from the vault_password_file defined in the temporary ansible.cfg
+# password from the vault_password_file defined in the temporary ansible.cfg 
+# which is why we don't need --vault-password-file or $ANSIBLE_VAULT_PASSWORD here.
 ENCRYPTED_CONTENT=$(ansible-vault encrypt "$TEMP_FILE" --output -)
 
 # --- 4. Cleanup and Output ---
