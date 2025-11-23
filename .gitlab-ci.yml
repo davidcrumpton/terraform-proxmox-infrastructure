@@ -97,6 +97,7 @@ plan:
     TF_VAR_pm_api_token_id: "$PM_API_TOKEN_ID"
     TF_VAR_pm_api_token_secret: "$PM_API_TOKEN_SECRET"
   script:
+  - apk update && apk add --no-cache jq
   - terraform plan -out="${TF_ROOT}/tfplan.cache" 
   artifacts:
     expire_in: 1 day
@@ -110,7 +111,6 @@ plan:
 apply:
   stage: apply
   script:
-  - apk update && apk add --no-cache jq
   - export ANSIBLE_VAULT_PASSWORD="${ANSIBLE_VAULT_PASSWORD}"
   - terraform apply -auto-approve "${TF_ROOT}/tfplan.cache"
   - terraform output -json > "${TF_ROOT}/tf_outputs.json" 
