@@ -4,14 +4,10 @@
 locals {
   # Collect ansible data from all LXC modules
   lxc_inventory = [
-    # module.lxc_atom5g.ansible_data,
-
-    # Add more here, e.g.:
-    #    module.lxc_gl_runner.ansible_data,
-    #    module.lxc_nextsuite.ansible_data,
+    ## INVENTORY_MARK ## Don't Remove
     module.lxc_wikijs.ansible_data,
-    #    module.lxc_docker02.ansible_data,
-    # module.lxc_keycloak.ansible_data,
+
+    # The enable and disable scripts in the scripts/folder should manage this block
   ]
 
   # Build base groups

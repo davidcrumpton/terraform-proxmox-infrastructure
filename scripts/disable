@@ -9,34 +9,67 @@ LXC_DISABLED_NAME="disabled/lxc_${1}.tf.disabled"
 VM_ENABLED_NAME=vm_${1}.tf
 VM_DISABLED_NAME="disabled/vm_${1}.tf.disabled"
 
+INVENTORY_FILE="inventory_builder.tf"
 
+# Function to perform the in-place sed delete operation
+# Arguments: $1 = MODULE_LINE, $2 = INVENTORY_FILE
+delete_module_line() {
+    local module="$1"
+    local file="$2"
+    
+    # Escape special characters in the module line for sed
+    ESCAPED_MODULE=$(echo "$module" | sed 's/[][\/.^$*]/\\&/g')
+
+    if [ "$(uname)" = "Darwin" ]; then
+        # BSD sed: Use -i ''
+        sed -i '' "/$ESCAPED_MODULE/d" "$file"
+    else
+        # GNU sed: Use -i
+        sed -i "/$ESCAPED_MODULE/d" "$file"
+    fi
+}
+
+# --- Determine Module Type ---
 if test -f $LXC_ENABLED_NAME || test -f $LXC_DISABLED_NAME
 then
-	ENABLED_NAME=$LXC_ENABLED_NAME
-	DISABLED_NAME=$LXC_DISABLED_NAME
+    ENABLED_NAME=$LXC_ENABLED_NAME
+    DISABLED_NAME=$LXC_DISABLED_NAME
+    MODULE_TYPE="lxc"
 else
-	ENABLED_NAME=$VM_ENABLED_NAME
-	DISABLED_NAME=$VM_DISABLED_NAME
+    ENABLED_NAME=$VM_ENABLED_NAME
+    DISABLED_NAME=$VM_DISABLED_NAME
+    MODULE_TYPE="vm"
+fi
+MODULE_LINE="    module.${MODULE_TYPE}_${1}.ansible_data,"
+
+# --- Validation Checks ---
+if test -f "$DISABLED_NAME"
+then
+    echo "$1 is already disabled or duplicated"
+    exit 1
 fi
 
-if test -f $DISABLED_NAME
+if ! test -f "$ENABLED_NAME"
 then
-	echo "$1 is already disabled or duplicated"
-	exit 1
+    echo "$ENABLED_NAME doesn't exist!"
+    exit 1
 fi
 
-if ! test -f $ENABLED_NAME
+# 1. Remove the module line from inventory_builder.tf
+if delete_module_line "$MODULE_LINE" "$INVENTORY_FILE"
 then
-	echo "$ENABLED_NAME doesn'texist!"
-	exit 1
-fi
-
-if mv $ENABLED_NAME $DISABLED_NAME
-then
-	echo "disabled $1"
-	echo "#    module.lxc_$1.ansible_data," 
+    echo "Removed line from $INVENTORY_FILE:"
+    echo "$MODULE_LINE"
 else
-	echo "failed to disable $1"
-	exit 1
+    echo "Warning: Failed to remove module line from $INVENTORY_FILE."
 fi
-exit 0
+
+# 2. Move the file to disable the module
+if mv "$ENABLED_NAME" "$DISABLED_NAME"
+then
+    echo "Successfully disabled $1 ($MODULE_TYPE)"
+    exit 0
+else
+    echo "failed to disable $1"
+    exit 1
+fi

@@ -9,33 +9,76 @@ LXC_DISABLED_NAME="disabled/lxc_${1}.tf.disabled"
 VM_ENABLED_NAME=vm_${1}.tf
 VM_DISABLED_NAME="disabled/vm_${1}.tf.disabled"
 
+INVENTORY_FILE="inventory_builder.tf"
+# Use a simple, non-quoted anchor line here
+ANCHOR_LINE="## INVENTORY_MARK ## Don't Remove"
 
+# Function to perform the in-place sed append operation
+# This function handles the BSD vs. GNU syntax difference without 'eval'.
+# Arguments: $1 = ANCHOR_LINE, $2 = MODULE_LINE, $3 = INVENTORY_FILE
+insert_module_line() {
+    local anchor="$1"
+    local module="$2"
+    local file="$3"
+    
+    # We escape the anchor line to ensure it is treated as a literal string by sed
+    # The 's/[][\/.^$*]/\\&/g' is a robust way to escape special characters.
+    ESCAPED_ANCHOR=$(echo "$anchor" | sed 's/[][\/.^$*]/\\&/g')
+
+    if [ "$(uname)" = "Darwin" ]; then
+        # BSD sed: Use -i '' and the multi-line append syntax
+        # This is the most reliable way to insert on BSD without complex quoting
+        sed -i '' "/$ESCAPED_ANCHOR/a\\
+$module" "$file"
+    else
+        # GNU sed: Use -i and a literal newline (\n) in the append command
+        sed -i "/$ESCAPED_ANCHOR/a\\
+$module" "$file"
+    fi
+}
+
+# --- Determine Module Type ---
 if test -f $LXC_ENABLED_NAME || test -f $LXC_DISABLED_NAME
 then
-	ENABLED_NAME=$LXC_ENABLED_NAME
-	DISABLED_NAME=$LXC_DISABLED_NAME
+    ENABLED_NAME=$LXC_ENABLED_NAME
+    DISABLED_NAME=$LXC_DISABLED_NAME
+    MODULE_TYPE="lxc"
 else
-	ENABLED_NAME=$VM_ENABLED_NAME
-	DISABLED_NAME=$VM_DISABLED_NAME
+    ENABLED_NAME=$VM_ENABLED_NAME
+    DISABLED_NAME=$VM_DISABLED_NAME
+    MODULE_TYPE="vm"
+fi
+MODULE_LINE="    module.${MODULE_TYPE}_${1}.ansible_data,"
+
+# --- Validation Checks ---
+if test -f "$ENABLED_NAME"
+then
+    echo "$1 is already enabled or duplicated"
+    exit 1
 fi
 
-if test -f $ENABLED_NAME
+if ! test -f "$DISABLED_NAME"
 then
-	echo "$1 is already enabled or duplicated"
-	exit 1
+    echo "Can't access $DISABLED_NAME"
+    exit 1
 fi
 
-if ! test -f $DISABLED_NAME
+# 1. Move the file to enable the module
+if mv "$DISABLED_NAME" "$ENABLED_NAME"
 then
-	echo "Can't access $DISABLED_NAME"
-	exit 1
-fi
-if mv $DISABLED_NAME $ENABLED_NAME
-then
-	echo "enabled $1"
-        echo "    module.lxc_$1.ansible_data,"
+    echo "Successfully enabled $1 ($MODULE_TYPE)"
+
+    # 2. Insert the module line using the dedicated function
+    if insert_module_line "$ANCHOR_LINE" "$MODULE_LINE" "$INVENTORY_FILE"
+    then
+        echo "Added line to $INVENTORY_FILE:"
+        echo "$MODULE_LINE"
+        exit 0
+    else
+        echo "Warning: Failed to add module line to $INVENTORY_FILE, but file was moved."
+        exit 1
+    fi
 else
-	echo "failed to enable $1"
-	exit 1
+    echo "failed to enable $1"
+    exit 1
 fi
-exit 0
