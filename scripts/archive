@@ -1,12 +1,59 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: MIT
+#
+# Archiving script to create a clean project tarball, excluding common build/config files.
 
+# --- Configuration ---
+readonly ARCHIVE_NAME="terraform_home_lab.tar.gz"
+readonly ARCHIVE_PATH="${HOME}/Downloads/${ARCHIVE_NAME}"
+readonly REQUIRED_DIR="scripts" # A directory whose existence confirms we are at the project root
 
-if [ -d scripts ]
-then
-	echo archiving without the baggage...
-	tar  --exclude=venv  --exclude=.git  --exclude=\*.tfvars  --exclude=.terraform --exclude=./plan.out --exclude=.terraform.lock.hcl --exclude=terraform/ansible-vars/ -czf  ~/Downloads/terraform_home_lab.tar.gz .
+# List of files/directories to explicitly exclude from the archive
+declare -a EXCLUDES=(
+    'venv'
+    '.git'
+    '*.tfvars'
+    '.terraform'
+    './plan.out'
+    '.terraform.lock.hcl'
+    'terraform/ansible-vars/'
+)
+
+# --- Functions ---
+
+# Function to run when the script exits (success or failure)
+cleanup() {
+    # Optionally add logic here for temporary file removal or state reset
+    : # No cleanup needed for this simple script
+}
+trap cleanup EXIT # Ensure cleanup runs on exit
+
+# Function to check for project root
+check_project_root() {
+    if [[ ! -d "$REQUIRED_DIR" ]]; then
+        echo "❌ Error: Project root check failed." >&2
+        echo "   Please ensure you are in the project root directory which must contain a '$REQUIRED_DIR' directory." >&2
+        exit 1
+    fi
+}
+
+# --- Main Logic ---
+
+check_project_root
+
+echo "📦 Archiving project to: $ARCHIVE_PATH"
+
+# Build the dynamic list of --exclude flags
+EXCLUDE_ARGS=()
+for item in "${EXCLUDES[@]}"; do
+    EXCLUDE_ARGS+=( "--exclude=$item" )
+done
+
+# Execute the tar command
+# The ${EXCLUDE_ARGS[@]} expands the array into separate arguments
+if tar "${EXCLUDE_ARGS[@]}" -czf "$ARCHIVE_PATH" .; then
+    echo "✅ Success! Archive created."
 else
-	echo "Ensure you are in the project root before running the archiver"
-	exit 1;
+    echo "❌ Error: Archiving failed with return code $?." >&2
+    exit 1
 fi
